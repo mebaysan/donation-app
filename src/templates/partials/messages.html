@@ -1,0 +1,7 @@
+{% if messages %}
+    {% for message in messages %}
+        <script>get_notification("{{ message }}", "{{ message.tags }}")</script>
+    {% endfor %}
+
+{% endif %}
+

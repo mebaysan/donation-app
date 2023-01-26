@@ -1,0 +1,42 @@
+:root {
+    --baysan-main-color: #7bc59b;
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    border-top-color: var(--baysan-main-color) !important;
+    border-right-color: var(--baysan-main-color) !important;
+    border-left-color: var(--baysan-main-color) !important;
+    border-bottom-color: #ffffff !important;
+}
+
+#donationsTabContent .card:hover {
+    border: 2px solid var(--baysan-main-color);
+    box-shadow: 0px 0px 10px #888888;
+    transform: scale(1.05);
+}
+
+#navbarNav li:hover {
+    box-shadow: 0px 0px 10px var(--baysan-main-color);
+    transform: scale(1.05);
+}
+
+.form-control:focus {
+    color: var(--bs-body-color);
+    background-color: var(--bs-form-control-bg);
+    border-color: var(--baysan-main-color);
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem var(--baysan-main-color);
+
+}
+
+.form-select:focus {
+    color: var(--bs-body-color);
+    background-color: var(--bs-form-control-bg);
+    border-color: var(--baysan-main-color);
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem var(--baysan-main-color);
+}
+
+.form-check:checked{
+    fill: red;
+}

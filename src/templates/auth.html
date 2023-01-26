@@ -1,0 +1,15 @@
+{% extends 'partials/base.html' %}
+{% block page_title %} | Giriş {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5">
+                {% include 'auth/login/content.html' %}
+            </div>
+            <div class="col-lg-7">
+                {% include 'auth/register/content.html' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

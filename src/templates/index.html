@@ -1,0 +1,57 @@
+{% extends 'partials/base.html' %}
+
+{% block page_title %}
+    | Anasayfa
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <ul class="nav nav-tabs mb-2" id="donationsTab" role="tablist">
+            {% for cat in categories %}
+                <li class="nav-item">
+                    <a class="nav-link text-muted {% if forloop.first %} active {% endif %}"
+                       id="category-{{ cat.pk }}-tab"
+                       data-toggle="tab"
+                       href="#category-{{ cat.pk }}" role="tab"
+                       aria-controls="category1" aria-selected="true">{{ cat.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+
+
+        <div class="tab-content" id="donationsTabContent">
+            {% for cat in categories %}
+                <div class="tab-pane fade {% if forloop.first %} show active {% endif %}" id="category-{{ cat.pk }}"
+                     role="tabpanel"
+                     aria-labelledby="category-{{ cat.pk }}-tab">
+                    <div class="row mb-3">
+                        {% for item in cat.get_published_items %}
+                            <div class="col-3 mb-2">
+                                <div class="card">
+                                    <img src="{{ item.get_image_path }}" class="card-img-top"
+                                         alt="Donation Item 1">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ item.name }}</h5>
+                                        <p class="card-text">{{ item.description }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function () {
+            $('#donationsTab a').on('click', function (e) {
+                e.preventDefault()
+                $(this).tab('show')
+            })
+        });
+    </script>
+{% endblock %}

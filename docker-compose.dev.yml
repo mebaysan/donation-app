@@ -1,0 +1,67 @@
+version: "3.9"
+
+services:
+
+  webservice:
+    container_name: ihya_web_dev
+    build: ./src
+    depends_on:
+      - database
+    environment:
+      - SECRET_KEY=verysecretKey
+      - DEBUG=0
+      - DB_NAME=postgres
+      - DB_HOST=database
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=secretpassword
+      - ALLOWED_HOSTS=127.0.0.1
+    entrypoint: bash entrypoint.sh
+    networks:
+      - nginx_network
+      - pg_network
+    volumes:
+      - static_volume:/app/static
+      - media_volume:/app/media
+
+  database:
+    container_name: ihya_database_dev
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=secretpassword
+    volumes:
+      - database_volume:/var/lib/postgresql/data
+    networks:
+      - pg_network
+
+  nginx:
+    container_name: ihya_nginx_dev
+    # location of the dockerfile that defines the nginx image. The dockerfile will be used to spin up an image during the build stage.
+    build: ./nginx
+    # map the machine port 1339 to the container port 80. Any traffic from 1339 externally will be passed to port 80 of the NGINX container. You can access this container viea localhost:1339
+    ports:
+      - "81:80"
+    # static & media storages provisioned since django does not handle static & media files in production
+    volumes:
+      - static_volume:/app/static
+      - media_volume:/app/media
+
+    # will only start if web is up and running
+    depends_on:
+      - webservice
+    # restart service when it fails
+    restart: "on-failure"
+    networks:
+      - nginx_network
+
+networks:
+  nginx_network:
+    driver: bridge
+  pg_network:
+    driver: bridge
+
+volumes:
+  database_volume:
+  static_volume:
+  media_volume:

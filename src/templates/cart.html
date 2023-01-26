@@ -1,0 +1,83 @@
+{% extends 'partials/base.html' %}
+
+
+{% block page_title %}
+    | Sepet
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form class="donate-now__payment-info-form" action="{% url 'web:cart' %}" method="POST" id="bagis_form">
+            {% csrf_token %}
+            <h3 class="donate-now__title">Kişisel Bilgileriniz</h3>
+
+            <div class="row">
+                <div class="col-xl-4">
+                    <div class="donate-now__personal-info-input">
+                        <input type="text" placeholder="İsim - Soyisim" name="name" required>
+                    </div>
+                </div>
+                <div class="col-xl-4">
+                    <div class="donate-now__personal-info-input">
+                        <input type="email" placeholder="Email" name="email" required>
+                    </div>
+                </div>
+                <div class="col-xl-4">
+                    <div class="donate-now__personal-info-input">
+                        <input type="text" placeholder="Telefon Numaranız" name="phone" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12">
+                    <div
+                            class="donate-now__personal-info-input donate-now__personal-info-message-box">
+                        <textarea name="message" placeholder="Varsa vakfımıza mesajınız"></textarea>
+                    </div>
+                </div>
+            </div>
+            <h3 class="donate-now__title">Ödeme Bilgileri</h3>
+
+            <div class="row">
+                <div class="col-xl-6">
+                    <div class="donate-now__payment-info-input">
+                        <input type="text" placeholder="Kart Numaranız" name="number" required>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="donate-now__payment-info-input">
+                        <input type="text" placeholder="Kart Üzerindeki Ad - Soyad" name="card_holder_name" required>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="donate-now__payment-info-input">
+                        <input type="text" placeholder="Kart Son Kullanma Ay/Yıl" name="expiry" required>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="donate-now__payment-info-input">
+                        <input type="text" placeholder="Kart CVC" name="cvc" required>
+                    </div>
+                </div>
+                <div class="col-xl-12">
+                    <div class="donate-now__payment-info-input">
+                        <div id="card-div"></div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="donate-now__payment-info-input">
+                        <input type="text" placeholder="Bağış Miktarınız (0.0)" name="amount" required>
+                    </div>
+                </div>
+
+            </div>
+            <div class="donate-now__payment-info-btn-box" style="display: flex;">
+                <button id="bagis-buton-verified" type="submit" class="thm-btn donate-now__payment-info-btn"
+                        style="display: block; margin-right:25px;">Bağış Yap
+                </button>
+                <div id="bs-captcha-div"></div>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

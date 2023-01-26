@@ -1,0 +1,55 @@
+{% extends 'partials/base.html' %}
+
+{% block page_title %}
+    | Profil
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <ul class="nav nav-tabs mb-2" id="profileTabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link text-muted active"
+                   id="profile-tab"
+                   data-toggle="tab"
+                   href="#profile" role="tab"
+                   aria-controls="profile" aria-selected="true">Profil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-muted"
+                   id="donations-tab"
+                   data-toggle="tab"
+                   href="#donations" role="tab"
+                   aria-controls="donations" aria-selected="true">Bağışlarım</a>
+            </li>
+        </ul>
+
+
+        <div class="tab-content" id="donationsTabContent">
+            <div class="tab-pane fade show active" id="profile"
+                 role="tabpanel"
+                 aria-labelledby="profile-tab">
+                <div class="row mb-3">
+                    {% include 'profile/profile/content.html' %}
+                </div>
+            </div>
+            <div class="tab-pane fade" id="donations"
+                 role="tabpanel"
+                 aria-labelledby="donations-tab">
+                <div class="row mb-3">
+                    {% include 'profile/donations/content.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function () {
+            $('#profileTabs a').on('click', function (e) {
+                e.preventDefault()
+                $(this).tab('show')
+            })
+        });
+    </script>
+{% endblock %}

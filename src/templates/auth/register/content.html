@@ -1,0 +1,96 @@
+<div class="card" style="height: 100%;">
+    <div class="card-body">
+        <h5 class="card-title">Yeni Kayıt</h5>
+        <hr>
+        <h6 class="card-subtitle mb-2 text-muted"></h6>
+        <form action="{% url 'web:register' %}" method="post">
+            {% csrf_token %}
+
+            <div class="row mb-3">
+                <div class="col-4">
+                    <label for="registerName" class="form-label">Adınız</label>
+                    <input type="text" class="form-control" id="registerName" name="registerName"
+                           placeholder="Adınız *"
+                           required>
+                </div>
+                <div class=" col-4">
+                    <label for="registerSurname" class="form-label">Soyadınız</label>
+                    <input type="text" class="form-control" id="registerSurname" name="registerSurname"
+                           placeholder="Soyadınız *"
+                           required>
+                </div>
+                <div class=" col-4">
+                    <label for="registerGender" class="form-label">Cinsiyet</label>
+                    <select class="form-select" name="registerGender" id="registerGender" required>
+                        <option value="Male">Erkek</option>
+                        <option value="Female">Kadın</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-6">
+                    <label for="registerEmail" class="form-label">Email Adresi</label>
+                    <input type="email" class="form-control" id="registerEmail" name="registerEmail"
+                           placeholder="E-Mail Adresi*"
+                           required>
+                </div>
+                <div class="col-6">
+                    <label for="registerPhone" class="form-label">Cep Telefonu</label>
+                    <input type="text" class="form-control" id="registerPhone" name="registerPhone"
+                           placeholder="Cep Telefonu*"
+                           required>
+                </div>
+            </div>
+
+            {#            <div class="row mb-3">#}
+            {#                <div class=" col-4">#}
+            {#                    <label for="registerCountry" class="form-label">Ülke</label>#}
+            {#                    <select class="form-select" name="registerCountry" id="registerCountry" required>#}
+            {#                        <option value="TR">Türkiye</option>#}
+            {#                    </select>#}
+            {#                </div>#}
+            {#                <div class=" col-4">#}
+            {#                    <label for="registerCity" class="form-label">Şehir</label>#}
+            {#                    <select class="form-select" name="registerCity" id="registerCity" required>#}
+            {#                        <option value="TR">İstanbul</option>#}
+            {#                    </select>#}
+            {#                </div>#}
+            {#                <div class=" col-4">#}
+            {#                    <label for="registerState" class="form-label">İlçe</label>#}
+            {#                    <select class="form-select" name="registerState" id="registerState" required>#}
+            {#                        <option value="TR">Başakşehir</option>#}
+            {#                    </select>#}
+            {#                </div>#}
+            {##}
+            {#            </div>#}
+
+            <div class="row mb-3">
+                <div class="col-6">
+                    <label for="registerPassword" class="form-label">Parola</label>
+                    <input type="password" class="form-control" id="registerPassword" name="registerPassword"
+                           placeholder="Parola*"
+                           required>
+                </div>
+                <div class="col-6">
+                    <label for="registerPasswordAgain" class="form-label">Parola Tekrar</label>
+                    <input type="password" class="form-control" id="registerPasswordAgain" name="registerPasswordAgain"
+                           placeholder="Parola Tekrar*"
+                           required>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col" style="display: flex;">
+                    <label for="registerIsApprovedToBeInTouch" class="form-label" style="margin-right: 10px;">
+                        <i class="bi-info"></i> Tarafımla iletişime geçilmesine izin veriyorum.
+                    </label>
+                    <input type="checkbox" class="form-check" id="registerIsApprovedToBeInTouch"
+                           name="registerIsApprovedToBeInTouch">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success">Kayıt</button>
+        </form>
+    </div>
+</div>
