@@ -1,4 +1,7 @@
+from django.contrib.auth import get_user_model
 from django.db import models
+
+User = get_user_model()
 
 
 # Create your models here.
@@ -20,3 +23,17 @@ class PaymentProvider(models.Model):
                 published_provider.is_provider = False
                 published_provider.save()
         super(PaymentProvider, self).save(*args, **kwargs)
+
+
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    amount = models.DecimalField(max_digits=16, decimal_places=2, default=0)
+    updated_date = models.DateTimeField(auto_now_add=True, auto_created=True)
+    donations = models.ManyToManyField('donor.Donation', null=True)
+
+    class Meta:
+        verbose_name = 'Cart'
+        verbose_name_plural = 'Carts'
+
+    def __str__(self):
+        return self.user.username

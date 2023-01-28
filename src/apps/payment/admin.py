@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.payment.models import PaymentProvider
+from apps.payment.models import Cart, PaymentProvider
 
 
 # Register your models here.
@@ -17,4 +17,9 @@ class PaymentProviderAdmin(admin.ModelAdmin):
         return False
 
 
+class CartAdmin(admin.ModelAdmin):
+    list_display = ['__str__', 'amount', 'updated_date']
+
+
 admin.site.register(PaymentProvider, PaymentProviderAdmin)
+admin.site.register(Cart, CartAdmin)
