@@ -60,6 +60,6 @@ KUVEYTTURK_CONF = {
     'password': os.getenv('KUVEYTTURK_PASSWORD'),
     'ok_url': os.getenv('KUVEYTTURK_OK_URL'),
     'fail_url': os.getenv('KUVEYTTURK_FAIL_URL'),
-    'pos_kart_onay_url': 'https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelPayGate',
-    'pos_odeme_url': 'https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelProvisionGate',
+    'payment_request_url': 'https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelPayGate',
+    'payment_approve_url': 'https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelProvisionGate',
 }

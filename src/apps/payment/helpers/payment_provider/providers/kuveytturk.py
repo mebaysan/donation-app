@@ -115,6 +115,8 @@ class KuveytTurkPaymentProvider(object):
             merchant_order_id=merchant_order_id,
             message=payment_request_data['message'],
         )
+        if request.user.is_authenticated:
+            new_transaction.user = request.user
         new_transaction.save()
         ########### HASH Işlemleri #############
         hashed_password = base64.b64encode(
@@ -154,7 +156,7 @@ class KuveytTurkPaymentProvider(object):
            """
         headers = {"Content-Type": "application/xml", "Content-Length": str(len(data))}
         r = requests.post(
-            settings.KUVEYTTURK_CONF["pos_kart_onay_url"],
+            settings.KUVEYTTURK_CONF["payment_request_url"],
             data=data.encode("ISO-8859-9"),
             headers=headers,
         )
@@ -205,7 +207,7 @@ class KuveytTurkPaymentProvider(object):
             """
         headers = {"Content-Type": "application/xml", "Content-Length": str(len(data))}
         r = requests.post(
-            settings.KUVEYTTURK_CONF["pos_odeme_url"],
+            settings.KUVEYTTURK_CONF["payment_approve_url"],
             data=data.encode("ISO-8859-9"),
             headers=headers,
         )

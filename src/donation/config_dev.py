@@ -29,10 +29,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 KUVEYTTURK_CONF = {
     'magaza_no': '1234',
     'musteri_no': '1233214',
-    'username': 'ourusername',
-    'password': 'ourpassword',
+    'username': 'apitest',
+    'password': 'api123',
     'ok_url': 'http://127.0.0.1:8000/transaction-success/',
     'fail_url': 'http://127.0.0.1:8000/transaction-fail/',
-    'pos_kart_onay_url': 'https://boatest.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelPayGate',
-    'pos_odeme_url': 'https://boatest.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelProvisionGate',
+    'payment_request_url': 'https://boatest.kuveytturk.com.tr/boa.virtualpos.services/Home/ThreeDModelPayGate',
+    'payment_approve_url': 'https://boatest.kuveytturk.com.tr/boa.virtualpos.services/Home/ThreeDModelProvisionGate',
 }
+# TEST CARD FOR KUVEYTTURK
+# Test Kart Bilgileri
+# Kart No: 4033 6025 6202 0327
+# CVV2: 861
+# Expirydate: 01/30
