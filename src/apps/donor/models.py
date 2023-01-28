@@ -8,6 +8,9 @@ User = get_user_model()
 # Create your models here.
 
 class DonationCategory(models.Model):
+    """
+            Holds donation category
+    """
     name = models.CharField(max_length=255)
     description = models.TextField()
     image = models.ImageField(upload_to='donation_category/', null=True, blank=True)
@@ -25,6 +28,9 @@ class DonationCategory(models.Model):
 
 
 class DonationItem(models.Model):
+    """
+        Holds donation item
+    """
     name = models.CharField(max_length=255)
     description = models.TextField()
     category = models.ForeignKey(DonationCategory, on_delete=models.SET_NULL, null=True, related_name='items')
@@ -46,12 +52,23 @@ class DonationItem(models.Model):
         verbose_name_plural = 'Donation Items'
 
 
+class Donation(models.Model):
+    """
+        Holds transaction and donation item pairs with amount
+    """
+    donation_item = models.ForeignKey(DonationItem, on_delete=models.SET_NULL, null=True)
+    amount = models.DecimalField(decimal_places=2, max_digits=16)
+    donation_transaction = models.ForeignKey('donor.DonationTransaction', on_delete=models.SET_NULL, null=True)
+
+
 class DonationTransaction(models.Model):
+    """
+        Holds transaction of donations in the same line with total number
+    """
     name = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
     phone = models.CharField(max_length=255)
-    donation_item = models.ManyToManyField(DonationItem) # todo: implement a new model to store donation item and donation transactions
-    amount = models.CharField(max_length=255)
+    amount = models.DecimalField(decimal_places=2, max_digits=16)
     merchant_order_id = models.TextField(null=True, blank=True)
     md_code = models.CharField(max_length=300, null=True, blank=True)
     message = models.TextField(null=True, blank=True)
