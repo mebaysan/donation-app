@@ -3,12 +3,13 @@ from django.contrib.auth import authenticate, get_user_model, login as dj_login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import auth
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from apps.donor.models import DonationCategory, DonationItem
+from apps.donor.models import DonationCategory, DonationItem, Donation
 from apps.payment.helpers.payment_provider.payment_provider_factory import PaymentProviderFactory
+from apps.payment.models import Cart
 
 User = get_user_model()
 
@@ -47,7 +48,18 @@ def cart(request):
 @login_required
 @require_http_methods(['POST'])
 def cart_update(request):
+    amount = request.POST.get('amount')
+    donation_item_pk = request.POST.get('donation_item_pk')
+    donation_item = get_object_or_404(DonationItem, pk=donation_item_pk)
+    cart = Cart.objects.filter(user=request.user).first()
 
+    try:
+        new_donation = Donation.objects.create(donation_item=donation_item, amount=amount, cart=cart)
+        new_donation.save()
+        messages.success(request, 'Başarıyla sepete eklendi.')
+    except Exception as e:
+        print(e)
+        messages.error(request, 'Sepete eklenirken hata!')
     return redirect('web:index')
 
 

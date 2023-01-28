@@ -54,11 +54,16 @@ class DonationItem(models.Model):
 
 class Donation(models.Model):
     """
-        Holds transaction and donation item pairs with amount
+        Holds Cart donation items
     """
     donation_item = models.ForeignKey(DonationItem, on_delete=models.SET_NULL, null=True)
     amount = models.DecimalField(decimal_places=2, max_digits=16)
-    donation_transaction = models.ForeignKey('donor.DonationTransaction', on_delete=models.SET_NULL, null=True)
+    donation_transaction = models.ForeignKey('donor.DonationTransaction', on_delete=models.SET_NULL, null=True, blank=True)
+    cart = models.ForeignKey('payment.Cart', on_delete=models.CASCADE, null=True, related_query_name='donations',
+                             related_name='donations')
+
+    def save(self, *args, **kwargs):
+        super(Donation, self).save(*args, **kwargs)
 
 
 class DonationTransaction(models.Model):

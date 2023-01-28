@@ -33,12 +33,15 @@
                                     <div class="card-body">
                                         <h5 class="card-title">{{ item.name }}</h5>
                                         <p class="card-text">{{ item.description }}</p>
-                                        <form action="" method="post">
+                                        <form action="{% url 'web:cart_update' %}" method="post">
+                                            {% csrf_token %}
                                             <div class="row">
                                                 <div class="col-6">
                                                     <label>
                                                         <input type="number" class="form-control" required
                                                                placeholder="0.0" name="amount">
+                                                        <input type="hidden" name="donation_item_pk"
+                                                               value="{{ item.pk }}">
                                                     </label>
                                                 </div>
                                                 <div class="col-6">
