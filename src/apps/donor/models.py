@@ -58,7 +58,6 @@ class Donation(models.Model):
     """
     donation_item = models.ForeignKey(DonationItem, on_delete=models.SET_NULL, null=True)
     amount = models.DecimalField(decimal_places=2, max_digits=16)
-    donation_transaction = models.ForeignKey('donor.DonationTransaction', on_delete=models.SET_NULL, null=True, blank=True)
     cart = models.ForeignKey('payment.Cart', on_delete=models.CASCADE, null=True, related_query_name='donations',
                              related_name='donations')
 
@@ -84,6 +83,7 @@ class DonationTransaction(models.Model):
         max_length=255, null=True, blank=True, default="Response not received from bank"
     )
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    donations = models.ManyToManyField(Donation)
 
     class Meta:
         verbose_name = 'Donation Transaction'

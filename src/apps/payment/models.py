@@ -39,3 +39,9 @@ class Cart(models.Model):
 
     def get_item_counts(self):
         return self.donations.count()
+
+    def update_cart_total(self):
+        self.amount = 0
+        for donation in self.donations.all():
+            self.amount += donation.amount
+        self.save()
