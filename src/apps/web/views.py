@@ -36,11 +36,19 @@ def transaction_fail(request):
     return HttpResponse(request)
 
 
+@login_required
 def cart(request):
     if request.method == 'POST':
         provider = PaymentProviderFactory.get_payment_provider()
         return provider.make_payment(request)
     return render(request, 'cart.html')
+
+
+@login_required
+@require_http_methods(['POST'])
+def cart_update(request):
+
+    return redirect('web:index')
 
 
 @require_http_methods(['POST'])

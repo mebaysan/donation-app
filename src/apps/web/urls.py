@@ -12,6 +12,7 @@ urlpatterns = [
     path('profile-update/', views.profile_update, name='profile_update'),
     path('password-update/', views.password_update, name='password_update'),
     path('cart/', views.cart, name='cart'),
+    path('cart-update/', views.cart_update, name='cart_update'),
     path('transaction-success/', views.transaction_success, name='transaction_success'),
     path('transaction-fail/', views.transaction_fail, name='transaction_fail'),
 
