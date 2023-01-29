@@ -33,7 +33,8 @@ class DonationListCreateAPIView(ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Donation.objects.filter(cart=self.request.user.cart).all()
+        # donations that are not in the cart
+        return Donation.objects.exclude(cart=self.request.user.cart).all()
 
     def perform_create(self, serializer):
         serializer.save(cart=self.request.user.cart)
