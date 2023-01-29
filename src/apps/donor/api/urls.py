@@ -11,4 +11,6 @@ urlpatterns = [
     path('items/<int:pk>/', views.DonationItemRetrieveAPIView.as_view(), name='item_detail'),
     path('donations/', views.DonationListCreateAPIView.as_view(), name='donations'),
     path('donations/<int:pk>/', views.DonationRetrieveUpdateDestroyAPIView.as_view(), name='donation_details'),
+    path('transactions/', views.DonationTransactionListAPIView.as_view(), name='transactions'),
+    path('transactions/<int:pk>/', views.DonationTransactionRetrieveAPIView.as_view(), name='transaction_details'),
 ]

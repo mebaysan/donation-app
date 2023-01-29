@@ -1,8 +1,9 @@
-from rest_framework.generics import ListAPIView, RetrieveAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import (ListAPIView, RetrieveAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView)
 from rest_framework.permissions import IsAuthenticated
 
-from apps.donor.api.serializers import DonationCategorySerializer, DonationItemSerializer, DonationSerializer
-from apps.donor.models import DonationCategory, DonationItem, Donation
+from apps.donor.api.serializers import (DonationCategorySerializer, DonationItemSerializer, DonationSerializer,
+                                        DonationTransactionSerializer, DonationTransactionDetailsSerializer)
+from apps.donor.models import DonationCategory, DonationItem, Donation, DonationTransaction
 
 
 class DonationCategoryListAPIView(ListAPIView):
@@ -51,3 +52,20 @@ class DonationRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Donation.objects.filter(cart__user=self.request.user).all()
+
+
+class DonationTransactionListAPIView(ListAPIView):
+    serializer_class = DonationTransactionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return DonationTransaction.objects.filter(user=self.request.user).all()
+
+
+class DonationTransactionRetrieveAPIView(RetrieveAPIView):
+    serializer_class = DonationTransactionDetailsSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'pk'
+
+    def get_queryset(self):
+        return DonationTransaction.objects.filter(user=self.request.user)

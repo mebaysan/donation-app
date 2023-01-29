@@ -9,6 +9,8 @@ class PaymentProvider(models.Model):
     name = models.CharField(max_length=255)
     is_provider = models.BooleanField(default=False)
 
+    # todo: implement payment api views
+
     class Meta:
         verbose_name = 'Payment Provider'
         verbose_name_plural = 'Payment Providers'
