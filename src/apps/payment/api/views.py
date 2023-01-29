@@ -1,6 +1,8 @@
+from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import RetrieveAPIView, CreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from apps.payment.api.serializers import CartSerializer, CartItemSerializer
 from apps.payment.helpers.payment_provider.payment_provider_factory import PaymentProviderFactory
@@ -47,3 +49,18 @@ def payment(request):
     provider = PaymentProviderFactory.get_payment_provider()
     return provider.make_payment(request)
     # return Response({"message": "Hello, world!"})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def payment_success(request):
+    provider = PaymentProviderFactory.get_payment_provider()
+    return provider.approve_payment(request)
+    # return Response({"message": "Hello, world!"})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def payment_fail(request):
+    content = {'detail': 'Payment failed!'}
+    return Response(content, status.HTTP_400_BAD_REQUEST)

@@ -31,8 +31,8 @@ KUVEYTTURK_CONF = {
     'musteri_no': '1233214',
     'username': 'apitest',
     'password': 'api123',
-    'ok_url': 'http://127.0.0.1:8000/transaction-success/',
-    'fail_url': 'http://127.0.0.1:8000/transaction-fail/',
+    'ok_url': 'http://127.0.0.1:8000/api/payment-success/',
+    'fail_url': 'http://127.0.0.1:8000/api/payment-fail/',
     'payment_request_url': 'https://boatest.kuveytturk.com.tr/boa.virtualpos.services/Home/ThreeDModelPayGate',
     'payment_approve_url': 'https://boatest.kuveytturk.com.tr/boa.virtualpos.services/Home/ThreeDModelProvisionGate',
 }

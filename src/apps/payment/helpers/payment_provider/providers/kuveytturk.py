@@ -228,6 +228,7 @@ class KuveytTurkPaymentProvider(object):
 
         if response_code == "00":
             transaction.is_complete = True
+
         transaction.save()
 
         return transaction.md_code

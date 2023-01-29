@@ -13,7 +13,7 @@ class PaymentProvider(models.Model):
     name = models.CharField(max_length=255)
     is_provider = models.BooleanField(default=False)
 
-    # todo: implement payment api views
+    # todo: implement creating donations after successfull transaction
 
     class Meta:
         verbose_name = 'Payment Provider'
