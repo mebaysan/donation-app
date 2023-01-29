@@ -1,0 +1,16 @@
+{% extends 'admin/base.html' %}
+
+{% load static %}
+
+<!-- Panel Logo & Yazı  -->
+{% block branding %}
+    <h1 id="head">
+        <a href="{% url 'admin:index' %}" style="color: white;">{{ get_app_name }} Cockpit</a>
+    </h1>
+{% endblock %}
+
+<!-- Panel CSS  -->
+{% block extrastyle %}
+    <link rel="stylesheet" href="{% static 'css/custom_admin.css' %}">
+
+{% endblock extrastyle %}
