@@ -1,3 +1,4 @@
+# DEPRECATED
 from django.contrib import messages
 from django.contrib.auth import authenticate, get_user_model, login as dj_login
 from django.contrib.auth.decorators import login_required
