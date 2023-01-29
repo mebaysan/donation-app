@@ -58,8 +58,12 @@ class Donation(models.Model):
     """
     donation_item = models.ForeignKey(DonationItem, on_delete=models.SET_NULL, null=True)
     amount = models.DecimalField(decimal_places=2, max_digits=16)
+    added_time = models.DateTimeField(auto_now_add=True, auto_created=True)
     cart = models.ForeignKey('payment.Cart', on_delete=models.CASCADE, null=True, related_query_name='donations',
                              related_name='donations')
+
+    def __str__(self):
+        return f"{self.cart.user.username}-{self.donation_item.name}-{self.amount}"
 
     def save(self, *args, **kwargs):
         existing_donation = Donation.objects.filter(cart=self.cart, donation_item=self.donation_item).first()

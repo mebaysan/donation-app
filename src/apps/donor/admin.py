@@ -16,7 +16,8 @@ class DonationItemAdmin(admin.ModelAdmin):
 
 
 class DonationAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'donation_item', 'amount')
+    list_display = ('__str__', 'donation_item', 'amount', 'added_time')
+    readonly_fields = ('added_time',)
 
 
 class DonationTransactionAdmin(admin.ModelAdmin):
