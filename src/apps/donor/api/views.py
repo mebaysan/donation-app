@@ -1,4 +1,4 @@
-from rest_framework.generics import (ListAPIView, RetrieveAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView)
+from rest_framework.generics import (ListAPIView, RetrieveAPIView)
 from rest_framework.permissions import IsAuthenticated
 
 from apps.donor.api.serializers import (DonationCategorySerializer, DonationItemSerializer, DonationSerializer,
@@ -28,31 +28,13 @@ class DonationItemRetrieveAPIView(RetrieveAPIView):
     lookup_field = 'pk'
 
 
-class DonationListCreateAPIView(ListCreateAPIView):
+class DonationListAPIView(ListAPIView):
     serializer_class = DonationSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         # donations that are not in the cart
-        return Donation.objects.exclude(cart=self.request.user.cart).all()
-
-    def perform_create(self, serializer):
-        serializer.save(cart=self.request.user.cart)
-
-
-class DonationRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
-    """
-        Donation in the cart can be
-         - added
-         - retrieved (details)
-         - removed
-    """
-    serializer_class = DonationSerializer
-    permission_classes = [IsAuthenticated]
-    lookup_field = 'pk'
-
-    def get_queryset(self):
-        return Donation.objects.filter(cart__user=self.request.user).all()
+        return Donation.objects.filter(user=self.request.user).all()
 
 
 class DonationTransactionListAPIView(ListAPIView):

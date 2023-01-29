@@ -74,13 +74,13 @@ class KuveytTurkPaymentProvider(object):
         amount = int(amount.split(".")[0])
 
         # ####### Kart Bilgileri #######
-        card_number = request.POST.get("number").replace(" ", "")
+        card_number = request.POST.get("card_number").replace(" ", "")
         card_holder_name = request.POST.get("card_holder_name").upper()
-        card_expiry = request.POST.get("expiry")
+        card_expiry = request.POST.get("card_expiry")
         card_date = card_expiry.split("/")
         card_month = card_date[0].strip()
         card_year = card_date[1].strip()
-        card_cvc = request.POST.get("cvc")
+        card_cvc = request.POST.get("card_cvc")
 
         if card_number[0] == "4":
             card_type = "Visa"

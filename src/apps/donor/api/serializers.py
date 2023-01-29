@@ -20,7 +20,7 @@ class DonationItemSerializer(serializers.ModelSerializer):
 class DonationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Donation
-        exclude = ['cart']
+        fields = '__all__'
 
 
 class DonationTransactionSerializer(serializers.ModelSerializer):
