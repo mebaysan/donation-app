@@ -26,7 +26,7 @@ class PaymentProvider(models.Model):
 
 
 class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_query_name='cart', related_name='cart')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=False, related_query_name='cart', related_name='cart')
     amount = models.DecimalField(max_digits=16, decimal_places=2, default=0)
     updated_date = models.DateTimeField(auto_now_add=True, auto_created=True)
 
@@ -44,4 +44,8 @@ class Cart(models.Model):
         self.amount = 0
         for donation in self.donations.all():
             self.amount += donation.amount
+        self.save()
+
+    def clean_cart(self):
+        self.donations = []
         self.save()

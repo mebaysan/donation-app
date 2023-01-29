@@ -8,5 +8,9 @@ from apps.payment.models import Cart
 class CartRetrieveAPIView(RetrieveAPIView):
     serializer_class = CartSerializer
     permission_classes = [IsAuthenticated]
-    queryset = Cart.objects.all()
-    lookup_field = 'pk'
+
+    def get_object(self):
+        return self.request.user.cart
+
+    def get_queryset(self):
+        return Cart.objects.filter(user=self.request.user).first().donations.all()

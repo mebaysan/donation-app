@@ -3,7 +3,6 @@ from rest_framework.permissions import IsAuthenticated
 
 from apps.donor.api.serializers import DonationCategorySerializer, DonationItemSerializer, DonationSerializer
 from apps.donor.models import DonationCategory, DonationItem, Donation
-from apps.payment.models import Cart
 
 
 class DonationCategoryListAPIView(ListAPIView):
@@ -33,15 +32,19 @@ class DonationListCreateAPIView(ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        cart = Cart.objects.filter(user=self.request.user).first()
-        return Donation.objects.filter(cart=cart).all()
+        return Donation.objects.filter(cart=self.request.user.cart).all()
 
     def perform_create(self, serializer):
-        cart = Cart.objects.filter(user=self.request.user).first()
-        serializer.save(cart=cart)
+        serializer.save(cart=self.request.user.cart)
 
 
 class DonationRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    """
+        Donation in the cart can be
+         - added
+         - retrieved (details)
+         - removed
+    """
     serializer_class = DonationSerializer
     permission_classes = [IsAuthenticated]
     lookup_field = 'pk'

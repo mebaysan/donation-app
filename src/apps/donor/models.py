@@ -62,6 +62,10 @@ class Donation(models.Model):
                              related_name='donations')
 
     def save(self, *args, **kwargs):
+        existing_donation = Donation.objects.filter(cart=self.cart, donation_item=self.donation_item).first()
+        if existing_donation:
+            self.amount += existing_donation.amount
+            existing_donation.delete()
         super(Donation, self).save(*args, **kwargs)
 
 
