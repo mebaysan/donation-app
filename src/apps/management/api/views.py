@@ -11,8 +11,8 @@ User = get_user_model()
 
 
 class UserMeView(RetrieveUpdateAPIView):
-    permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_object(self):
         return self.request.user
