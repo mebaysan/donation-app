@@ -26,7 +26,7 @@ class PaymentProvider(models.Model):
 
 
 class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_query_name='cart')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_query_name='cart')
     amount = models.DecimalField(max_digits=16, decimal_places=2, default=0)
     updated_date = models.DateTimeField(auto_now_add=True, auto_created=True)
 
