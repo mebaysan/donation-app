@@ -45,6 +45,7 @@ def update_cart_total_after_delete(sender, instance, **kwargs):
 @receiver(post_save, sender=DonationTransaction)
 def clean_cart_after_successfull_payment(sender, instance, created, **kwargs):
     """
-        Clean cart if transaction is success
+        Clean cart if transaction is success and create donation records of cart items
     """
-    instance.user.cart.clean_cart()
+    if instance.is_complete:
+        instance.user.cart.clean_cart()

@@ -69,9 +69,9 @@ class KuveytTurkPaymentProvider(object):
         email = request.POST.get("email")
         phone = request.POST.get("phone")
         amount = float(request.POST.get("amount"))
-        amount *= 100
-        amount = str(amount)
-        amount = int(amount.split(".")[0])
+        amount_sent_to_bank = amount * 100
+        amount_sent_to_bank = str(amount_sent_to_bank)
+        amount_sent_to_bank = int(amount_sent_to_bank.split(".")[0])
 
         # ####### Kart Bilgileri #######
         card_number = request.POST.get("card_number").replace(" ", "")
@@ -94,7 +94,8 @@ class KuveytTurkPaymentProvider(object):
         ####### Mesaj #######
         message = request.POST.get("message")
 
-        return {'name': name, 'email': email, 'phone': phone, 'amount': amount, 'card_number': card_number,
+        return {'name': name, 'email': email, 'phone': phone, 'amount': amount,
+                'amount_sent_to_bank': amount_sent_to_bank, 'card_number': card_number,
                 'card_holder_name': card_holder_name, 'card_expiry': card_expiry, 'card_date': card_date,
                 'card_month': card_month,
                 'card_year': card_year,
@@ -112,6 +113,7 @@ class KuveytTurkPaymentProvider(object):
             email=payment_request_data['email'],
             phone=payment_request_data['phone'],
             amount=payment_request_data['amount'],
+            amount_sent_to_bank=payment_request_data['amount_sent_to_bank'],
             merchant_order_id=merchant_order_id,
             message=payment_request_data['message'],
         )
@@ -147,8 +149,8 @@ class KuveytTurkPaymentProvider(object):
            <CardType>{str(payment_request_data['card_type'])}</CardType>
            <TransactionType>Sale</TransactionType>
            <InstallmentCount>{int('0')}</InstallmentCount>
-           <Amount>{int(payment_request_data['amount'])}</Amount>
-           <DisplayAmount>{int(payment_request_data['amount'])}</DisplayAmount>
+           <Amount>{int(payment_request_data['amount_sent_to_bank'])}</Amount>
+           <DisplayAmount>{int(payment_request_data['amount_sent_to_bank'])}</DisplayAmount>
            <CurrencyCode>{str('0949')}</CurrencyCode>
            <MerchantOrderId>{str(merchant_order_id)}</MerchantOrderId>
            <TransactionSecurity>{int('3')}</TransactionSecurity>

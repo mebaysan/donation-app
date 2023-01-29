@@ -21,7 +21,9 @@ class DonationAdmin(admin.ModelAdmin):
 
 
 class DonationTransactionAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'status_code')
+    list_display = (
+        '__str__', 'name', 'email', 'amount', 'amount_sent_to_bank', 'date', 'status_code_description', 'status_code',
+        'is_complete')
 
 
 admin.site.register(DonationCategory, DonationCategoryAdmin)

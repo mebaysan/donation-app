@@ -1,5 +1,9 @@
+from datetime import datetime
+
 from django.contrib.auth import get_user_model
 from django.db import models
+
+from apps.donor.models import Donation
 
 User = get_user_model()
 
@@ -71,8 +75,11 @@ class Cart(models.Model):
         self.save()
 
     def clean_cart(self):
-        donations = self.cart_items.all()
-        self.amount = 0
-        for donation in donations:
-            self.cart_items.remove(donation)
+        cart_items = self.cart_items.all()
+        for cart_item in cart_items:
+            new_donation = Donation.objects.create(
+                donation_item=cart_item.donation_item, amount=cart_item.amount, added_time=datetime.now(),
+                user=cart_item.cart.user)
+            new_donation.save()
+        self.cart_items.all().delete()
         self.save()

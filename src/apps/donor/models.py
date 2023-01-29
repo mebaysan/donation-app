@@ -73,6 +73,7 @@ class DonationTransaction(models.Model):
     email = models.CharField(max_length=255)
     phone = models.CharField(max_length=255)
     amount = models.DecimalField(decimal_places=2, max_digits=16)
+    amount_sent_to_bank = models.CharField(max_length=299)
     merchant_order_id = models.TextField(null=True, blank=True)
     md_code = models.CharField(max_length=300, null=True, blank=True)
     message = models.TextField(null=True, blank=True)
@@ -88,3 +89,6 @@ class DonationTransaction(models.Model):
     class Meta:
         verbose_name = 'Donation Transaction'
         verbose_name_plural = 'Donation Transactions'
+
+    def __str__(self):
+        return self.merchant_order_id
