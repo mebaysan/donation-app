@@ -49,6 +49,8 @@ if APP_MEDIA_STORAGE_TYPE == 'S3':
 
     # Media root for prod mode. You should use 3rd party storage for these
     MEDIA_ROOT = f'https://s3.amazonaws.com/{AWS_STORAGE_BUCKET_NAME}/media/'
+elif APP_MEDIA_STORAGE_TYPE == 'ON_PREM':
+    MEDIA_ROOT = BASE_DIR / 'media'
 else:
     MEDIA_ROOT = BASE_DIR / 'media'
 

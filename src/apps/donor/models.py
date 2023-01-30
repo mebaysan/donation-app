@@ -41,11 +41,8 @@ class DonationItem(models.Model):
         return self.name
 
     def get_image_path(self):
-        if settings.DEBUG == 1:
-            return self.image.url
-        else:
-            # todo: implement s3
-            pass
+        return self.image.url
+
 
     class Meta:
         verbose_name = 'Donation Item'
