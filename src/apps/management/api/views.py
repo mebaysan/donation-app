@@ -24,7 +24,10 @@ class UserMeView(RetrieveUpdateAPIView):
         serializer.save()
         return Response(serializer.data)
 
-
+# todo: register view
+# todo: sepette item güncelleme fix
+# todo: bağışçı profili (yeni model, eğer kullanıcı giriş yapmamışsa otomatik bağışçı profili oluşacak ve bağış ona kaydedilecek)
+# todo: login olmadan bağış
 class PasswordChangeView(UpdateAPIView):
     serializer_class = PasswordChangeSerializer
     permission_classes = [IsAuthenticated]

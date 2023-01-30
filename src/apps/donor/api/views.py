@@ -1,7 +1,8 @@
 from rest_framework.generics import (ListAPIView, RetrieveAPIView)
 from rest_framework.permissions import IsAuthenticated
 
-from apps.donor.api.serializers import (DonationCategorySerializer, DonationItemSerializer, DonationSerializer,
+from apps.donor.api.serializers import (DonationCategorySerializer, DonationCategoryDetailsSerializer,
+                                        DonationItemSerializer, DonationSerializer,
                                         DonationTransactionSerializer, DonationTransactionDetailsSerializer)
 from apps.donor.models import DonationCategory, DonationItem, Donation, DonationTransaction
 
@@ -12,7 +13,7 @@ class DonationCategoryListAPIView(ListAPIView):
 
 
 class DonationCategoryRetrieveAPIView(RetrieveAPIView):
-    serializer_class = DonationCategorySerializer
+    serializer_class = DonationCategoryDetailsSerializer
     queryset = DonationCategory.objects.filter(is_published=True).all()
     lookup_field = 'pk'
 

@@ -11,6 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
         message="Phone number must be in the format: '+[country code][phone number]'"
     )
     phone_number = serializers.CharField(validators=[phone_regex], max_length=17)
+    username = serializers.CharField(validators=[phone_regex], max_length=17)  # login should be only with phone number
 
     class Meta:
         model = User
