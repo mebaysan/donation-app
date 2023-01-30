@@ -1,4 +1,5 @@
 # Table of Contents
+
 - [Table of Contents](#table-of-contents)
 - [Introduction](#introduction)
 - [Makefile](#makefile)
@@ -8,7 +9,7 @@
 - [Core Django Settings](#core-django-settings)
 - [For Development](#for-development)
 - [For Production](#for-production)
-  - [Load Default Superuser](#load-default-superuser)
+    - [Load Default Superuser](#load-default-superuser)
 - [Default Credentials for Django Admin](#default-credentials-for-django-admin)
 - [Deploy on A Real Server](#deploy-on-a-real-server)
 - [Backup](#backup)
@@ -16,10 +17,13 @@
 
 # Introduction
 
-I created this repo to easily dockerize Django apps. In this repo, I have my own config set-up to seperate prod and dev environments. Also, I have my pre-built `docker-compose.yml` to easily deploy my projects. You can create a Django app inside this directory to use this boilerplate. I have also published two articles about this repo. You can read them by following the links below.
+I created this repo to easily dockerize Django apps. In this repo, I have my own config set-up to seperate prod and dev
+environments. Also, I have my pre-built `docker-compose.yml` to easily deploy my projects. You can create a Django app
+inside this directory to use this boilerplate. I have also published two articles about this repo. You can read them by
+following the links below.
+
 - [A Boilerplate to Easily Dockerize and Deploy Django Apps](https://medium.com/codex/a-boilerplate-to-easily-dockerize-and-deploy-django-apps-8c3a459d01e)
 - [A Boilerplate to Self-Hosted Continuous Delivery Django Apps (Part-2)](https://medium.com/codex/a-boilerplate-to-self-hosted-continuous-delivery-django-apps-part-2-f358274a0ac3)
-
 
 ![logic](readme/logic.png)
 
@@ -33,8 +37,8 @@ The app's image is created by using [Dockerfile](./Dockerfile).
 
 # Nginx Dockerfile
 
-To set-up Nginx, we use [Dockerfile](./nginx/Dockerfile) which is located under the [nginx](./nginx/) folder. Also, [nginx.conf](./nginx/nginx.conf) file is being used for proxy.
-
+To set-up Nginx, we use [Dockerfile](./nginx/Dockerfile) which is located under the [nginx](./nginx/) folder.
+Also, [nginx.conf](./nginx/nginx.conf) file is being used for proxy.
 
 # Docker Compose
 
@@ -42,7 +46,9 @@ To set-up Nginx, we use [Dockerfile](./nginx/Dockerfile) which is located under 
 
 # Core Django Settings
 
-I seperate the prod and dev environments. [config_prod.py](./settings/config_prod.py) file is being used for prod environments and [config_prod.py](./settings/config_dev.py) for dev environments. We need to implement the lines in [settings.py](./settings/settings.py) file to use these seperated environments.
+I seperate the prod and dev environments. [config_prod.py](./settings/config_prod.py) file is being used for prod
+environments and [config_prod.py](./settings/config_dev.py) for dev environments. We need to implement the lines
+in [settings.py](./settings/settings.py) file to use these seperated environments.
 
 **Do not forget to remove `DATABASES` variable in default settings to prevent database duplication!!!**
 
@@ -53,6 +59,7 @@ You can use [dev-postgres.sh](scripts/dev-postgres.sh) to create a development d
 # For Production
 
 ## Load Default Superuser
+
 ```
 docker container exec -it baysan_web /bin/bash
 >>> make loaddata
@@ -64,7 +71,6 @@ docker container exec -it baysan_web /bin/bash
 username: admin
 password: Passw0rd!.
 ```
-
 
 # Deploy on A Real Server
 
@@ -100,7 +106,6 @@ Steps:
         sudo ln -s /etc/nginx/sites-available/baysanproject /etc/nginx/sites-enabled
     ```
 
-
 # Backup
 
 You can use [backuper-db.sh](scripts/backuper-db.sh) to backup your database inside Docker container.
@@ -108,22 +113,41 @@ You can use [backuper-db.sh](scripts/backuper-db.sh) to backup your database ins
 You can use [backuper-web.sh](scripts/backuper-web.sh) to backup your django data inside Docker container.
 
 You can create a crontab by using the command below.
+
 ```
 sudo crontab -e
 ```
-# CI & CD with GitHub Actions
-In [cd.yml](.github/workflows/cd.yml) file, there is a simple continuous delivery workflow is coded. To use it, you have to have your own VPS.
 
-- To activate `self-hosted` mode, you can use the `Settings` tab on your repo. Then, you should go `Actions > General` section. Here, `Allow all actions and reusable workflows` checkbox should be checked.
-- Now, you are able to create your own runner on your VPS. You should go `Actions > Runners` section and create a new Runner.
+# CI & CD with GitHub Actions
+
+In [cd.yml](.github/workflows/cd.yml) file, there is a simple continuous delivery workflow is coded. To use it, you have
+to have your own VPS.
+
+- To activate `self-hosted` mode, you can use the `Settings` tab on your repo. Then, you should go `Actions > General`
+  section. Here, `Allow all actions and reusable workflows` checkbox should be checked.
+- Now, you are able to create your own runner on your VPS. You should go `Actions > Runners` section and create a new
+  Runner.
 - You should install the runner on your VPS by following the commands GitHub showed you.
-- If you get an error like this `Must not be executed as ROOT`, you should deal with it by using the command below on your terminal.
+- If you get an error like this `Must not be executed as ROOT`, you should deal with it by using the command below on
+  your terminal.
     ```
     export RUNNER_ALLOW_RUNASROOT=1
     ```
-- `run.sh` will start to listen, when you close your terminal or executed job, runner will not listen the further requests.
-- `./svc.sh help` command will help you to understand how to run a consistent runner. You will follow the command like below.
+- `run.sh` will start to listen, when you close your terminal or executed job, runner will not listen the further
+  requests.
+- `./svc.sh help` command will help you to understand how to run a consistent runner. You will follow the command like
+  below.
     ```
     ./svc.sh install
     ./svc.sh run
     ```
+
+# Codebase Related Topic
+
+## Custom Authentication Backend
+
+For this app's purpose, we can be logged in via username or phone_number. Application
+uses [`apps.management.authentication.JWTAuthentication`](./src/apps/management/authentication.py) class for rest
+framework views.
+
+To obtain a token, we use `/api/token/` endpoint. It uses [`ObtainTokenView`](./src/apps/management/api/views.py) view.

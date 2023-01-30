@@ -65,3 +65,6 @@ KUVEYTTURK_CONF = {
     'payment_request_url': 'https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelPayGate',
     'payment_approve_url': 'https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelProvisionGate',
 }
+
+# JWT CONF
+TOKEN_LIFETIME_HOURS = os.getenv('TOKEN_LIFETIME_HOURS', 5)
