@@ -27,3 +27,8 @@ class PasswordChangeSerializer(serializers.Serializer):
         if data['new_password'] != data['confirm_new_password']:
             raise serializers.ValidationError("New passwords do not match.")
         return data
+
+
+class ObtainTokenSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
