@@ -41,12 +41,13 @@ class CartItem(models.Model):
         verbose_name = 'Cart Item'
         verbose_name_plural = 'Cart Items'
 
-    def save(self, *args, **kwargs):
-        existing_item = CartItem.objects.filter(cart=self.cart, donation_item=self.donation_item).first()
-        if existing_item:
-            self.amount += existing_item.amount
-            existing_item.delete()
-        super(CartItem, self).save(*args, **kwargs)
+    # Eğer sepette item varsa ve tekrar eklenirse var olan item fiyatını güncelle
+    # def save(self, *args, **kwargs):
+    #     existing_item = CartItem.objects.filter(cart=self.cart, donation_item=self.donation_item).first()
+    #     if existing_item:
+    #         self.amount += existing_item.amount
+    #         existing_item.delete()
+    #     super(CartItem, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.cart.user.username}-{self.donation_item.name}-{self.amount}"
