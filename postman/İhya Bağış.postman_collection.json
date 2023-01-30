@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\":\"admin\",\n    \"password\":\"123\"\n}",
+							"raw": "{\n    \"username\":\"+905308626253\",\n    \"password\":\"123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -163,6 +163,35 @@
 								"management",
 								"users",
 								"me",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phone_number\": \"+905326382352\",\n    \"password\": \"123\",\n    \"confirm_new_password\":\"123\",\n    \"username\": \"yavuzbaysan34@gmail.com\",\n    \"email\": \"yavuzbaysan34@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/management/users/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"management",
+								"users",
 								""
 							]
 						}
@@ -436,7 +465,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{BASE_URL}}/api/payment/cart/items/7/",
+									"raw": "{{BASE_URL}}/api/payment/cart/items/14/",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -445,7 +474,7 @@
 										"payment",
 										"cart",
 										"items",
-										"7",
+										"14",
 										""
 									]
 								}
