@@ -1,12 +1,12 @@
 from django.contrib.auth import get_user_model
 from rest_framework import views, permissions, status
-from rest_framework.generics import RetrieveUpdateAPIView, UpdateAPIView
+from rest_framework.generics import RetrieveUpdateAPIView, UpdateAPIView, CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.management.api.serializers import ObtainTokenSerializer
 from apps.management.api.serializers import PasswordChangeSerializer
-from apps.management.api.serializers import UserSerializer
+from apps.management.api.serializers import UserSerializer, UserRegisterSerializer
 from apps.management.authentication import JWTAuthentication
 
 User = get_user_model()
@@ -67,4 +67,23 @@ class PasswordChangeView(UpdateAPIView):
             self.object.set_password(serializer.data.get("new_password"))
             self.object.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserCreateAPIView(CreateAPIView):
+    serializer_class = UserRegisterSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            validated_data.pop('confirm_new_password')
+            try:
+                user = User.objects.create_user(**validated_data)
+                return Response({'details': 'User created successfully.'}, status=status.HTTP_201_CREATED)
+            except Exception as e:
+                # todo: optimize the error response
+                return Response({'details': "User couldn't create successfully."},
+                                status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
