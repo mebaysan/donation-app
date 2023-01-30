@@ -32,8 +32,8 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-    # API Doc
-    path('api/openapi/', get_schema_view(
+    # API Doc (open api)
+    path('api/docs/', get_schema_view(
         title=settings.APP_NAME,
         description="API Documentation",
         version="1.0.0",
