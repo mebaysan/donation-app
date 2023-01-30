@@ -1,10 +1,17 @@
 from django.contrib.auth import get_user_model
+from django.core.validators import RegexValidator
 from rest_framework import serializers
 
 User = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
+    phone_regex = RegexValidator(
+        regex=r'^\+\d{1,3}\d{1,15}$',
+        message="Phone number must be in the format: '+[country code][phone number]'"
+    )
+    phone_number = serializers.CharField(validators=[phone_regex], max_length=17)
+
     class Meta:
         model = User
         exclude = ['groups', 'user_permissions', 'is_superuser', 'is_staff', 'is_active', 'password']

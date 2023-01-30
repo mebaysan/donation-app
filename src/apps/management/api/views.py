@@ -17,6 +17,13 @@ class UserMeView(RetrieveUpdateAPIView):
     def get_object(self):
         return self.request.user
 
+    def update(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = self.serializer_class(user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
 
 class PasswordChangeView(UpdateAPIView):
     serializer_class = PasswordChangeSerializer
