@@ -174,3 +174,8 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
+
+# todo: implement creating donations after successfull transaction
+# todo: register view
+# todo: bağışçı profili (yeni model, eğer kullanıcı giriş yapmamışsa otomatik bağışçı profili oluşacak ve bağış ona kaydedilecek)
+# todo: login olmadan bağış
