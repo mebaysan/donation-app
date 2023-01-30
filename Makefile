@@ -99,3 +99,6 @@ runproxyversion:
 	@make collect
 	@make migration
 	@make run_gunicorn
+
+generate-schema:
+    @python ./src/manage.py generateschema --file openapi-schema.yml

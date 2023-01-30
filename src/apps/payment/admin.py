@@ -1,14 +1,9 @@
 from django.contrib import admin
 
-from apps.donor.models import Donation
-from apps.payment.models import Cart, PaymentProvider
+from apps.payment.models import Cart, PaymentProvider, CartItem
 
 
 # Register your models here.
-
-class DonationInline(admin.TabularInline):
-    model = Donation
-    extra = 0
 
 
 class PaymentProviderAdmin(admin.ModelAdmin):
@@ -23,11 +18,20 @@ class PaymentProviderAdmin(admin.ModelAdmin):
         return False
 
 
+class CartItemAdmin(admin.ModelAdmin):
+    list_display = ['__str__', 'amount', 'added_date']
+
+
+class CartItemInline(admin.TabularInline):
+    model = CartItem
+    extra = 0
+
+
 class CartAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'amount', 'updated_date', 'get_item_counts']
     readonly_fields = ['updated_date', 'get_item_counts']
     fields = ['user', 'amount', 'updated_date', 'get_item_counts']
-    inlines = [DonationInline]
+    inlines = [CartItemInline]
 
     def get_item_counts(self, obj):
         return obj.get_item_counts()
@@ -37,3 +41,4 @@ class CartAdmin(admin.ModelAdmin):
 
 admin.site.register(PaymentProvider, PaymentProviderAdmin)
 admin.site.register(Cart, CartAdmin)
+admin.site.register(CartItem, CartItemAdmin)
