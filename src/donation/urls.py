@@ -17,6 +17,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.schemas import get_schema_view
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -25,10 +26,25 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # API URLs
     path('api/', include('apps.web.api.urls')),
+    # AUTH ENDPOINTS
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    # API Doc
+    path('api/openapi/', get_schema_view(
+        title=settings.APP_NAME,
+        description="API Documentation",
+        version="1.0.0",
+        patterns=[
+            path('api/', include('apps.web.api.urls')),
+            path('api/token/', TokenObtainPairView.as_view()),
+            path('api/token/refresh/', TokenRefreshView.as_view()),
+            path('api/token/verify/', TokenVerifyView.as_view()),
+        ]
+    ), name='openapi-schema'
+         ),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
