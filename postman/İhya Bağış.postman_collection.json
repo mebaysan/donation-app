@@ -35,35 +35,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "Refresh Token",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"refresh\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY3NTA3MjA3MiwiaWF0IjoxNjc0OTg1NjcyLCJqdGkiOiI0NTBhODE3ZjQ1MDQ0OWE3YTcwZGEyYmMyY2VjZDgzYiIsInVzZXJfaWQiOjF9.wLHBzUJ8OCsA2Vm0zXG4esY7ouglNOWcq4LqTRvPy4w\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/api/token/refresh/",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"token",
-								"refresh",
-								""
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		},
@@ -571,54 +542,8 @@
 							}
 						],
 						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "name",
-									"value": "Enes Baysan",
-									"type": "default"
-								},
-								{
-									"key": "email",
-									"value": "info@baysansoft.com",
-									"type": "default"
-								},
-								{
-									"key": "phone",
-									"value": "5308626253",
-									"type": "default"
-								},
-								{
-									"key": "amount",
-									"value": "5.00",
-									"type": "default"
-								},
-								{
-									"key": "card_number",
-									"value": "4033 6025 6202 0327",
-									"type": "default"
-								},
-								{
-									"key": "card_holder_name",
-									"value": "Enes Baysan",
-									"type": "default"
-								},
-								{
-									"key": "card_expiry",
-									"value": "01/30",
-									"type": "default"
-								},
-								{
-									"key": "card_cvc",
-									"value": "861",
-									"type": "default"
-								},
-								{
-									"key": "message",
-									"value": "TEST!",
-									"type": "default"
-								}
-							],
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Enes Baysan\",\n    \"email\":\"info@baysansoft.com\",\n    \"phone\":\"+905308626253\",\n    \"amount\":\"5.00\",\n    \"card_number\":\"4033 6025 6202 0327\",\n    \"card_holder_name\":\"Enes Baysan\",\n    \"card_expiry\":\"01/30\",\n    \"card_cvc\":\"861\",\n    \"message\":\"TEST!\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
