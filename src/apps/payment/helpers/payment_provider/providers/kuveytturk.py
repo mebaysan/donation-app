@@ -63,24 +63,27 @@ class KuveytTurkPaymentProvider(object):
     }
     CONF = settings.KUVEYTTURK_CONF
 
-    def payment_request_parser(self, request):
+    def payment_request_parser(self, request_data):
+        """
+            request_data (OrderedDict): Serialized data
+        """
         ####### Bagisci Bilgileri #######
-        name = request.POST.get("name")
-        email = request.POST.get("email")
-        phone = request.POST.get("phone")
-        amount = float(request.POST.get("amount"))
+        name = request_data.get("name")
+        email = request_data.get("email")
+        phone = request_data.get("phone")
+        amount = float(request_data.get("amount"))
         amount_sent_to_bank = amount * 100
         amount_sent_to_bank = str(amount_sent_to_bank)
         amount_sent_to_bank = int(amount_sent_to_bank.split(".")[0])
 
         # ####### Kart Bilgileri #######
-        card_number = request.POST.get("card_number").replace(" ", "")
-        card_holder_name = request.POST.get("card_holder_name").upper()
-        card_expiry = request.POST.get("card_expiry")
+        card_number = request_data.get("card_number").replace(" ", "")
+        card_holder_name = request_data.get("card_holder_name").upper()
+        card_expiry = request_data.get("card_expiry")
         card_date = card_expiry.split("/")
         card_month = card_date[0].strip()
         card_year = card_date[1].strip()
-        card_cvc = request.POST.get("card_cvc")
+        card_cvc = request_data.get("card_cvc")
 
         if card_number[0] == "4":
             card_type = "Visa"
@@ -92,7 +95,7 @@ class KuveytTurkPaymentProvider(object):
             raise ValueError('Please enter a valid card.')
 
         ####### Mesaj #######
-        message = request.POST.get("message")
+        message = request_data.get("message")
 
         return {'name': name, 'email': email, 'phone': phone, 'amount': amount,
                 'amount_sent_to_bank': amount_sent_to_bank, 'card_number': card_number,
@@ -104,8 +107,8 @@ class KuveytTurkPaymentProvider(object):
                 'message': message
                 }
 
-    def make_payment(self, request):
-        payment_request_data = self.payment_request_parser(request)
+    def make_payment(self, request, request_data):
+        payment_request_data = self.payment_request_parser(request_data)
         merchant_order_id = f"web-bagis/STATIC-DEGISECEK/{str(timezone.now().time())}"  # istediğimiz değer yazılabilir bizim tuttuğumuz değer olacak (sabit veya değişken)
         ############## Bağış İşlem model instance create ##############
         new_transaction = DonationTransaction(

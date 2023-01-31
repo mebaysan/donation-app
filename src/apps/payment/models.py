@@ -12,6 +12,7 @@ User = get_user_model()
 class PaymentProvider(models.Model):
     name = models.CharField(max_length=255)
     is_provider = models.BooleanField(default=False)
+    code_name = models.CharField(max_length=3)
 
     class Meta:
         verbose_name = 'Payment Provider'

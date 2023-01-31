@@ -12,7 +12,7 @@ User = get_user_model()
 @receiver(post_migrate)
 def create_base_providers(sender, **kwargs):
     from .models import PaymentProvider
-    PaymentProvider.objects.get_or_create(name="KuveytTurk", is_provider=True)
+    PaymentProvider.objects.get_or_create(name="KuveytTurk", is_provider=True, code_name='KT')
 
 
 @receiver(post_save, sender=User)

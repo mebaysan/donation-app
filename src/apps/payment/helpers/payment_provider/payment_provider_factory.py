@@ -10,7 +10,7 @@ class PaymentProviderFactory:
     @classmethod
     def get_payment_provider(cls):
         provider = cls.get_published_payment_provider_instance()
-        if provider.name == 'KuveytTurk':
+        if provider.code_name == 'KT':
             return KuveytTurkPaymentProvider()
         else:
             return KuveytTurkPaymentProvider()
