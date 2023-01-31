@@ -1,7 +1,7 @@
-from django.core.validators import RegexValidator
 from rest_framework import serializers
 
 from apps.payment.models import Cart, CartItem
+from helpers.serializers.validators import email_regex, phone_regex, card_expiry_regex
 
 
 class CartItemSerializer(serializers.ModelSerializer):
@@ -19,22 +19,13 @@ class CartSerializer(serializers.ModelSerializer):
 
 
 class PaymentRequestSerializer(serializers.Serializer):
-    phone_regex = RegexValidator(
-        regex=r'^\+\d{1,3}\d{1,15}$',
-        message="Phone number must be in the format: '+[country code][phone number]'"
-    )
-    email_regex = RegexValidator(
-        regex=r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$',
-        message="Email must be in the format: 'example@domain.com'"
-    )
-
     name = serializers.CharField()
     email = serializers.EmailField(validators=[email_regex])
     phone = serializers.CharField(validators=[phone_regex])
     amount = serializers.FloatField(min_value=0)
     card_number = serializers.CharField(max_length=19)
     card_holder_name = serializers.CharField()
-    card_expiry = serializers.CharField(max_length=7)
+    card_expiry = serializers.CharField(max_length=5, validators=[card_expiry_regex])
     card_cvc = serializers.CharField(max_length=4)
     message = serializers.CharField(required=False)
 

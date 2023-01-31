@@ -1,15 +1,12 @@
 from django.contrib.auth import get_user_model
-from django.core.validators import RegexValidator
 from rest_framework import serializers
+
+from helpers.serializers.validators import email_regex, phone_regex, username_regex
 
 User = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
-    phone_regex = RegexValidator(
-        regex=r'^\+\d{1,3}\d{1,15}$',
-        message="Phone number must be in the format: '+[country code][phone number]'"
-    )
     phone_number = serializers.CharField(validators=[phone_regex], max_length=17)
 
     class Meta:
@@ -18,18 +15,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
-    phone_regex = RegexValidator(
-        regex=r'^\+\d{1,3}\d{1,15}$',
-        message="Phone number must be in the format: '+[country code][phone number]'"
-    )
-    email_regex = RegexValidator(
-        regex=r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$',
-        message="Email must be in the format: 'example@domain.com'"
-    )
-    username_regex = RegexValidator(
-        regex=r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$',
-        message="Username must be in the format: 'example@domain.com'"
-    )
     phone_number = serializers.CharField(validators=[phone_regex], max_length=17, required=True)
     email = serializers.CharField(validators=[email_regex], required=True)
     username = serializers.CharField(validators=[username_regex], required=True)

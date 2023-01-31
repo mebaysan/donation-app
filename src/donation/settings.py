@@ -147,6 +147,5 @@ JWT_CONF = {
 }
 
 # todo: implement creating donations after successfull transaction
-# todo: register view
 # todo: bağışçı profili (yeni model, eğer kullanıcı giriş yapmamışsa otomatik bağışçı profili oluşacak ve bağış ona kaydedilecek)
 # todo: login olmadan bağış
