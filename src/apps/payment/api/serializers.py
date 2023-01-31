@@ -30,6 +30,11 @@ class PaymentRequestSerializer(serializers.Serializer):
     message = serializers.CharField(required=False)
 
     def validate_card_number(self, value):
+        """
+            4      => Visa
+            5 || 6 => MasterCard
+            9      => Troy
+        """
         if value[0] not in ["4", "5", "6", "9"]:
             raise serializers.ValidationError('Please enter a valid card.')
         return value
