@@ -71,10 +71,6 @@ class KuveytTurkPaymentProvider(object):
         name = request_data.get("name")
         email = request_data.get("email")
         phone = request_data.get("phone")
-        amount = float(request_data.get("amount"))
-        amount_sent_to_bank = amount * 100
-        amount_sent_to_bank = str(amount_sent_to_bank)
-        amount_sent_to_bank = int(amount_sent_to_bank.split(".")[0])
 
         # ####### Kart Bilgileri #######
         card_number = request_data.get("card_number").replace(" ", "")
@@ -97,6 +93,18 @@ class KuveytTurkPaymentProvider(object):
         ####### Mesaj #######
         message = request_data.get("message")
 
+        ####### Donation Items #######
+        donations = request_data.get('donations')
+
+        ####### Amount #######
+        amount = 0
+        for donation in donations:
+            amount += donation.get('amount')
+        amount = float(amount)
+        amount_sent_to_bank = amount * 100
+        amount_sent_to_bank = str(amount_sent_to_bank)
+        amount_sent_to_bank = int(amount_sent_to_bank.split(".")[0])
+
         return {'name': name, 'email': email, 'phone': phone, 'amount': amount,
                 'amount_sent_to_bank': amount_sent_to_bank, 'card_number': card_number,
                 'card_holder_name': card_holder_name, 'card_expiry': card_expiry, 'card_date': card_date,
@@ -104,7 +112,8 @@ class KuveytTurkPaymentProvider(object):
                 'card_year': card_year,
                 'card_cvc': card_cvc,
                 'card_type': card_type,
-                'message': message
+                'message': message,
+                'donations': donations
                 }
 
     def make_payment(self, request, request_data):

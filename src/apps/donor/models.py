@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
 
@@ -43,7 +42,6 @@ class DonationItem(models.Model):
     def get_image_path(self):
         return self.image.url
 
-
     class Meta:
         verbose_name = 'Donation Item'
         verbose_name_plural = 'Donation Items'
@@ -57,6 +55,8 @@ class Donation(models.Model):
     amount = models.DecimalField(decimal_places=2, max_digits=16)
     added_time = models.DateTimeField(auto_now_add=True, auto_created=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    donation_transaction = models.ForeignKey('donor.DonationTransaction', on_delete=models.CASCADE,
+                                             related_name='donations')
 
     def __str__(self):
         return f"{self.user.username}-{self.donation_item.name}-{self.amount}"
@@ -81,7 +81,6 @@ class DonationTransaction(models.Model):
         max_length=255, null=True, blank=True, default="Response not received from bank"
     )
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    donations = models.ManyToManyField(Donation)
 
     class Meta:
         verbose_name = 'Donation Transaction'

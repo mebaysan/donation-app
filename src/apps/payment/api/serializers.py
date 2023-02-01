@@ -10,6 +10,12 @@ class CartItemSerializer(serializers.ModelSerializer):
         fields = ['id', 'donation_item', 'amount', 'added_date']
 
 
+class CartItemPaymentRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CartItem
+        fields = ['donation_item', 'amount']
+
+
 class CartSerializer(serializers.ModelSerializer):
     cart_items = CartItemSerializer(many=True)
 
@@ -22,12 +28,13 @@ class PaymentRequestSerializer(serializers.Serializer):
     name = serializers.CharField()
     email = serializers.EmailField(validators=[email_regex])
     phone = serializers.CharField(validators=[phone_regex])
-    amount = serializers.FloatField(min_value=0)
+    # amount = serializers.FloatField(min_value=0) # we sum manually in the provider method
     card_number = serializers.CharField(max_length=19)
     card_holder_name = serializers.CharField()
     card_expiry = serializers.CharField(max_length=5, validators=[card_expiry_regex])
     card_cvc = serializers.CharField(max_length=4)
     message = serializers.CharField(required=False)
+    donations = CartItemPaymentRequestSerializer(many=True)
 
     def validate_card_number(self, value):
         """
