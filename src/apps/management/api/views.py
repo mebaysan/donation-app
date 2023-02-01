@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.db import IntegrityError
 from rest_framework import views, permissions, status
 from rest_framework.generics import RetrieveUpdateAPIView, UpdateAPIView, CreateAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -63,7 +64,7 @@ class PasswordChangeView(UpdateAPIView):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             if not self.object.check_password(serializer.data.get("old_password")):
-                return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"old_password": ["Yanlış parola."]}, status=status.HTTP_400_BAD_REQUEST)
             self.object.set_password(serializer.data.get("new_password"))
             self.object.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
@@ -81,9 +82,11 @@ class UserCreateAPIView(CreateAPIView):
             validated_data.pop('confirm_new_password')
             try:
                 user = User.objects.create_user(**validated_data)
-                return Response({'details': 'User created successfully.'}, status=status.HTTP_201_CREATED)
-            except Exception as e:
-                # todo: optimize the error response
-                return Response({'details': "User couldn't create successfully."},
+                return Response({'details': 'Kullanıcı başarıyla oluşturuldu.'}, status=status.HTTP_201_CREATED)
+            except IntegrityError:
+                return Response({'details': "Kayıt etmek istediğiniz bilgiler başka bir kullanıcı tarafından alınmış."},
+                                status=status.HTTP_400_BAD_REQUEST)
+            except Exception:
+                return Response({'details': "Kullanıcı oluşturulurken hata."},
                                 status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
