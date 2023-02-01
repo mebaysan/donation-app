@@ -4,7 +4,7 @@ import jwt
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from rest_framework import authentication
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.exceptions import AuthenticationFailed, ParseError
 
 User = get_user_model()
 
@@ -24,7 +24,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
         except jwt.exceptions.InvalidSignatureError:
             raise AuthenticationFailed('Invalid signature')
         except:
-            raise AuthenticationFailed('Token can not be decoded')
+            raise ParseError()
 
         # Get the user from the database
         username_or_phone_number = payload.get('user_identifier')
