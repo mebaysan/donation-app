@@ -292,4 +292,4 @@ class KuveytTurkPaymentProvider(object):
 
         transaction.save()
 
-        return transaction.md_code
+        return Response({'details': 'You have successfully completed the donation.'}, status.HTTP_200_OK)
