@@ -145,6 +145,3 @@ REST_FRAMEWORK = {
 JWT_CONF = {
     'TOKEN_LIFETIME_HOURS': TOKEN_LIFETIME_HOURS
 }
-
-# todo: login olmadan bağış
-# todo: bağışçı profili (yeni model, eğer kullanıcı giriş yapmamışsa otomatik bağışçı profili oluşacak ve bağış ona kaydedilecek)

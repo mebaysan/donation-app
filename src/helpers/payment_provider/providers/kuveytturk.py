@@ -5,11 +5,16 @@ import uuid
 
 import requests
 from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
-from django.utils import timezone
+from rest_framework import status
+from rest_framework.response import Response
 
 from apps.payment.models import DonationTransaction, Donation
+
+User = get_user_model()
 
 
 class KuveytTurkPaymentProvider(object):
@@ -69,7 +74,8 @@ class KuveytTurkPaymentProvider(object):
             request_data (OrderedDict): Serialized data
         """
         ####### Bagisci Bilgileri #######
-        name = request_data.get("name")
+        first_name = request_data.get("first_name")
+        last_name = request_data.get("last_name")
         email = request_data.get("email")
         phone = request_data.get("phone")
 
@@ -106,23 +112,32 @@ class KuveytTurkPaymentProvider(object):
         amount_sent_to_bank = str(amount_sent_to_bank)
         amount_sent_to_bank = int(amount_sent_to_bank.split(".")[0])
 
-        return {'name': name, 'email': email, 'phone': phone, 'amount': amount,
-                'amount_sent_to_bank': amount_sent_to_bank, 'card_number': card_number,
-                'card_holder_name': card_holder_name, 'card_expiry': card_expiry, 'card_date': card_date,
-                'card_month': card_month,
-                'card_year': card_year,
-                'card_cvc': card_cvc,
-                'card_type': card_type,
-                'message': message,
-                'donations': donations
-                }
+        return {
+            'first_name': first_name,
+            'last_name': last_name,
+            'email': email,
+            'phone': phone,
+            'amount': amount,
+            'amount_sent_to_bank': amount_sent_to_bank,
+            'card_number': card_number,
+            'card_holder_name': card_holder_name,
+            'card_expiry': card_expiry,
+            'card_date': card_date,
+            'card_month': card_month,
+            'card_year': card_year,
+            'card_cvc': card_cvc,
+            'card_type': card_type,
+            'message': message,
+            'donations': donations
+        }
 
     def make_payment(self, request, request_data):
         payment_request_data = self.payment_request_parser(request_data)
-        merchant_order_id = f"{uuid.uuid4()}/{str(timezone.now().time())}"  # istediğimiz değer yazılabilir bizim tuttuğumuz değer olacak (sabit veya değişken)
+        merchant_order_id = f"{uuid.uuid4()}"  # istediğimiz değer yazılabilir bizim tuttuğumuz değer olacak (sabit veya değişken)
         ############## DonationTransaction instance create ##############
         new_transaction = DonationTransaction(
-            name=payment_request_data['name'],
+            first_name=payment_request_data['first_name'],
+            last_name=payment_request_data['last_name'],
             email=payment_request_data['email'],
             phone=payment_request_data['phone'],
             amount=payment_request_data['amount'],
@@ -132,6 +147,33 @@ class KuveytTurkPaymentProvider(object):
         )
         if request.user.is_authenticated:
             new_transaction.user = request.user
+
+        else:  # payment request has no user (not logged-in)
+            exists_user = User.objects.filter(email=payment_request_data['email'],
+                                              phone_number=payment_request_data['phone']).first()
+            if exists_user is not None:  # there is a User with credentials
+                new_transaction.user = exists_user
+            else:  # there is no User with the email or phone_number
+                try:
+                    new_user = User.objects.create(first_name=payment_request_data['first_name'],
+                                                   last_name=payment_request_data['first_name'],
+                                                   email=payment_request_data['email'],
+                                                   username=payment_request_data['email'],
+                                                   phone_number=payment_request_data['phone'],
+                                                   )
+                    new_user.set_password(str(uuid.uuid4()))
+                    new_user.save()
+                    new_transaction.user = new_user
+                except IntegrityError as e:
+                    # email != phone_number for User
+                    context = {'details': 'Please send valid Email and Phone number.'}
+                    if 'phone_number' in str(e):  # email is different but phone_number is taken by a User
+                        context['details'] = 'Phone number already in use. Please send your valid account information.'
+                    if 'username' in str(e):  # phone_number is different but email (username) is taken by a User
+                        context['details'] = 'Email already in use. Please send your valid account information.'
+                    return Response(context,
+                                    status.HTTP_400_BAD_REQUEST)
+
         new_transaction.save()
 
         ########### Donation Create for DonationTransaction #############

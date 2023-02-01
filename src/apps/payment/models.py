@@ -25,7 +25,8 @@ class DonationTransaction(models.Model):
     """
         Holds transaction of donations in the same line with total number
     """
-    name = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
     phone = models.CharField(max_length=255)
     amount = models.DecimalField(decimal_places=2, max_digits=16)
@@ -39,7 +40,7 @@ class DonationTransaction(models.Model):
     status_code_description = models.CharField(
         max_length=255, null=True, blank=True, default="Response not received from bank"
     )
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Donation Transaction'

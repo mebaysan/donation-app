@@ -45,7 +45,8 @@ class CartSerializer(serializers.ModelSerializer):
 
 
 class PaymentRequestSerializer(serializers.Serializer):
-    name = serializers.CharField()
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
     email = serializers.EmailField(validators=[email_regex])
     phone = serializers.CharField(validators=[phone_regex])
     # amount = serializers.FloatField(min_value=0) # we sum manually in the provider method

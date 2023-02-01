@@ -51,7 +51,8 @@ class DonationInline(admin.TabularInline):
 
 class DonationTransactionAdmin(admin.ModelAdmin):
     list_display = (
-        '__str__', 'name', 'email', 'amount', 'amount_sent_to_bank', 'date', 'status_code_description', 'status_code',
+        '__str__', 'first_name', 'last_name', 'email', 'amount', 'amount_sent_to_bank', 'date',
+        'status_code_description', 'status_code',
         'is_complete')
     inlines = [DonationInline]
 

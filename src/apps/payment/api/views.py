@@ -1,13 +1,13 @@
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import RetrieveAPIView, CreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
-from apps.payment.api.serializers import CartSerializer, CartItemSerializer, DonationSerializer, \
-    DonationTransactionSerializer, DonationTransactionDetailsSerializer
-from helpers.payment_provider.payment_provider_factory import PaymentProviderFactory
+from apps.payment.api.serializers import (CartSerializer, CartItemSerializer, DonationSerializer,
+                                          DonationTransactionSerializer, DonationTransactionDetailsSerializer)
 from apps.payment.models import Cart, CartItem, Donation, DonationTransaction
+from helpers.payment_provider.payment_provider_factory import PaymentProviderFactory
 
 
 class DonationListAPIView(ListAPIView):
@@ -71,7 +71,7 @@ class CartItemRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def payment(request):
     # Get payment provider payment request serializer class
     serializer_class = PaymentProviderFactory.get_payment_provider_payment_request_serializer()
@@ -87,14 +87,14 @@ def payment(request):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def payment_success(request):
     provider = PaymentProviderFactory.get_payment_provider()
     return provider.approve_payment(request)
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def payment_fail(request):
     content = {'detail': 'Payment failed!'}
     return Response(content, status.HTTP_400_BAD_REQUEST)
