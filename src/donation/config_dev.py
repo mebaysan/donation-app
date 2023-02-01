@@ -44,3 +44,11 @@ KUVEYTTURK_CONF = {
 
 # JWT CONF
 TOKEN_LIFETIME_HOURS = 5
+
+# EMAIL
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'info@baysansoft.com'
+EMAIL_HOST_PASSWORD = 'bkbkegwqmsfdlsyu'
+EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = True

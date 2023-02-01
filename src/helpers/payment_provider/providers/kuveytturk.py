@@ -13,6 +13,7 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from apps.payment.models import DonationTransaction, Donation
+from helpers.communication.email import send_password_reset_email
 
 User = get_user_model()
 
@@ -153,7 +154,7 @@ class KuveytTurkPaymentProvider(object):
                                               phone_number=payment_request_data['phone']).first()
             if exists_user is not None:  # there is a User with credentials
                 new_transaction.user = exists_user
-            else:  # there is no User with the email or phone_number
+            else:  # there is no User with the mail_templates or phone_number
                 try:
                     new_user = User.objects.create(first_name=payment_request_data['first_name'],
                                                    last_name=payment_request_data['first_name'],
@@ -164,13 +165,15 @@ class KuveytTurkPaymentProvider(object):
                     new_user.set_password(str(uuid.uuid4()))
                     new_user.save()
                     new_transaction.user = new_user
+                    send_password_reset_email(new_user, request)
                 except IntegrityError as e:
-                    # email != phone_number for User
+                    # mail_templates != phone_number for User
                     context = {'details': 'Lütfen geçerli email ve telefon numarası kullanın.'}
                     if 'phone_number' in str(e):  # email is different but phone_number is taken by a User
                         context[
                             'details'] = 'Telefon farklı bir bağışçı profilinde kullanılıyor. Lütfen hesabınıza tanımlı email ve telefon numarasını kullanın.'
-                    if 'username' in str(e):  # phone_number is different but email (username) is taken by a User
+                    if 'username' in str(
+                            e):  # phone_number is different but email (username) is taken by a User
                         context[
                             'details'] = 'Email farklı bir bağışçı profilinde kullanılıyor. Lütfen hesabınıza tanımlı email ve telefon numarasını kullanın.'
                     return Response(context,
