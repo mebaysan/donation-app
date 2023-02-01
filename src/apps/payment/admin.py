@@ -55,6 +55,8 @@ class DonationTransactionAdmin(admin.ModelAdmin):
         'status_code_description', 'status_code',
         'is_complete')
     inlines = [DonationInline]
+    list_filter = ['is_complete', 'status_code']
+    search_fields = ['first_name', 'last_name', 'email', 'phone_number']
 
 
 admin.site.register(DonationTransaction, DonationTransactionAdmin)

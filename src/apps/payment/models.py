@@ -28,7 +28,7 @@ class DonationTransaction(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
-    phone = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=255)
     amount = models.DecimalField(decimal_places=2, max_digits=16)
     amount_sent_to_bank = models.CharField(max_length=299)
     merchant_order_id = models.TextField(null=True, blank=True)

@@ -77,7 +77,7 @@ class KuveytTurkPaymentProvider(object):
         first_name = request_data.get("first_name")
         last_name = request_data.get("last_name")
         email = request_data.get("email")
-        phone = request_data.get("phone")
+        phone = request_data.get("phone_number")
 
         # ####### Kart Bilgileri #######
         card_number = request_data.get("card_number").replace(" ", "")
@@ -139,7 +139,7 @@ class KuveytTurkPaymentProvider(object):
             first_name=payment_request_data['first_name'],
             last_name=payment_request_data['last_name'],
             email=payment_request_data['email'],
-            phone=payment_request_data['phone'],
+            phone_number=payment_request_data['phone'],
             amount=payment_request_data['amount'],
             amount_sent_to_bank=payment_request_data['amount_sent_to_bank'],
             merchant_order_id=merchant_order_id,
