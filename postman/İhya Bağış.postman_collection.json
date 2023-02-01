@@ -265,94 +265,6 @@
 							"response": []
 						}
 					]
-				},
-				{
-					"name": "Donations",
-					"item": [
-						{
-							"name": "List Donations",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer {{ACCESS_TOKEN}}",
-										"type": "default"
-									}
-								],
-								"url": {
-									"raw": "{{BASE_URL}}/api/donor/donations/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"donor",
-										"donations",
-										""
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Donation Transactions",
-					"item": [
-						{
-							"name": "Donation Transactions",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer {{ACCESS_TOKEN}}",
-										"type": "default"
-									}
-								],
-								"url": {
-									"raw": "{{BASE_URL}}/api/donor/transactions/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"donor",
-										"transactions",
-										""
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Donation Transaction Details",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer {{ACCESS_TOKEN}}",
-										"type": "default"
-									}
-								],
-								"url": {
-									"raw": "{{BASE_URL}}/api/donor/transactions/1",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"donor",
-										"transactions",
-										"1"
-									]
-								}
-							},
-							"response": []
-						}
-					]
 				}
 			]
 		},
@@ -401,7 +313,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"donation_item\":2,\n    \"amount\":50.0\n}",
+									"raw": "{\n    \"donation_item\":2,\n    \"amount\":30.0\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -436,7 +348,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{BASE_URL}}/api/payment/cart/items/14/",
+									"raw": "{{BASE_URL}}/api/payment/cart/items/18/",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -445,7 +357,7 @@
 										"payment",
 										"cart",
 										"items",
-										"14",
+										"18",
 										""
 									]
 								}
@@ -531,6 +443,94 @@
 					]
 				},
 				{
+					"name": "Donations",
+					"item": [
+						{
+							"name": "List Donations",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{ACCESS_TOKEN}}",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/payment/donations/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"payment",
+										"donations",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Donation Transactions",
+					"item": [
+						{
+							"name": "Donation Transactions",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{ACCESS_TOKEN}}",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/payment/transactions/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"payment",
+										"transactions",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Donation Transaction Details",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{ACCESS_TOKEN}}",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/payment/transactions/1",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"payment",
+										"transactions",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "Payment",
 					"request": {
 						"method": "POST",
@@ -543,7 +543,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\":\"Enes Baysan\",\n    \"email\":\"info@baysansoft.com\",\n    \"phone\":\"+905308626253\",\n    \"amount\":\"5.00\",\n    \"card_number\":\"4033 6025 6202 0327\",\n    \"card_holder_name\":\"Enes Baysan\",\n    \"card_expiry\":\"01/30\",\n    \"card_cvc\":\"861\",\n    \"message\":\"TEST!\"\n}",
+							"raw": "{\n    \"name\":\"Enes Baysan\",\n    \"email\":\"info@baysansoft.com\",\n    \"phone\":\"+905308626253\",\n    \"card_number\":\"4033 6025 6202 0327\",\n    \"card_holder_name\":\"Enes Baysan\",\n    \"card_expiry\":\"01/30\",\n    \"card_cvc\":\"861\",\n    \"message\":\"TEST!\",\n    \"donations\": [\n        {\"donation_item\":2, \"amount\":50},\n        {\"donation_item\":2, \"amount\":50},\n        {\"donation_item\":2, \"amount\":150}\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
