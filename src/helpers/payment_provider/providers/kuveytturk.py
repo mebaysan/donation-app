@@ -134,7 +134,7 @@ class KuveytTurkPaymentProvider(object):
             new_transaction.user = request.user
         new_transaction.save()
 
-        ########### Donations for DonationTransaction #############
+        ########### Donation Create for DonationTransaction #############
         for donation in payment_request_data['donations']:
             new_donation = Donation.objects.create(donation_item=donation.get('donation_item'),
                                                    amount=donation.get('amount'),
