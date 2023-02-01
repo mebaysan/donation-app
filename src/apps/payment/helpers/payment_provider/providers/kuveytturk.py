@@ -1,6 +1,7 @@
 import base64
 import hashlib
 import urllib.parse
+import uuid
 
 import requests
 from django.conf import settings
@@ -8,7 +9,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
-from apps.donor.models import DonationTransaction
+from apps.payment.models import DonationTransaction
 
 
 class KuveytTurkPaymentProvider(object):
@@ -118,8 +119,8 @@ class KuveytTurkPaymentProvider(object):
 
     def make_payment(self, request, request_data):
         payment_request_data = self.payment_request_parser(request_data)
-        merchant_order_id = f"web-bagis/STATIC-DEGISECEK/{str(timezone.now().time())}"  # istediğimiz değer yazılabilir bizim tuttuğumuz değer olacak (sabit veya değişken)
-        ############## Bağış İşlem model instance create ##############
+        merchant_order_id = f"{uuid.uuid4()}/{str(timezone.now().time())}"  # istediğimiz değer yazılabilir bizim tuttuğumuz değer olacak (sabit veya değişken)
+        ############## DonationTransaction instance create ##############
         new_transaction = DonationTransaction(
             name=payment_request_data['name'],
             email=payment_request_data['email'],
@@ -132,7 +133,7 @@ class KuveytTurkPaymentProvider(object):
         if request.user.is_authenticated:
             new_transaction.user = request.user
         new_transaction.save()
-        ########### HASH Işlemleri #############
+        ########### HASH Process #############
         hashed_password = base64.b64encode(
             hashlib.sha1(settings.KUVEYTTURK_CONF["password"].encode("ISO-8859-9")).digest()
         ).decode()
@@ -226,12 +227,12 @@ class KuveytTurkPaymentProvider(object):
             headers=headers,
         )
 
-        ##### transaction Durum Kontrol #####
+        ##### Transaction Status Check #####
         response_code_start = r.text.find("<ResponseCode>")
         response_code_end = r.text.find("</ResponseCode>")
         response_code = str(r.text[response_code_start + 14: response_code_end])
 
-        ####### Bağış İşlem get instance ##############
+        ####### DonationTransaction get instance from payment ##############
         transaction = get_object_or_404(DonationTransaction, merchant_order_id=str(merchant_order_id))
         transaction.status_code = response_code
         transaction.status_code_description = self.RESPONSE_CODES[response_code] if self.RESPONSE_CODES[

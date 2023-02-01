@@ -3,9 +3,50 @@ from datetime import datetime
 from django.contrib.auth import get_user_model
 from django.db import models
 
-from apps.donor.models import Donation
-
 User = get_user_model()
+
+
+class Donation(models.Model):
+    """
+        Holds Cart donation items
+    """
+    donation_item = models.ForeignKey('donor.DonationItem', on_delete=models.SET_NULL, null=True)
+    amount = models.DecimalField(decimal_places=2, max_digits=16)
+    added_time = models.DateTimeField(auto_now_add=True, auto_created=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    donation_transaction = models.ForeignKey('payment.DonationTransaction', on_delete=models.CASCADE,
+                                             related_name='donations')
+
+    def __str__(self):
+        return f"{self.user.username}-{self.donation_item.name}-{self.amount}"
+
+
+class DonationTransaction(models.Model):
+    """
+        Holds transaction of donations in the same line with total number
+    """
+    name = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
+    phone = models.CharField(max_length=255)
+    amount = models.DecimalField(decimal_places=2, max_digits=16)
+    amount_sent_to_bank = models.CharField(max_length=299)
+    merchant_order_id = models.TextField(null=True, blank=True)
+    md_code = models.CharField(max_length=300, null=True, blank=True)
+    message = models.TextField(null=True, blank=True)
+    is_complete = models.BooleanField(default=False, null=True, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+    status_code = models.CharField(null=True, blank=True, default="-1", max_length=3)
+    status_code_description = models.CharField(
+        max_length=255, null=True, blank=True, default="Response not received from bank"
+    )
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Donation Transaction'
+        verbose_name_plural = 'Donation Transactions'
+
+    def __str__(self):
+        return self.merchant_order_id
 
 
 # Create your models here.

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.payment.models import Cart, PaymentProvider, CartItem
+from apps.payment.models import Cart, PaymentProvider, CartItem, Donation, DonationTransaction
 
 
 # Register your models here.
@@ -38,6 +38,21 @@ class CartAdmin(admin.ModelAdmin):
 
     get_item_counts.short_description = 'Items in the Cart'
 
+
+class DonationAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'donation_item', 'amount', 'added_time')
+    readonly_fields = ('added_time',)
+
+
+class DonationTransactionAdmin(admin.ModelAdmin):
+    list_display = (
+        '__str__', 'name', 'email', 'amount', 'amount_sent_to_bank', 'date', 'status_code_description', 'status_code',
+        'is_complete')
+
+
+admin.site.register(DonationTransaction, DonationTransactionAdmin)
+
+admin.site.register(Donation, DonationAdmin)
 
 admin.site.register(PaymentProvider, PaymentProviderAdmin)
 admin.site.register(Cart, CartAdmin)

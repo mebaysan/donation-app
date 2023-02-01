@@ -1,12 +1,39 @@
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.generics import RetrieveAPIView, CreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import RetrieveAPIView, CreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.payment.api.serializers import CartSerializer, CartItemSerializer
+from apps.payment.api.serializers import CartSerializer, CartItemSerializer, DonationSerializer, \
+    DonationTransactionSerializer, DonationTransactionDetailsSerializer
 from apps.payment.helpers.payment_provider.payment_provider_factory import PaymentProviderFactory
-from apps.payment.models import Cart, CartItem
+from apps.payment.models import Cart, CartItem, Donation, DonationTransaction
+
+
+class DonationListAPIView(ListAPIView):
+    serializer_class = DonationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # donations that are not in the cart
+        return Donation.objects.filter(user=self.request.user).all()
+
+
+class DonationTransactionListAPIView(ListAPIView):
+    serializer_class = DonationTransactionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return DonationTransaction.objects.filter(user=self.request.user).all()
+
+
+class DonationTransactionRetrieveAPIView(RetrieveAPIView):
+    serializer_class = DonationTransactionDetailsSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'pk'
+
+    def get_queryset(self):
+        return DonationTransaction.objects.filter(user=self.request.user)
 
 
 class CartRetrieveAPIView(RetrieveAPIView):

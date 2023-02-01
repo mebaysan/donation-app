@@ -11,4 +11,7 @@ urlpatterns = [
     path('payment/', views.payment, name='payment'),
     path('payment-success/', views.payment_success, name='payment_success'),
     path('payment-fail/', views.payment_fail, name='payment_fail'),
+    path('donations/', views.DonationListAPIView.as_view(), name='donations'),
+    path('transactions/', views.DonationTransactionListAPIView.as_view(), name='transactions'),
+    path('transactions/<int:pk>/', views.DonationTransactionRetrieveAPIView.as_view(), name='transaction_details'),
 ]
