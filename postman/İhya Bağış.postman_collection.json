@@ -313,7 +313,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"donation_item\":2,\n    \"amount\":30.0\n}",
+									"raw": "{\n    \"donation_item\":1,\n    \"amount\":150.0\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -514,7 +514,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{BASE_URL}}/api/payment/transactions/1",
+									"raw": "{{BASE_URL}}/api/payment/transactions/7",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -522,7 +522,7 @@
 										"api",
 										"payment",
 										"transactions",
-										"1"
+										"7"
 									]
 								}
 							},
@@ -531,39 +531,73 @@
 					]
 				},
 				{
-					"name": "Payment",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{ACCESS_TOKEN}}",
-								"type": "default"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\":\"Enes Baysan\",\n    \"email\":\"info@baysansoft.com\",\n    \"phone\":\"+905308626253\",\n    \"card_number\":\"4033 6025 6202 0327\",\n    \"card_holder_name\":\"Enes Baysan\",\n    \"card_expiry\":\"01/30\",\n    \"card_cvc\":\"861\",\n    \"message\":\"TEST!\",\n    \"donations\": [\n        {\"donation_item\":2, \"amount\":50},\n        {\"donation_item\":2, \"amount\":50},\n        {\"donation_item\":2, \"amount\":150}\n    ]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "Payment Requests",
+					"item": [
+						{
+							"name": "Payment",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{ACCESS_TOKEN}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"first_name\":\"Enes\",\n    \"last_name\":\"Baysan\",\n    \"email\":\"info@baysansoft.com\",\n    \"phone\":\"+905308626253\",\n    \"card_number\":\"4033 6025 6202 0327\",\n    \"card_holder_name\":\"Enes Baysan\",\n    \"card_expiry\":\"01/30\",\n    \"card_cvc\":\"861\",\n    \"message\":\"TEST!\",\n    \"donations\": [\n        {\"donation_item\":2, \"amount\":30},\n        {\"donation_item\":1, \"amount\":30},\n        {\"donation_item\":1, \"amount\":150}\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/payment/payment/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"payment",
+										"payment",
+										""
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{BASE_URL}}/api/payment/payment/",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"payment",
-								"payment",
-								""
-							]
+						{
+							"name": "Payment (Not Logged-in)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"first_name\":\"Test\",\n    \"last_name\":\"Demo\",\n    \"email\":\"test@baysansoft.com\",\n    \"phone\":\"+903212341222\",\n    \"card_number\":\"4033 6025 6202 0327\",\n    \"card_holder_name\":\"Test Demo\",\n    \"card_expiry\":\"01/30\",\n    \"card_cvc\":\"861\",\n    \"message\":\"TEST!\",\n    \"donations\": [\n        {\"donation_item\":2, \"amount\":30},\n        {\"donation_item\":1, \"amount\":30},\n        {\"donation_item\":1, \"amount\":150}\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/payment/payment/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"payment",
+										"payment",
+										""
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				}
 			]
 		}
