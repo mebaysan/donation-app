@@ -9,7 +9,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
-from apps.payment.models import DonationTransaction
+from apps.payment.models import DonationTransaction, Donation
 
 
 class KuveytTurkPaymentProvider(object):
@@ -133,6 +133,12 @@ class KuveytTurkPaymentProvider(object):
         if request.user.is_authenticated:
             new_transaction.user = request.user
         new_transaction.save()
+
+        ########### Donations for DonationTransaction #############
+        for donation in payment_request_data['donations']:
+            new_donation = Donation.objects.create(donation_item=donation.get('donation_item'),
+                                                   amount=donation.get('amount'),
+                                                   donation_transaction=new_transaction, user=new_transaction.user)
         ########### HASH Process #############
         hashed_password = base64.b64encode(
             hashlib.sha1(settings.KUVEYTTURK_CONF["password"].encode("ISO-8859-9")).digest()

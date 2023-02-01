@@ -6,7 +6,7 @@ from rest_framework.response import Response
 
 from apps.payment.api.serializers import CartSerializer, CartItemSerializer, DonationSerializer, \
     DonationTransactionSerializer, DonationTransactionDetailsSerializer
-from apps.payment.helpers.payment_provider.payment_provider_factory import PaymentProviderFactory
+from helpers.payment_provider.payment_provider_factory import PaymentProviderFactory
 from apps.payment.models import Cart, CartItem, Donation, DonationTransaction
 
 

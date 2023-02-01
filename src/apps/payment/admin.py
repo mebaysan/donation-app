@@ -44,10 +44,16 @@ class DonationAdmin(admin.ModelAdmin):
     readonly_fields = ('added_time',)
 
 
+class DonationInline(admin.TabularInline):
+    model = Donation
+    extra = 0
+
+
 class DonationTransactionAdmin(admin.ModelAdmin):
     list_display = (
         '__str__', 'name', 'email', 'amount', 'amount_sent_to_bank', 'date', 'status_code_description', 'status_code',
         'is_complete')
+    inlines = [DonationInline]
 
 
 admin.site.register(DonationTransaction, DonationTransactionAdmin)
