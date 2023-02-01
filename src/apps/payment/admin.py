@@ -40,8 +40,13 @@ class CartAdmin(admin.ModelAdmin):
 
 
 class DonationAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'donation_item', 'amount', 'added_time')
-    readonly_fields = ('added_time',)
+    list_display = ['__str__', 'donation_item', 'amount', 'added_time', 'get_is_complete_transaction']
+    readonly_fields = ['added_time', ]
+
+    def get_is_complete_transaction(self, obj):
+        return 'Yes' if obj.is_complete_transaction else 'No'
+
+    get_is_complete_transaction.short_description = 'Is Transaction Completed'
 
 
 class DonationInline(admin.TabularInline):

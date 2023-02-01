@@ -20,11 +20,18 @@ class Donation(models.Model):
     def __str__(self):
         return f"{self.user.username}-{self.donation_item.name}-{self.amount}"
 
+    @property
+    def is_complete_transaction(self):
+        return self.donation_transaction.is_complete
+
 
 class DonationTransaction(models.Model):
     """
         Holds transaction of donations in the same line with total number
     """
+    DONATION_TYPES = [
+        ('WEB', 'WEB')
+    ]
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
@@ -41,6 +48,7 @@ class DonationTransaction(models.Model):
         max_length=255, null=True, blank=True, default="Response not received from bank"
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    donation_type = models.CharField(choices=DONATION_TYPES, default='WEB', max_length=10)
 
     class Meta:
         verbose_name = 'Donation Transaction'
