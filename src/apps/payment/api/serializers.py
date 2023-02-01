@@ -64,12 +64,12 @@ class PaymentRequestSerializer(serializers.Serializer):
             9      => Troy
         """
         if value[0] not in ["4", "5", "6", "9"]:
-            raise serializers.ValidationError('Please enter a valid card.')
+            raise serializers.ValidationError('Lütfen geçerli bir kart girin.')
         return value
 
     def validate_amount(self, value):
         if value <= 0:
-            raise serializers.ValidationError('Please enter a positive amount.')
+            raise serializers.ValidationError("0'dan büyük bir sayı girin.")
         return value
 
 

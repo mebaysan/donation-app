@@ -34,30 +34,18 @@ DATABASES = {
     }
 }
 
-# AWS Credentials
-AWS_ACCESS_KEY_ID = 'your_access_key'
-AWS_SECRET_ACCESS_KEY = 'your_secret_key'
-AWS_STORAGE_BUCKET_NAME = 'your_bucket_name'
-AWS_S3_REGION_NAME = 'your_region_name'
-
 # APP MEDIA STORAGE TYPE
 APP_MEDIA_STORAGE_TYPE = os.getenv("APP_MEDIA_STORAGE_TYPE")  # set 'S3' to use S3
 
-if APP_MEDIA_STORAGE_TYPE == 'S3':
-    # To store files in S3
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-    # Media root for prod mode. You should use 3rd party storage for these
-    MEDIA_ROOT = f'https://s3.amazonaws.com/{AWS_STORAGE_BUCKET_NAME}/media/'
-elif APP_MEDIA_STORAGE_TYPE == 'ON_PREM':
+if APP_MEDIA_STORAGE_TYPE == 'ON_PREM':
     MEDIA_ROOT = BASE_DIR / 'media'
 else:
     MEDIA_ROOT = BASE_DIR / 'media'
 
 # KUVEYTTURK CONF
 KUVEYTTURK_CONF = {
-    'store_no': os.getenv('KUVEYTTURK_MAGAZA_NO'),
-    'customer_no': os.getenv('KUVEYTTURK_MUSTERI_NO'),
+    'store_no': os.getenv('KUVEYTTURK_STORE_NO'),
+    'customer_no': os.getenv('KUVEYTTURK_CUSTOMER_NO'),
     'username': os.getenv('KUVEYTTURK_USERNAME'),
     'password': os.getenv('KUVEYTTURK_PASSWORD'),
     'ok_url': os.getenv('KUVEYTTURK_OK_URL'),

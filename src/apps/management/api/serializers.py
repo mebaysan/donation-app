@@ -27,9 +27,9 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if data['password'] != data['confirm_new_password']:
-            raise serializers.ValidationError("New passwords do not match.")
+            raise serializers.ValidationError("Parolalar eşleşmiyor.")
         if data['username'] != data['email']:
-            raise serializers.ValidationError("Username and email do not match.")
+            raise serializers.ValidationError("Kullanıcı adı ve email eşleşmiyor.")
         return data
 
 
@@ -40,7 +40,7 @@ class PasswordChangeSerializer(serializers.Serializer):
 
     def validate(self, data):
         if data['new_password'] != data['confirm_new_password']:
-            raise serializers.ValidationError("New passwords do not match.")
+            raise serializers.ValidationError("Parolalar eşleşmiyor.")
         return data
 
 

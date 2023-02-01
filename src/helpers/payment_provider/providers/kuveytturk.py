@@ -95,7 +95,7 @@ class KuveytTurkPaymentProvider(object):
         elif card_number[0] == "9":
             card_type = "Troy"
         else:
-            raise ValueError('Please enter a valid card.')
+            raise ValueError('Lütfen geçerli bir kart girin.')
 
         ####### Mesaj #######
         message = request_data.get("message")
@@ -166,11 +166,13 @@ class KuveytTurkPaymentProvider(object):
                     new_transaction.user = new_user
                 except IntegrityError as e:
                     # email != phone_number for User
-                    context = {'details': 'Please send valid Email and Phone number.'}
+                    context = {'details': 'Lütfen geçerli email ve telefon numarası kullanın.'}
                     if 'phone_number' in str(e):  # email is different but phone_number is taken by a User
-                        context['details'] = 'Phone number already in use. Please send your valid account information.'
+                        context[
+                            'details'] = 'Telefon farklı bir bağışçı profilinde kullanılıyor. Lütfen hesabınıza tanımlı email ve telefon numarasını kullanın.'
                     if 'username' in str(e):  # phone_number is different but email (username) is taken by a User
-                        context['details'] = 'Email already in use. Please send your valid account information.'
+                        context[
+                            'details'] = 'Email farklı bir bağışçı profilinde kullanılıyor. Lütfen hesabınıza tanımlı email ve telefon numarasını kullanın.'
                     return Response(context,
                                     status.HTTP_400_BAD_REQUEST)
 
@@ -292,4 +294,4 @@ class KuveytTurkPaymentProvider(object):
 
         transaction.save()
 
-        return Response({'details': 'You have successfully completed the donation.'}, status.HTTP_200_OK)
+        return Response({'details': 'Başarıyla bağışınız tamamlandı.'}, status.HTTP_200_OK)
