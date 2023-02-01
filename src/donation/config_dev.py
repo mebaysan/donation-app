@@ -27,8 +27,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # KUVEYTTURK CONF
 KUVEYTTURK_CONF = {
-    'magaza_no': '1234',
-    'musteri_no': '1233214',
+    'store_no': '1234',
+    'customer_no': '1233214',
     'username': 'apitest',
     'password': 'api123',
     'ok_url': 'http://127.0.0.1:8000/api/payment-success/',

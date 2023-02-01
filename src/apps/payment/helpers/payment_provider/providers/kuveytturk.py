@@ -129,7 +129,7 @@ class KuveytTurkPaymentProvider(object):
         ).decode()
         hashed_data = base64.b64encode(
             hashlib.sha1(
-                f'{settings.KUVEYTTURK_CONF["magaza_no"]}{merchant_order_id}{payment_request_data["amount"]}{settings.KUVEYTTURK_CONF["ok_url"]}{settings.KUVEYTTURK_CONF["fail_url"]}{settings.KUVEYTTURK_CONF["username"]}{hashed_password}'.encode(
+                f'{settings.KUVEYTTURK_CONF["store_no"]}{merchant_order_id}{payment_request_data["amount"]}{settings.KUVEYTTURK_CONF["ok_url"]}{settings.KUVEYTTURK_CONF["fail_url"]}{settings.KUVEYTTURK_CONF["username"]}{hashed_password}'.encode(
                     "ISO-8859-9"
                 )
             ).digest()
@@ -141,8 +141,8 @@ class KuveytTurkPaymentProvider(object):
            <OkUrl>{str(settings.KUVEYTTURK_CONF["ok_url"])}</OkUrl>
            <FailUrl>{str(settings.KUVEYTTURK_CONF["fail_url"])}</FailUrl>
            <HashData>{hashed_data}</HashData>
-           <MerchantId>{int(settings.KUVEYTTURK_CONF['magaza_no'])}</MerchantId>
-           <CustomerId>{int(settings.KUVEYTTURK_CONF['musteri_no'])}</CustomerId>
+           <MerchantId>{int(settings.KUVEYTTURK_CONF['store_no'])}</MerchantId>
+           <CustomerId>{int(settings.KUVEYTTURK_CONF['customer_no'])}</CustomerId>
            <UserName>{str(settings.KUVEYTTURK_CONF['username'])}</UserName>
            <CardNumber>{str(payment_request_data['card_number'])}</CardNumber>
            <CardExpireDateYear>{str(payment_request_data['card_year'])}</CardExpireDateYear>
@@ -184,7 +184,7 @@ class KuveytTurkPaymentProvider(object):
         ).decode()
         hashed_data = base64.b64encode(
             hashlib.sha1(
-                f'{settings.KUVEYTTURK_CONF["magaza_no"]}{merchant_order_id}{amount}{settings.KUVEYTTURK_CONF["username"]}{hashed_password}'.encode(
+                f'{settings.KUVEYTTURK_CONF["store_no"]}{merchant_order_id}{amount}{settings.KUVEYTTURK_CONF["username"]}{hashed_password}'.encode(
                     "ISO-8859-9"
                 )
             ).digest()
@@ -194,8 +194,8 @@ class KuveytTurkPaymentProvider(object):
             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
             <APIVersion>1.0.0</APIVersion>
             <HashData>{hashed_data}</HashData>
-            <MerchantId>{int(settings.KUVEYTTURK_CONF['magaza_no'])}</MerchantId>
-            <CustomerId>{int(settings.KUVEYTTURK_CONF['musteri_no'])}</CustomerId>
+            <MerchantId>{int(settings.KUVEYTTURK_CONF['store_no'])}</MerchantId>
+            <CustomerId>{int(settings.KUVEYTTURK_CONF['customer_no'])}</CustomerId>
             <UserName>{str(settings.KUVEYTTURK_CONF['username'])}</UserName>
             <TransactionType>Sale</TransactionType>
             <InstallmentCount>{int('0')}</InstallmentCount>

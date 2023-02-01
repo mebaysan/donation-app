@@ -56,8 +56,8 @@ else:
 
 # KUVEYTTURK CONF
 KUVEYTTURK_CONF = {
-    'magaza_no': os.getenv('KUVEYTTURK_MAGAZA_NO'),
-    'musteri_no': os.getenv('KUVEYTTURK_MUSTERI_NO'),
+    'store_no': os.getenv('KUVEYTTURK_MAGAZA_NO'),
+    'customer_no': os.getenv('KUVEYTTURK_MUSTERI_NO'),
     'username': os.getenv('KUVEYTTURK_USERNAME'),
     'password': os.getenv('KUVEYTTURK_PASSWORD'),
     'ok_url': os.getenv('KUVEYTTURK_OK_URL'),
