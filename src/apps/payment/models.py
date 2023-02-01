@@ -29,7 +29,7 @@ class DonationTransaction(models.Model):
     """
         Holds transaction of donations in the same line with total number
     """
-    DONATION_TYPES = [
+    DONATION_PLATFORMS = [
         ('WEB', 'WEB')
     ]
     first_name = models.CharField(max_length=255)
@@ -48,7 +48,7 @@ class DonationTransaction(models.Model):
         max_length=255, null=True, blank=True, default="Response not received from bank"
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    donation_type = models.CharField(choices=DONATION_TYPES, default='WEB', max_length=10)
+    donation_platform = models.CharField(choices=DONATION_PLATFORMS, default='WEB', max_length=10)
 
     class Meta:
         verbose_name = 'Donation Transaction'
