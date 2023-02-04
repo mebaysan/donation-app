@@ -12,13 +12,17 @@ from django.utils.http import urlsafe_base64_encode
 User = get_user_model()
 
 
-def send_email(subject, body, to_emails, ):
+def send_email(subject, body, to_emails, html_message=None):
     email = EmailMessage(
         subject,
         body,
         settings.EMAIL_HOST_USER,
-        to_emails
+        to_emails,
+        reply_to=[settings.EMAIL_HOST_USER],
     )
+    if html_message:
+        email.content_subtype = "html"
+        email.body = html_message
     email.send()
 
 
@@ -37,4 +41,15 @@ def send_password_reset_email(user, request):
         'token': default_token_generator.make_token(user),
     })
     recipient_list = [user.email]
-    send_email(subject, message, recipient_list)
+    send_email(subject, message, recipient_list, html_message=message)
+
+
+def send_password_reset_success_email(user):
+    # send email
+    subject = 'İhya Vakfı Bağışçı Hesabınız Hakkında Bilgilendirme'
+    message = render_to_string('mail_templates/message.html', {
+        'user': user,
+        'message': 'Bağışçı hesabınızın parolası güncellendi. Eğer işlem size ait değilse lütfen İhya Vakfı ile iletişime geçin.'
+    })
+    recipient_list = [user.email]
+    send_email(subject, message, recipient_list, html_message=message)

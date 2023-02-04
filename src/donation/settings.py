@@ -67,6 +67,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "helpers.context_processors.get_app_name",
+                "helpers.context_processors.get_favicon",
             ],
         },
     },

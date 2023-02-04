@@ -3,8 +3,9 @@ import os
 
 from donation.settings import BASE_DIR
 
-# App Name to use in templates
+# App Variables to use in templates
 APP_NAME = os.getenv("APP_NAME")
+APP_FAVICON_URL = os.getenv("APP_FAVICON_URL")
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 

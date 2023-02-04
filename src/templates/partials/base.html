@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ get_app_name }}</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ get_favicon }}"/>
+
+    {% include 'partials/css.html' %}
+
+    {% block extra_css %} {% endblock %}
+</head>
+<body>
+
+{% block content %}
+
+{% endblock %}
+
+{% include 'partials/js.html' %}
+
+{% include 'partials/notification.html' %}
+
+{% block extra_js %} {% endblock %}
+</body>
+</html>

@@ -29,7 +29,7 @@ class ObtainTokenView(views.APIView):
             user = User.objects.filter(phone_number=username_or_phone_number).first()
 
         if user is None or not user.check_password(password):
-            return Response({'details': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'details': 'Lütfen geçerli giriş bilgileri girin.'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Generate the JWT token
         jwt_token = JWTAuthentication.create_jwt(user)

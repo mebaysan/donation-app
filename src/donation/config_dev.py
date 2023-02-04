@@ -4,8 +4,9 @@ import os
 
 from donation.settings import BASE_DIR
 
-# App Name to use in templates
+# App Variables to use in templates
 APP_NAME = 'Donation App'
+APP_FAVICON_URL = 'https://ihyavakfi.org.tr/media/site/favicon.png'
 
 SECRET_KEY = "verySECRETk3y"
 

@@ -1,0 +1,14 @@
+{% extends 'partials/base.html' %}
+
+{% block content %}
+
+    {% if user %}
+        <p>Sayın {{ user.first_name }} {{ user.last_name }},</p>
+    {% endif %}
+
+    <p>{{ message }}</p>
+
+    <p>Teşekkürler,</p>
+    <p>İhya Vakfı</p>
+
+{% endblock %}
