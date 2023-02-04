@@ -47,3 +47,7 @@ class PasswordChangeSerializer(serializers.Serializer):
 class ObtainTokenSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
+
+
+class ForgotPasswordSerializer(serializers.Serializer):
+    username = serializers.CharField()
