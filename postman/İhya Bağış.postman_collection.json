@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\":\"+905308626253\",\n    \"password\":\"123\"\n}",
+							"raw": "{\n    \"username\":\"menesbaysan@gmail.com\",\n    \"password\":\"Passw0rd!.\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -147,7 +147,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"phone_number\": \"+905326382352\",\n    \"password\": \"123\",\n    \"confirm_new_password\":\"123\",\n    \"username\": \"yavuzbaysan34@gmail.com\",\n    \"email\": \"yavuzbaysan34@gmail.com\"\n}",
+							"raw": "{\n    \"phone_number\": \"+901233211223\",\n    \"password\": \"123\",\n    \"confirm_new_password\":\"123\",\n    \"username\": \"mail@mebaysan.com\",\n    \"email\": \"mail@mebaysan.com\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -163,6 +163,35 @@
 								"api",
 								"management",
 								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"menesbaysan@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/management/forgot-password/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"management",
+								"forgot-password",
 								""
 							]
 						}
@@ -575,7 +604,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"first_name\":\"Test\",\n    \"last_name\":\"Demo\",\n    \"email\":\"test@baysansoft.com\",\n    \"phone_number\":\"+903212341222\",\n    \"card_number\":\"4033 6025 6202 0327\",\n    \"card_holder_name\":\"Test Demo\",\n    \"card_expiry\":\"01/30\",\n    \"card_cvc\":\"861\",\n    \"message\":\"TEST!\",\n    \"donations\": [\n        {\"donation_item\":2, \"amount\":30},\n        {\"donation_item\":1, \"amount\":30},\n        {\"donation_item\":1, \"amount\":150}\n    ]\n}",
+									"raw": "{\n    \"first_name\":\"Test\",\n    \"last_name\":\"Demo\",\n    \"email\":\"menesbaysan@gmail.com\",\n    \"phone_number\":\"+903212341212\",\n    \"card_number\":\"4033 6025 6202 0327\",\n    \"card_holder_name\":\"Test Demo\",\n    \"card_expiry\":\"01/30\",\n    \"card_cvc\":\"861\",\n    \"message\":\"TEST!\",\n    \"donations\": [\n        {\"donation_item\":2, \"amount\":30},\n        {\"donation_item\":1, \"amount\":30},\n        {\"donation_item\":1, \"amount\":150}\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
