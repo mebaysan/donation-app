@@ -10,7 +10,8 @@ class Donation(models.Model):
     """
         Holds Cart donation items
     """
-    donation_item = models.ForeignKey('donor.DonationItem', on_delete=models.SET_NULL, null=True)
+    donation_item = models.ForeignKey('donor.DonationItem', on_delete=models.SET_NULL, null=True,
+                                      related_name='donations')
     amount = models.DecimalField(decimal_places=2, max_digits=16)
     added_time = models.DateTimeField(auto_now_add=True, auto_created=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
