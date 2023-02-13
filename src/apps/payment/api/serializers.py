@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from apps.donor.models import DonationItem
 from apps.payment.models import Cart, CartItem, Donation, DonationTransaction
 from helpers.serializers.validators import email_regex, phone_regex, card_expiry_regex
 
@@ -28,6 +29,17 @@ class CartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
         fields = ['id', 'donation_item', 'amount', 'added_date']
+
+    def validate_amount(self, value):
+        donation_item_id = self.initial_data.get('donation_item')
+        donation_item = DonationItem.objects.filter(id=donation_item_id).first()
+        if donation_item.donation_type == 'Static':
+            # donation item has rules
+            if value < donation_item.quantity_price:
+                raise serializers.ValidationError("Amount can't be less than the donation item's quantity price.")
+            if value % donation_item.quantity_price != 0:
+                raise serializers.ValidationError("Amount has to be multiple of donation item's quantity price.")
+        return value
 
 
 class CartItemPaymentRequestSerializer(serializers.ModelSerializer):
@@ -70,6 +82,18 @@ class PaymentRequestSerializer(serializers.Serializer):
     def validate_amount(self, value):
         if value <= 0:
             raise serializers.ValidationError("0'dan büyük bir sayı girin.")
+        return value
+
+    def validate_donations(self, value):
+        for item in value:
+            donation_item = DonationItem.objects.filter(id=item['donation_item'].id).first()
+            if donation_item.donation_type == 'Static':
+                if item['amount'] < donation_item.quantity_price:
+                    raise serializers.ValidationError(
+                        f"Amount can't be less than the donation item's quantity price. {item['amount']} is not acceptable for {item['donation_item'].name}.")
+                if item['amount'] % donation_item.quantity_price != 0:
+                    raise serializers.ValidationError(
+                        f"Amount has to be multiple of donation item's quantity price. {item['amount']} is not acceptable for {item['donation_item'].name}.")
         return value
 
 

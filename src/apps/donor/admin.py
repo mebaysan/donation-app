@@ -11,7 +11,7 @@ class DonationCategoryAdmin(admin.ModelAdmin):
 
 
 class DonationItemAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'is_published')
+    list_display = ('name', 'category', 'is_published', 'donation_type')
     list_editable = ('category', 'is_published',)
 
 
