@@ -151,3 +151,16 @@ uses [`apps.management.authentication.JWTAuthentication`](./src/apps/management/
 framework views.
 
 To obtain a token, we use `/api/token/` endpoint. It uses [`ObtainTokenView`](./src/apps/management/api/views.py) view.
+
+# Development Environment
+
+## Run Project
+
+To override the config variables, you can update the variables in [`config_dev.py`](./src/donation/config_dev.py) file.
+
+```bash
+make create-devdb # create project dev db (you have to have Docker on your machine)
+make migration # create the db
+make superuser # create a super user 
+make runserver # run the project
+```
