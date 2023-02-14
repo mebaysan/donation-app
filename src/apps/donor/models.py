@@ -25,6 +25,9 @@ class DonationCategory(models.Model):
     def get_published_items(self):
         return self.items.filter(is_published=True).all()
 
+    def get_image_path(self):
+        return self.image.url
+
 
 class DonationItem(models.Model):
     """
@@ -52,3 +55,41 @@ class DonationItem(models.Model):
     class Meta:
         verbose_name = 'Donation Item'
         verbose_name_plural = 'Donation Items'
+
+
+class Bank(models.Model):
+    name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='donation_category/', null=True, blank=True)
+    is_published = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = 'Bank'
+        verbose_name_plural = 'Banks'
+
+    def __str__(self):
+        return self.name
+
+    def get_image_path(self):
+        return self.image.url
+
+
+class BankAccount(models.Model):
+    CURRENCY_TYPES = (
+        ('TRY', 'TRY'),
+        ('USD', 'USD'),
+        ('EUR', 'EUR'),
+    )
+    account_name = models.CharField(max_length=500)
+    branch = models.CharField(max_length=500)
+    branch_no = models.IntegerField()
+    swift_no = models.CharField(max_length=500)
+    iban_no = models.CharField(max_length=500)
+    currency = models.CharField(choices=CURRENCY_TYPES, max_length=3)
+    bank = models.ForeignKey(Bank, on_delete=models.CASCADE, related_name='bank_accounts')
+
+    def __str__(self):
+        return self.account_name
+
+    class Meta:
+        verbose_name = 'Bank Account'
+        verbose_name_plural = 'Bank Accounts'

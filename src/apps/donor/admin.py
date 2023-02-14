@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.donor.models import DonationItem, DonationCategory
+from apps.donor.models import DonationItem, DonationCategory, Bank, BankAccount
 from apps.payment.models import Donation
 
 
@@ -32,5 +32,20 @@ class DonationItemAdmin(admin.ModelAdmin):
                 return True
 
 
+class BankAccountInline(admin.TabularInline):
+    model = BankAccount
+    extra = 1
+
+
+class BankAdmin(admin.ModelAdmin):
+    inlines = [BankAccountInline]
+
+
+class BankAccountAdmin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(DonationCategory, DonationCategoryAdmin)
 admin.site.register(DonationItem, DonationItemAdmin)
+admin.site.register(Bank, BankAdmin)
+admin.site.register(BankAccount, BankAccountAdmin)

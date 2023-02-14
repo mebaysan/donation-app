@@ -294,6 +294,31 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Bank (Accounts)",
+					"item": [
+						{
+							"name": "Bank (Accounts) List",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/api/donor/banks/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"donor",
+										"banks",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
@@ -342,7 +367,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"donation_item\":1,\n    \"amount\":150.0\n}",
+									"raw": "{\n    \"donation_item\":3,\n    \"amount\":1500.0\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -575,7 +600,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"first_name\":\"Enes\",\n    \"last_name\":\"Baysan\",\n    \"email\":\"info@baysansoft.com\",\n    \"phone_number\":\"+905308626253\",\n    \"card_number\":\"4033 6025 6202 0327\",\n    \"card_holder_name\":\"Enes Baysan\",\n    \"card_expiry\":\"01/30\",\n    \"card_cvc\":\"861\",\n    \"message\":\"TEST!\",\n    \"donations\": [\n        {\"donation_item\":2, \"amount\":30},\n        {\"donation_item\":1, \"amount\":30},\n        {\"donation_item\":1, \"amount\":150}\n    ]\n}",
+									"raw": "{\n    \"first_name\":\"Enes\",\n    \"last_name\":\"Baysan\",\n    \"email\":\"info@baysansoft.com\",\n    \"phone_number\":\"+905308626253\",\n    \"card_number\":\"4033 6025 6202 0327\",\n    \"card_holder_name\":\"Enes Baysan\",\n    \"card_expiry\":\"01/30\",\n    \"card_cvc\":\"861\",\n    \"message\":\"TEST!\",\n    \"donations\": [\n        {\"donation_item\":3, \"amount\":750},\n        {\"donation_item\":3, \"amount\":1500}\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"

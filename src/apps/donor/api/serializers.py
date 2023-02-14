@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.donor.models import DonationCategory, DonationItem
+from apps.donor.models import DonationCategory, DonationItem, Bank, BankAccount
 
 
 class DonationItemUnderCategorySerializer(serializers.ModelSerializer):
@@ -30,3 +30,16 @@ class DonationItemSerializer(serializers.ModelSerializer):
         model = DonationItem
         fields = '__all__'
 
+
+class BankAccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BankAccount
+        fields = '__all__'
+
+
+class BankSerializer(serializers.ModelSerializer):
+    bank_accounts = BankAccountSerializer(many=True)
+
+    class Meta:
+        model = Bank
+        fields = '__all__'
