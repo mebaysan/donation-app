@@ -164,3 +164,9 @@ make migration # create the db
 make superuser # create a super user 
 make runserver # run the project
 ```
+
+### Non Docker Installed Machines
+
+```bash
+export DEBUG=2 # app will be using SQLite3 for DB
+```
