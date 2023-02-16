@@ -1,8 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
-from rest_framework import views, permissions, status
+from rest_framework import views, status
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import RetrieveUpdateAPIView, UpdateAPIView, CreateAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
 from apps.management.api.serializers import (UserSerializer, UserRegisterSerializer, PasswordChangeSerializer,
@@ -13,8 +14,17 @@ from helpers.communication.email import send_password_reset_email
 User = get_user_model()
 
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def healthcheck(request):
+    """
+    A simple healthcheck endpoint that returns a 200 OK status if the API is up and running.
+    """
+    return Response({'status': 'ok'})
+
+
 class ObtainTokenView(views.APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
     serializer_class = ObtainTokenSerializer
 
     def post(self, request, *args, **kwargs):
@@ -73,7 +83,7 @@ class PasswordChangeView(UpdateAPIView):
 
 class UserCreateAPIView(CreateAPIView):
     serializer_class = UserRegisterSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -93,7 +103,7 @@ class UserCreateAPIView(CreateAPIView):
 
 
 class ForgotPasswordAPIView(views.APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
     serializer_class = ForgotPasswordSerializer
 
     def post(self, request, *args, **kwargs):

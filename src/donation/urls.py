@@ -19,12 +19,14 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.schemas import get_schema_view
 
-from apps.management.api.views import ObtainTokenView
+from apps.management.api.views import ObtainTokenView, healthcheck
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # API URLs
     path('api/', include('apps.web.api.urls')),
+    # Healthcheck ENDPOINT(S)
+    path('api/healthcheck/', healthcheck, name='healthcheck'),
     # AUTH ENDPOINT(S)
     path('api/token/', ObtainTokenView.as_view(), name='obtain_token'),
     # API Doc (open api)

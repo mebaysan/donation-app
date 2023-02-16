@@ -35,6 +35,25 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Healthcheck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/healthcheck/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"healthcheck",
+								""
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -80,7 +99,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"old_password\":\"123.\",\n    \"new_password\":\"123\",\n    \"confirm_new_password\":\"123\"\n}",
+							"raw": "{\n    \"old_password\":\"Passw0rd!.\",\n    \"new_password\":\"123\",\n    \"confirm_new_password\":\"123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
