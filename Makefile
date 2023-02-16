@@ -70,7 +70,7 @@ collect:
 	@python src/manage.py collectstatic --no-input
 
 superuser:
-	@python manage.py createsuperuser
+	@python src/manage.py createsuperuser
 
 tests:
 	@python manage.py test
