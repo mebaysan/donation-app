@@ -28,9 +28,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # KUVEYTTURK CONF
 KUVEYTTURK_CONF = {
-    'store_no': '1234',
-    'customer_no': '1233214',
-    'username': 'apitest',
+    'store_no': '57902',
+    'customer_no': '97228291',
+    'username': 'TEPKVT2021',
     'password': 'api123',
     'ok_url': 'http://127.0.0.1:8000/api/payment-success/',
     'fail_url': 'http://127.0.0.1:8000/api/payment-fail/',
@@ -39,9 +39,9 @@ KUVEYTTURK_CONF = {
 }
 # TEST CARD FOR KUVEYTTURK
 # Test Kart Bilgileri
-# Kart No: 4033 6025 6202 0327
-# CVV2: 861
-# Expirydate: 01/30
+# Kart No: 5188 9619 3919 2544
+# CVV2: 929
+# Expirydate: 06/25
 
 # JWT CONF
 TOKEN_LIFETIME_HOURS = 5
