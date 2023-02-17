@@ -5,8 +5,8 @@ import os
 from donation.settings import BASE_DIR
 
 # App Variables to use in templates
-APP_NAME = 'Donation App'
-APP_FAVICON_URL = 'https://ihyavakfi.org.tr/media/site/favicon.png'
+APP_NAME = "Donation App"
+APP_FAVICON_URL = "https://ihyavakfi.org.tr/media/site/favicon.png"
 
 SECRET_KEY = "verySECRETk3y"
 
@@ -24,18 +24,18 @@ DATABASES = {
 }
 
 # Media root for dev mode
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / "media"
 
 # KUVEYTTURK CONF
 KUVEYTTURK_CONF = {
-    'store_no': '57902',
-    'customer_no': '97228291',
-    'username': 'TEPKVT2021',
-    'password': 'api123',
-    'ok_url': 'http://127.0.0.1:8000/api/payment-success/',
-    'fail_url': 'http://127.0.0.1:8000/api/payment-fail/',
-    'payment_request_url': 'https://boatest.kuveytturk.com.tr/boa.virtualpos.services/Home/ThreeDModelPayGate',
-    'payment_approve_url': 'https://boatest.kuveytturk.com.tr/boa.virtualpos.services/Home/ThreeDModelProvisionGate',
+    "store_no": "57902",
+    "customer_no": "97228291",
+    "username": "TEPKVT2021",
+    "password": "api123",
+    "ok_url": "http://127.0.0.1:8000/api/payment-success/",
+    "fail_url": "http://127.0.0.1:8000/api/payment-fail/",
+    "payment_request_url": "https://boatest.kuveytturk.com.tr/boa.virtualpos.services/Home/ThreeDModelPayGate",
+    "payment_approve_url": "https://boatest.kuveytturk.com.tr/boa.virtualpos.services/Home/ThreeDModelProvisionGate",
 }
 # TEST CARD FOR KUVEYTTURK
 # Test Kart Bilgileri
@@ -47,9 +47,9 @@ KUVEYTTURK_CONF = {
 TOKEN_LIFETIME_HOURS = 5
 
 # EMAIL
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'info@baysansoft.com'
-EMAIL_HOST_PASSWORD = 'bkbkegwqmsfdlsyu'
+EMAIL_HOST_USER = "info@baysansoft.com"
+EMAIL_HOST_PASSWORD = "bkbkegwqmsfdlsyu"
 EMAIL_USE_TLS = True
 # EMAIL_USE_SSL = True

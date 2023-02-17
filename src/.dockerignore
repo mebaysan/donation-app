@@ -161,8 +161,8 @@ cython_debug/
 
 # Custom
 # assets => compiled static files
-assets/
 static/
+media/
 .vscode/
 db.sqlite3
 .gitignore/

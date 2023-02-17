@@ -35,13 +35,8 @@ DATABASES = {
     }
 }
 
-# APP MEDIA STORAGE TYPE
-APP_MEDIA_STORAGE_TYPE = os.getenv("APP_MEDIA_STORAGE_TYPE")  # set 'S3' to use S3
-
-if APP_MEDIA_STORAGE_TYPE == 'ON_PREM':
-    MEDIA_ROOT = BASE_DIR / 'media'
-else:
-    MEDIA_ROOT = BASE_DIR / 'media'
+# Media root for dev mode
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # KUVEYTTURK CONF
 KUVEYTTURK_CONF = {
