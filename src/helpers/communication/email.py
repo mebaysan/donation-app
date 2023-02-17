@@ -33,23 +33,29 @@ def send_password_reset_email(user, request):
 
     # send email
     current_site = get_current_site(request)
-    subject = 'İhya Vakfı Bağışçı Hesabınız İçin Parola Sıfırlama Formu'
-    message = render_to_string('mail_templates/password_reset.html', {
-        'user': user,
-        'domain': current_site.domain,
-        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-        'token': default_token_generator.make_token(user),
-    })
+    subject = f"{settings.APP_NAME} Bağışçı Hesabınız İçin Parola Sıfırlama Formu"
+    message = render_to_string(
+        "mail_templates/password_reset.html",
+        {
+            "user": user,
+            "domain": current_site.domain,
+            "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+            "token": default_token_generator.make_token(user),
+        },
+    )
     recipient_list = [user.email]
     send_email(subject, message, recipient_list, html_message=message)
 
 
 def send_password_reset_success_email(user):
     # send email
-    subject = 'İhya Vakfı Bağışçı Hesabınız Hakkında Bilgilendirme'
-    message = render_to_string('mail_templates/message.html', {
-        'user': user,
-        'message': 'Bağışçı hesabınızın parolası güncellendi. Eğer işlem size ait değilse lütfen İhya Vakfı ile iletişime geçin.'
-    })
+    subject = f"{settings.APP_NAME} Bağışçı Hesabınız Hakkında Bilgilendirme"
+    message = render_to_string(
+        "mail_templates/message.html",
+        {
+            "user": user,
+            "message": f"Bağışçı hesabınızın parolası güncellendi. Eğer işlem size ait değilse lütfen {settings.APP_NAME} ile iletişime geçin.",
+        },
+    )
     recipient_list = [user.email]
     send_email(subject, message, recipient_list, html_message=message)

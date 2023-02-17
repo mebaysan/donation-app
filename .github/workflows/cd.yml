@@ -1,4 +1,4 @@
-name: İhya Bağış Continuous Delivery
+name: Donation App Continuous Delivery
 
 on:
   push:
