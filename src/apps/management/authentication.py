@@ -22,20 +22,20 @@ class JWTAuthentication(authentication.BaseAuthentication):
         try:
             payload = jwt.decode(jwt_token, settings.SECRET_KEY, algorithms=['HS256'])
         except jwt.exceptions.InvalidSignatureError:
-            raise AuthenticationFailed('Invalid signature')
+            raise AuthenticationFailed('Geçersiz imza.')
         except:
             raise ParseError()
 
         # Get the user from the database
         username_or_phone_number = payload.get('user_identifier')
         if username_or_phone_number is None:
-            raise AuthenticationFailed('User identifier not found in JWT')
+            raise AuthenticationFailed('JWT içerisinde kullanıcı tanımlayıcı bulunamadı.')
 
         user = User.objects.filter(username=username_or_phone_number).first()
         if user is None:
             user = User.objects.filter(phone_number=username_or_phone_number).first()
             if user is None:
-                raise AuthenticationFailed('User not found')
+                raise AuthenticationFailed('Kullanıcı bulunamadı.')
 
         # Return the user and token payload
         return user, payload
