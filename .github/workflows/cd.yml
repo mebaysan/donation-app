@@ -1,26 +1,29 @@
-name: Donation App Continuous Delivery
+name: CD - App Continuous Delivery
 
 on:
-  push:
-    branches: [ "main" ]
+  workflow_run:
+    workflows: ["CI - Image Deploy To Docker Hub"]
+    branches: [main]
+    types:
+      - completed
 
 jobs:
   deploy:
     runs-on: self-hosted
 
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Build Updated Docker Compose Environment
-      run: docker-compose build
+      - uses: actions/checkout@v3
 
-    - name: Stop Old Docker Compose Environment
-      run: docker-compose down
+      - name: Build Updated Docker Compose Environment
+        run: docker-compose build
 
-    - name: Run Updated Docker Compose Environment
-      run: docker-compose up -d
+      - name: Stop Old Docker Compose Environment
+        run: docker-compose down
 
-    - name: Remove Unused Docker Compose Environment
-      run: |
-        docker container prune -f
-        docker image prune -f
+      - name: Run Updated Docker Compose Environment
+        run: docker-compose up -d
+
+      - name: Remove Unused Docker Compose Environment
+        run: |
+          docker container prune -f
+          docker image prune -f
