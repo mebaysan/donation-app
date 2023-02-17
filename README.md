@@ -9,11 +9,16 @@
 - [Core Django Settings](#core-django-settings)
 - [For Development](#for-development)
 - [For Production](#for-production)
-    - [Load Default Superuser](#load-default-superuser)
+  - [Load Default Superuser](#load-default-superuser)
 - [Default Credentials for Django Admin](#default-credentials-for-django-admin)
 - [Deploy on A Real Server](#deploy-on-a-real-server)
 - [Backup](#backup)
-- [CI & CD with GitHub Actions](#ci--cd-with-github-actions)
+- [CI \& CD with GitHub Actions](#ci--cd-with-github-actions)
+- [Codebase Related Topic](#codebase-related-topic)
+  - [Custom Authentication Backend](#custom-authentication-backend)
+- [Development Environment](#development-environment)
+  - [Run Project](#run-project)
+- [Environment Variables](#environment-variables)
 
 # Introduction
 
@@ -165,8 +170,39 @@ make superuser # create a super user
 make runserver # run the project
 ```
 
-### Non Docker Installed Machines
+# Environment Variables
 
-```bash
-export DEBUG=2 # app will be using SQLite3 for DB
+```
+# App Variables to use in templates
+APP_NAME=My Donation App
+APP_FAVICON_URL=xyz.com/favicon.png
+
+SECRET_KEY=secret
+
+ALLOWED_HOSTS=HOST_1 HOST_2
+
+DB_NAME=somedb
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_USER=myuser
+DB_PASSWORD=myuser_password
+
+# KUVEYTTURK CONF
+KUVEYTTURK_STORE_NO=12345
+KUVEYTTURK_CUSTOMER_NO=1234
+KUVEYTTURK_USERNAME=your_api_username
+KUVEYTTURK_PASSWORD=your_api_password
+KUVEYTTURK_OK_URL=https://<YOUR_HOST>/api/payment-success/
+KUVEYTTURK_FAIL_URL=https://<YOUR_HOST>/api/payment-fail/
+
+# JWT CONF
+TOKEN_LIFETIME_HOURS=5
+
+# EMAIL
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_HOST_USER=yourmail@gmail.com
+EMAIL_HOST_PASSWORD=your_password
+EMAIL_USE_TLS=True
+EMAIL_USE_SSL=True
 ```
