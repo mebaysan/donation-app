@@ -21,6 +21,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = int(os.environ.get("DEBUG", default=0))
 if DEBUG == 1:
     from .config_dev import *
+elif DEBUG == 2:
+    from .config_dev import *
+
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 else:
     from .config_prod import *
 
@@ -40,7 +49,6 @@ INSTALLED_APPS = [
     "apps.donor.apps.DonorConfig",
     "apps.payment.apps.PaymentConfig",
     "apps.web.apps.WebConfig",
-
 ]
 
 MIDDLEWARE = [
@@ -117,32 +125,30 @@ STATIC_ROOT = BASE_DIR / "static"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 MESSAGE_TAGS = {
-    messages.ERROR: 'danger',
-    messages.WARNING: 'warning',
-    messages.SUCCESS: 'success',
-    messages.INFO: 'info',
-    'my_message_class': 'custom',
+    messages.ERROR: "danger",
+    messages.WARNING: "warning",
+    messages.SUCCESS: "success",
+    messages.INFO: "info",
+    "my_message_class": "custom",
 }
 
 # custom user model
 AUTH_USER_MODEL = "management.User"
 
 # Media URL
-MEDIA_URL = '/media/'
+MEDIA_URL = "/media/"
 
 LOGIN_URL = "/login"
 LOGIN_REDIRECT_URL = "/"
 
 # REST FRAMEWORK
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
     ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'apps.management.authentication.JWTAuthentication',
-    ]
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "apps.management.authentication.JWTAuthentication",
+    ],
 }
 
-JWT_CONF = {
-    'TOKEN_LIFETIME_HOURS': TOKEN_LIFETIME_HOURS
-}
+JWT_CONF = {"TOKEN_LIFETIME_HOURS": TOKEN_LIFETIME_HOURS}
