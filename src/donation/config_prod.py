@@ -36,27 +36,44 @@ DATABASES = {
 }
 
 # Media root for dev mode
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = BASE_DIR / "media"
 
 # KUVEYTTURK CONF
 KUVEYTTURK_CONF = {
-    'store_no': os.getenv('KUVEYTTURK_STORE_NO'),
-    'customer_no': os.getenv('KUVEYTTURK_CUSTOMER_NO'),
-    'username': os.getenv('KUVEYTTURK_USERNAME'),
-    'password': os.getenv('KUVEYTTURK_PASSWORD'),
-    'ok_url': os.getenv('KUVEYTTURK_OK_URL'),
-    'fail_url': os.getenv('KUVEYTTURK_FAIL_URL'),
-    'payment_request_url': 'https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelPayGate',
-    'payment_approve_url': 'https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelProvisionGate',
+    "store_no": os.getenv("KUVEYTTURK_STORE_NO"),
+    "customer_no": os.getenv("KUVEYTTURK_CUSTOMER_NO"),
+    "username": os.getenv("KUVEYTTURK_USERNAME"),
+    "password": os.getenv("KUVEYTTURK_PASSWORD"),
+    "ok_url": os.getenv("KUVEYTTURK_OK_URL"),
+    "fail_url": os.getenv("KUVEYTTURK_FAIL_URL"),
+    "payment_request_url": "https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelPayGate",
+    "payment_approve_url": "https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelProvisionGate",
 }
 
 # JWT CONF
-TOKEN_LIFETIME_HOURS = os.getenv('TOKEN_LIFETIME_HOURS', 5)
+TOKEN_LIFETIME_HOURS = os.getenv("TOKEN_LIFETIME_HOURS", 5)
 
 # EMAIL
-EMAIL_HOST = os.getenv('EMAIL_HOST')
-EMAIL_PORT = os.getenv('EMAIL_PORT')
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', True)
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_PORT = os.getenv("EMAIL_PORT")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", True)
 # EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', True)
+
+# LOGGING
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "ERROR",
+        },
+    },
+}
