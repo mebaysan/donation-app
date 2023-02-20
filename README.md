@@ -1,3 +1,5 @@
+[![CI - Image Deploy To Docker Hub](https://github.com/BaysanSoft/ihya-bagis-be/actions/workflows/ci.yaml/badge.svg)](https://github.com/BaysanSoft/ihya-bagis-be/actions/workflows/ci.yaml)
+
 # Table of Contents
 
 - [Table of Contents](#table-of-contents)
