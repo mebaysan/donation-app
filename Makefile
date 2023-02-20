@@ -46,7 +46,8 @@ migration:
 	@python src/manage.py migrate
 
 install:
-	@pip3 install -r requirements.txt
+	@pip install --upgrade pip
+	@pip install -r requirements.txt
 
 recover: install docdown docup wait migration loaddata
 	@echo "\n\t~~~~~~~~~~~~~~~"
