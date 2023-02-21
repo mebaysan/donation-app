@@ -22,7 +22,7 @@ from rest_framework.schemas import get_schema_view
 from apps.management.api.views import ObtainTokenView, healthcheck
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('cockpit/', admin.site.urls),
     # API URLs
     path('api/', include('apps.web.api.urls')),
     # Healthcheck ENDPOINT(S)
