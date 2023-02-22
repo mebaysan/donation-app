@@ -8,13 +8,13 @@ from helpers.serializers.validators import email_regex, phone_regex, card_expiry
 class DonationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Donation
-        fields = '__all__'
+        fields = "__all__"
 
 
 class DonationTransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = DonationTransaction
-        fields = '__all__'
+        fields = "__all__"
 
 
 class DonationTransactionDetailsSerializer(serializers.ModelSerializer):
@@ -22,30 +22,34 @@ class DonationTransactionDetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DonationTransaction
-        fields = '__all__'
+        fields = "__all__"
 
 
 class CartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
-        fields = ['id', 'donation_item', 'amount', 'added_date']
+        fields = ["id", "donation_item", "amount", "added_date"]
 
     def validate_amount(self, value):
-        donation_item_id = self.initial_data.get('donation_item')
+        donation_item_id = self.initial_data.get("donation_item")
         donation_item = DonationItem.objects.filter(id=donation_item_id).first()
-        if donation_item.donation_type == 'Static':
+        if donation_item.donation_type == "Static":
             # donation item has rules
             if value < donation_item.quantity_price:
-                raise serializers.ValidationError("Amount can't be less than the donation item's quantity price.")
+                raise serializers.ValidationError(
+                    "Amount can't be less than the donation item's quantity price."
+                )
             if value % donation_item.quantity_price != 0:
-                raise serializers.ValidationError("Amount has to be multiple of donation item's quantity price.")
+                raise serializers.ValidationError(
+                    "Amount has to be multiple of donation item's quantity price."
+                )
         return value
 
 
 class CartItemPaymentRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
-        fields = ['donation_item', 'amount']
+        fields = ["donation_item", "amount"]
 
 
 class CartSerializer(serializers.ModelSerializer):
@@ -53,7 +57,7 @@ class CartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cart
-        fields = ['updated_date', 'amount', 'cart_items']
+        fields = ["updated_date", "amount", "cart_items"]
 
 
 class PaymentRequestSerializer(serializers.Serializer):
@@ -68,15 +72,17 @@ class PaymentRequestSerializer(serializers.Serializer):
     card_cvc = serializers.CharField(max_length=4)
     message = serializers.CharField(required=False)
     donations = CartItemPaymentRequestSerializer(many=True)
+    group_name = serializers.CharField(required=False)
+    organization_name = serializers.CharField(required=False)
 
     def validate_card_number(self, value):
         """
-            4      => Visa
-            5 || 6 => MasterCard
-            9      => Troy
+        4      => Visa
+        5 || 6 => MasterCard
+        9      => Troy
         """
         if value[0] not in ["4", "5", "6", "9"]:
-            raise serializers.ValidationError('Lütfen geçerli bir kart girin.')
+            raise serializers.ValidationError("Lütfen geçerli bir kart girin.")
         return value
 
     def validate_amount(self, value):
@@ -86,14 +92,18 @@ class PaymentRequestSerializer(serializers.Serializer):
 
     def validate_donations(self, value):
         for item in value:
-            donation_item = DonationItem.objects.filter(id=item['donation_item'].id).first()
-            if donation_item.donation_type == 'Static':
-                if item['amount'] < donation_item.quantity_price:
+            donation_item = DonationItem.objects.filter(
+                id=item["donation_item"].id
+            ).first()
+            if donation_item.donation_type == "Static":
+                if item["amount"] < donation_item.quantity_price:
                     raise serializers.ValidationError(
-                        f"Amount can't be less than the donation item's quantity price. {item['amount']} is not acceptable for {item['donation_item'].name}.")
-                if item['amount'] % donation_item.quantity_price != 0:
+                        f"Amount can't be less than the donation item's quantity price. {item['amount']} is not acceptable for {item['donation_item'].name}."
+                    )
+                if item["amount"] % donation_item.quantity_price != 0:
                     raise serializers.ValidationError(
-                        f"Amount has to be multiple of donation item's quantity price. {item['amount']} is not acceptable for {item['donation_item'].name}.")
+                        f"Amount has to be multiple of donation item's quantity price. {item['amount']} is not acceptable for {item['donation_item'].name}."
+                    )
         return value
 
 

@@ -50,6 +50,8 @@ class DonationTransaction(models.Model):
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     donation_platform = models.CharField(choices=DONATION_PLATFORMS, default='WEB', max_length=10)
+    group_name = models.CharField(max_length=255, null=True, blank=True)
+    organization_name = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Donation Transaction'

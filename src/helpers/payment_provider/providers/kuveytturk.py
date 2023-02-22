@@ -72,7 +72,7 @@ class KuveytTurkPaymentProvider(object):
 
     def payment_request_parser(self, request_data):
         """
-            request_data (OrderedDict): Serialized data
+        request_data (OrderedDict): Serialized data
         """
         ####### Bagisci Bilgileri #######
         first_name = request_data.get("first_name")
@@ -96,40 +96,46 @@ class KuveytTurkPaymentProvider(object):
         elif card_number[0] == "9":
             card_type = "Troy"
         else:
-            raise ValueError('Lütfen geçerli bir kart girin.')
+            raise ValueError("Lütfen geçerli bir kart girin.")
 
         ####### Mesaj #######
         message = request_data.get("message")
 
         ####### Donation Items #######
-        donations = request_data.get('donations')
+        donations = request_data.get("donations")
 
         ####### Amount #######
         amount = 0
         for donation in donations:
-            amount += donation.get('amount')
+            amount += donation.get("amount")
         amount = float(amount)
         amount_sent_to_bank = amount * 100
         amount_sent_to_bank = str(amount_sent_to_bank)
         amount_sent_to_bank = int(amount_sent_to_bank.split(".")[0])
 
+        ####### Donation Items #######
+        group_name = request_data.get("group_name", None)
+        organization_name = request_data.get("organization_name", None)
+
         return {
-            'first_name': first_name,
-            'last_name': last_name,
-            'email': email,
-            'phone': phone,
-            'amount': amount,
-            'amount_sent_to_bank': amount_sent_to_bank,
-            'card_number': card_number,
-            'card_holder_name': card_holder_name,
-            'card_expiry': card_expiry,
-            'card_date': card_date,
-            'card_month': card_month,
-            'card_year': card_year,
-            'card_cvc': card_cvc,
-            'card_type': card_type,
-            'message': message,
-            'donations': donations
+            "first_name": first_name,
+            "last_name": last_name,
+            "email": email,
+            "phone": phone,
+            "amount": amount,
+            "amount_sent_to_bank": amount_sent_to_bank,
+            "card_number": card_number,
+            "card_holder_name": card_holder_name,
+            "card_expiry": card_expiry,
+            "card_date": card_date,
+            "card_month": card_month,
+            "card_year": card_year,
+            "card_cvc": card_cvc,
+            "card_type": card_type,
+            "message": message,
+            "donations": donations,
+            "group_name": group_name,
+            "organization_name": organization_name,
         }
 
     def make_payment(self, request, request_data):
@@ -137,58 +143,74 @@ class KuveytTurkPaymentProvider(object):
         merchant_order_id = f"{uuid.uuid4()}"  # istediğimiz değer yazılabilir bizim tuttuğumuz değer olacak (sabit veya değişken)
         ############## DonationTransaction instance create ##############
         new_transaction = DonationTransaction(
-            first_name=payment_request_data['first_name'],
-            last_name=payment_request_data['last_name'],
-            email=payment_request_data['email'],
-            phone_number=payment_request_data['phone'],
-            amount=payment_request_data['amount'],
-            amount_sent_to_bank=payment_request_data['amount_sent_to_bank'],
+            first_name=payment_request_data["first_name"],
+            last_name=payment_request_data["last_name"],
+            email=payment_request_data["email"],
+            phone_number=payment_request_data["phone"],
+            amount=payment_request_data["amount"],
+            amount_sent_to_bank=payment_request_data["amount_sent_to_bank"],
             merchant_order_id=merchant_order_id,
-            message=payment_request_data['message'],
+            message=payment_request_data["message"],
+            group_name=payment_request_data["group_name"],
+            organization_name=payment_request_data["organization_name"],
         )
         if request.user.is_authenticated:
             new_transaction.user = request.user
 
         else:  # payment request has no user (not logged-in)
-            exists_user = User.objects.filter(email=payment_request_data['email'],
-                                              phone_number=payment_request_data['phone']).first()
+            exists_user = User.objects.filter(
+                email=payment_request_data["email"],
+                phone_number=payment_request_data["phone"],
+            ).first()
             if exists_user is not None:  # there is a User with credentials
                 new_transaction.user = exists_user
             else:  # there is no User with the mail_templates or phone_number
                 try:
-                    new_user = User.objects.create(first_name=payment_request_data['first_name'],
-                                                   last_name=payment_request_data['first_name'],
-                                                   email=payment_request_data['email'],
-                                                   username=payment_request_data['email'],
-                                                   phone_number=payment_request_data['phone'],
-                                                   )
+                    new_user = User.objects.create(
+                        first_name=payment_request_data["first_name"],
+                        last_name=payment_request_data["first_name"],
+                        email=payment_request_data["email"],
+                        username=payment_request_data["email"],
+                        phone_number=payment_request_data["phone"],
+                    )
                     new_user.set_password(str(uuid.uuid4()))
                     new_user.save()
                     new_transaction.user = new_user
                     send_password_reset_email(new_user, request)
                 except IntegrityError as e:
                     # mail_templates != phone_number for User
-                    context = {'details': 'Lütfen geçerli email ve telefon numarası kullanın.'}
-                    if 'phone_number' in str(e):  # email is different but phone_number is taken by a User
+                    context = {
+                        "details": "Lütfen geçerli email ve telefon numarası kullanın."
+                    }
+                    if "phone_number" in str(
+                        e
+                    ):  # email is different but phone_number is taken by a User
                         context[
-                            'details'] = 'Telefon farklı bir bağışçı profilinde kullanılıyor. Lütfen hesabınıza tanımlı email ve telefon numarasını kullanın.'
-                    if 'username' in str(
-                            e):  # phone_number is different but email (username) is taken by a User
+                            "details"
+                        ] = "Telefon farklı bir bağışçı profilinde kullanılıyor. Lütfen hesabınıza tanımlı email ve telefon numarasını kullanın."
+                    if "username" in str(
+                        e
+                    ):  # phone_number is different but email (username) is taken by a User
                         context[
-                            'details'] = 'Email farklı bir bağışçı profilinde kullanılıyor. Lütfen hesabınıza tanımlı email ve telefon numarasını kullanın.'
-                    return Response(context,
-                                    status.HTTP_400_BAD_REQUEST)
+                            "details"
+                        ] = "Email farklı bir bağışçı profilinde kullanılıyor. Lütfen hesabınıza tanımlı email ve telefon numarasını kullanın."
+                    return Response(context, status.HTTP_400_BAD_REQUEST)
 
         new_transaction.save()
 
         ########### Donation Create for DonationTransaction #############
-        for donation in payment_request_data['donations']:
-            new_donation = Donation.objects.create(donation_item=donation.get('donation_item'),
-                                                   amount=donation.get('amount'),
-                                                   donation_transaction=new_transaction, user=new_transaction.user)
+        for donation in payment_request_data["donations"]:
+            new_donation = Donation.objects.create(
+                donation_item=donation.get("donation_item"),
+                amount=donation.get("amount"),
+                donation_transaction=new_transaction,
+                user=new_transaction.user,
+            )
         ########### HASH Process #############
         hashed_password = base64.b64encode(
-            hashlib.sha1(settings.KUVEYTTURK_CONF["password"].encode("ISO-8859-9")).digest()
+            hashlib.sha1(
+                settings.KUVEYTTURK_CONF["password"].encode("ISO-8859-9")
+            ).digest()
         ).decode()
         hashed_data = base64.b64encode(
             hashlib.sha1(
@@ -235,15 +257,19 @@ class KuveytTurkPaymentProvider(object):
         approve_res = urllib.parse.unquote(approve_res)
         amount_start = approve_res.find("<Amount>")
         amount_end = approve_res.find("</Amount>")
-        amount = approve_res[amount_start + 8: amount_end]
+        amount = approve_res[amount_start + 8 : amount_end]
         merchant_order_id_start = approve_res.find("<MerchantOrderId>")
         merchant_order_id_end = approve_res.find("</MerchantOrderId>")
-        merchant_order_id = approve_res[merchant_order_id_start + 17: merchant_order_id_end]
+        merchant_order_id = approve_res[
+            merchant_order_id_start + 17 : merchant_order_id_end
+        ]
         md_start = approve_res.find("<MD>")
         md_end = approve_res.find("</MD>")
-        md = approve_res[md_start + 4: md_end]
+        md = approve_res[md_start + 4 : md_end]
         hashed_password = base64.b64encode(
-            hashlib.sha1(settings.KUVEYTTURK_CONF["password"].encode("ISO-8859-9")).digest()
+            hashlib.sha1(
+                settings.KUVEYTTURK_CONF["password"].encode("ISO-8859-9")
+            ).digest()
         ).decode()
         hashed_data = base64.b64encode(
             hashlib.sha1(
@@ -283,13 +309,18 @@ class KuveytTurkPaymentProvider(object):
         ##### Transaction Status Check #####
         response_code_start = r.text.find("<ResponseCode>")
         response_code_end = r.text.find("</ResponseCode>")
-        response_code = str(r.text[response_code_start + 14: response_code_end])
+        response_code = str(r.text[response_code_start + 14 : response_code_end])
 
         ####### DonationTransaction get instance from payment ##############
-        transaction = get_object_or_404(DonationTransaction, merchant_order_id=str(merchant_order_id))
+        transaction = get_object_or_404(
+            DonationTransaction, merchant_order_id=str(merchant_order_id)
+        )
         transaction.status_code = response_code
-        transaction.status_code_description = self.RESPONSE_CODES[response_code] if self.RESPONSE_CODES[
-            response_code] else f"{str(response_code)}"
+        transaction.status_code_description = (
+            self.RESPONSE_CODES[response_code]
+            if self.RESPONSE_CODES[response_code]
+            else f"{str(response_code)}"
+        )
         transaction.md_code = md
 
         if response_code == "00":
@@ -297,4 +328,6 @@ class KuveytTurkPaymentProvider(object):
 
         transaction.save()
 
-        return Response({'details': 'Başarıyla bağışınız tamamlandı.'}, status.HTTP_200_OK)
+        return Response(
+            {"details": "Başarıyla bağışınız tamamlandı."}, status.HTTP_200_OK
+        )
