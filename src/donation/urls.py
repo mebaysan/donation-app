@@ -22,25 +22,28 @@ from rest_framework.schemas import get_schema_view
 from apps.management.api.views import ObtainTokenView, healthcheck
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("cockpit/", admin.site.urls),
     # API URLs
-    path('api/', include('apps.web.api.urls')),
+    path("api/", include("apps.web.api.urls")),
     # Healthcheck ENDPOINT(S)
-    path('api/healthcheck/', healthcheck, name='healthcheck'),
+    path("api/healthcheck/", healthcheck, name="healthcheck"),
     # AUTH ENDPOINT(S)
-    path('api/token/', ObtainTokenView.as_view(), name='obtain_token'),
+    path("api/token/", ObtainTokenView.as_view(), name="obtain_token"),
     # API Doc (open api)
-    path('api/docs/', get_schema_view(
-        title=settings.APP_NAME,
-        description="API Documentation",
-        version="1.0.0",
-        patterns=[
-            path('api/', include('apps.web.api.urls')),
-            path('api/token/', ObtainTokenView.as_view()),
-        ]
-    ), name='openapi-schema'
-         ),
-    path('', include('apps.management.urls')),  # password change etc.
+    path(
+        "api/docs/",
+        get_schema_view(
+            title=settings.APP_NAME,
+            description="API Documentation",
+            version="1.0.0",
+            patterns=[
+                path("api/", include("apps.web.api.urls")),
+                path("api/token/", ObtainTokenView.as_view()),
+            ],
+        ),
+        name="openapi-schema",
+    ),
+    path("", include("apps.management.urls")),  # password change etc.
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

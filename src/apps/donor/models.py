@@ -6,18 +6,20 @@ User = get_user_model()
 
 # Create your models here.
 
+
 class DonationCategory(models.Model):
     """
-            Holds donation category
+    Holds donation category
     """
+
     name = models.CharField(max_length=255)
     description = models.TextField()
-    image = models.ImageField(upload_to='donation_category/', null=True, blank=True)
+    image = models.ImageField(upload_to="donation_category/", null=True, blank=True)
     is_published = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name = 'Donation Category'
-        verbose_name_plural = 'Donation Categories'
+        verbose_name = "Donation Category"
+        verbose_name_plural = "Donation Categories"
 
     def __str__(self):
         return self.name
@@ -31,20 +33,24 @@ class DonationCategory(models.Model):
 
 class DonationItem(models.Model):
     """
-        Holds donation item
+    Holds donation item
     """
-    DONATION_TYPES = (
-        ('Dynamic', 'Dynamic'),
-        ('Static', 'Static')
-    )
+
+    DONATION_TYPES = (("Dynamic", "Dynamic"), ("Static", "Static"))
     name = models.CharField(max_length=255)
     description = models.TextField()
-    category = models.ForeignKey(DonationCategory, on_delete=models.SET_NULL, null=True, related_name='items')
-    image = models.ImageField(upload_to='donation_item/', null=True, blank=True)
+    category = models.ForeignKey(
+        DonationCategory, on_delete=models.SET_NULL, null=True, related_name="items"
+    )
+    image = models.ImageField(upload_to="donation_item/", null=True, blank=True)
     is_published = models.BooleanField(default=True)
     # we use the fields below to use restrictions
-    donation_type = models.CharField(choices=DONATION_TYPES, max_length=7, default='Dynamic')
-    quantity_price = models.DecimalField(decimal_places=2, max_digits=16, null=True, blank=True)
+    donation_type = models.CharField(
+        choices=DONATION_TYPES, max_length=7, default="Dynamic"
+    )
+    quantity_price = models.DecimalField(
+        decimal_places=2, max_digits=16, null=True, blank=True
+    )
 
     def __str__(self):
         return self.name
@@ -53,18 +59,18 @@ class DonationItem(models.Model):
         return self.image.url
 
     class Meta:
-        verbose_name = 'Donation Item'
-        verbose_name_plural = 'Donation Items'
+        verbose_name = "Donation Item"
+        verbose_name_plural = "Donation Items"
 
 
 class Bank(models.Model):
     name = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='donation_category/', null=True, blank=True)
+    image = models.ImageField(upload_to="donation_category/", null=True, blank=True)
     is_published = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name = 'Bank'
-        verbose_name_plural = 'Banks'
+        verbose_name = "Bank"
+        verbose_name_plural = "Banks"
 
     def __str__(self):
         return self.name
@@ -75,9 +81,9 @@ class Bank(models.Model):
 
 class BankAccount(models.Model):
     CURRENCY_TYPES = (
-        ('TRY', 'TRY'),
-        ('USD', 'USD'),
-        ('EUR', 'EUR'),
+        ("TRY", "TRY"),
+        ("USD", "USD"),
+        ("EUR", "EUR"),
     )
     account_name = models.CharField(max_length=500)
     branch = models.CharField(max_length=500)
@@ -85,11 +91,13 @@ class BankAccount(models.Model):
     swift_no = models.CharField(max_length=500)
     iban_no = models.CharField(max_length=500)
     currency = models.CharField(choices=CURRENCY_TYPES, max_length=3)
-    bank = models.ForeignKey(Bank, on_delete=models.CASCADE, related_name='bank_accounts')
+    bank = models.ForeignKey(
+        Bank, on_delete=models.CASCADE, related_name="bank_accounts"
+    )
 
     def __str__(self):
         return self.account_name
 
     class Meta:
-        verbose_name = 'Bank Account'
-        verbose_name_plural = 'Bank Accounts'
+        verbose_name = "Bank Account"
+        verbose_name_plural = "Bank Accounts"

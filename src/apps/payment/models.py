@@ -8,15 +8,23 @@ User = get_user_model()
 
 class Donation(models.Model):
     """
-        Holds Cart donation items
+    Holds Cart donation items
     """
-    donation_item = models.ForeignKey('donor.DonationItem', on_delete=models.SET_NULL, null=True,
-                                      related_name='donations')
+
+    donation_item = models.ForeignKey(
+        "donor.DonationItem",
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="donations",
+    )
     amount = models.DecimalField(decimal_places=2, max_digits=16)
     added_time = models.DateTimeField(auto_now_add=True, auto_created=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    donation_transaction = models.ForeignKey('payment.DonationTransaction', on_delete=models.CASCADE,
-                                             related_name='donations')
+    donation_transaction = models.ForeignKey(
+        "payment.DonationTransaction",
+        on_delete=models.CASCADE,
+        related_name="donations",
+    )
 
     def __str__(self):
         return f"{self.user.username}-{self.donation_item.name}-{self.amount}"
@@ -28,11 +36,10 @@ class Donation(models.Model):
 
 class DonationTransaction(models.Model):
     """
-        Holds transaction of donations in the same line with total number
+    Holds transaction of donations in the same line with total number
     """
-    DONATION_PLATFORMS = [
-        ('WEB', 'WEB')
-    ]
+
+    DONATION_PLATFORMS = [("WEB", "WEB")]
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
@@ -49,11 +56,15 @@ class DonationTransaction(models.Model):
         max_length=255, null=True, blank=True, default="Response not received from bank"
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    donation_platform = models.CharField(choices=DONATION_PLATFORMS, default='WEB', max_length=10)
+    donation_platform = models.CharField(
+        choices=DONATION_PLATFORMS, default="WEB", max_length=10
+    )
+    group_name = models.CharField(max_length=255, null=True, blank=True)
+    organization_name = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
-        verbose_name = 'Donation Transaction'
-        verbose_name_plural = 'Donation Transactions'
+        verbose_name = "Donation Transaction"
+        verbose_name_plural = "Donation Transactions"
 
     def __str__(self):
         return self.merchant_order_id
@@ -66,15 +77,17 @@ class PaymentProvider(models.Model):
     code_name = models.CharField(max_length=3)
 
     class Meta:
-        verbose_name = 'Payment Provider'
-        verbose_name_plural = 'Payment Providers'
+        verbose_name = "Payment Provider"
+        verbose_name_plural = "Payment Providers"
 
     def __str__(self):
         return self.name
 
     def save(self, *args, **kwargs):
         if self.is_provider:
-            published_provider = PaymentProvider.objects.filter(is_provider=True).first()
+            published_provider = PaymentProvider.objects.filter(
+                is_provider=True
+            ).first()
             if published_provider:
                 published_provider.is_provider = False
                 published_provider.save()
@@ -82,14 +95,18 @@ class PaymentProvider(models.Model):
 
 
 class CartItem(models.Model):
-    donation_item = models.ForeignKey('donor.DonationItem', on_delete=models.SET_NULL, null=True)
+    donation_item = models.ForeignKey(
+        "donor.DonationItem", on_delete=models.SET_NULL, null=True
+    )
     amount = models.DecimalField(max_digits=16, decimal_places=2, default=0)
     added_date = models.DateTimeField(auto_now_add=True, auto_created=True)
-    cart = models.ForeignKey('payment.Cart', on_delete=models.CASCADE, related_name='cart_items')
+    cart = models.ForeignKey(
+        "payment.Cart", on_delete=models.CASCADE, related_name="cart_items"
+    )
 
     class Meta:
-        verbose_name = 'Cart Item'
-        verbose_name_plural = 'Cart Items'
+        verbose_name = "Cart Item"
+        verbose_name_plural = "Cart Items"
 
     # Eğer sepette item varsa ve tekrar eklenirse var olan item fiyatını güncelle
     # def save(self, *args, **kwargs):
@@ -104,14 +121,19 @@ class CartItem(models.Model):
 
 
 class Cart(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=False, related_query_name='cart',
-                                related_name='cart')
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        null=False,
+        related_query_name="cart",
+        related_name="cart",
+    )
     amount = models.DecimalField(max_digits=16, decimal_places=2, default=0)
     updated_date = models.DateTimeField(auto_now_add=True, auto_created=True)
 
     class Meta:
-        verbose_name = 'Cart'
-        verbose_name_plural = 'Carts'
+        verbose_name = "Cart"
+        verbose_name_plural = "Carts"
 
     def __str__(self):
         return self.user.username
@@ -129,8 +151,11 @@ class Cart(models.Model):
         cart_items = self.cart_items.all()
         for cart_item in cart_items:
             new_donation = Donation.objects.create(
-                donation_item=cart_item.donation_item, amount=cart_item.amount, added_time=datetime.now(),
-                user=cart_item.cart.user)
+                donation_item=cart_item.donation_item,
+                amount=cart_item.amount,
+                added_time=datetime.now(),
+                user=cart_item.cart.user,
+            )
             new_donation.save()
         self.cart_items.all().delete()
         self.save()

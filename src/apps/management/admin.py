@@ -9,24 +9,12 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = (
         *UserAdmin.fieldsets,  # original form fieldsets, expanded
         (  # new fieldset added on to the bottom
-            'Additional Data',  # group heading of your choice; set to None for a blank space instead of a header
+            "Additional Data",  # group heading of your choice; set to None for a blank space instead of a header
             {
-                'fields': (
-                    'phone_number',
-                    'gender',
-                    'is_approved_to_be_in_touch'
-                ),
+                "fields": ("phone_number", "gender", "is_approved_to_be_in_touch"),
             },
         ),
-        (
-            'Location', {
-                'fields': (
-                    'country',
-                    'city',
-                    'state'
-                )
-            }
-        )
+        ("Location", {"fields": ("country", "city", "state")}),
     )
 
 

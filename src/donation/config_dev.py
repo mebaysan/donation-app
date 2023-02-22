@@ -1,6 +1,4 @@
-# If you want to use this config file, you should set `DEBUG=True` on your terminal
-
-import os
+# If you want to use this config file, you should set `DEBUG=1` on your terminal
 
 from donation.settings import BASE_DIR
 
@@ -11,6 +9,11 @@ APP_FAVICON_URL = "https://ihyavakfi.org.tr/media/site/favicon.png"
 SECRET_KEY = "verySECRETk3y"
 
 ALLOWED_HOSTS = []
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
 
 DATABASES = {
     "default": {

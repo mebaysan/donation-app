@@ -101,4 +101,5 @@ runproxyversion:
 	@make migration
 	@make run_gunicorn
 
-
+format:
+	@black src
