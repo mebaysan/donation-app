@@ -20,10 +20,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 DEBUG = int(os.environ.get("DEBUG", default=0))
 if DEBUG == 1:
-    DEBUG = True
     from .config_dev import *
 elif DEBUG == 2:
-    DEBUG = True
     from .config_dev import *
 
     DATABASES = {
@@ -33,7 +31,6 @@ elif DEBUG == 2:
         }
     }
 else:
-    DEBUG = False
     from .config_prod import *
 
 # Application definition
