@@ -21,6 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = int(os.environ.get("DEBUG", default=0))
 if DEBUG == 1:
     from .config_dev import *
+
+    DEBUG = True
 elif DEBUG == 2:
     from .config_dev import *
 
@@ -30,8 +32,11 @@ elif DEBUG == 2:
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
+    DEBUG = True
 else:
     from .config_prod import *
+
+    DEBUG = False
 
 # Application definition
 
