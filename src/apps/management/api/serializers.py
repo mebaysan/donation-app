@@ -11,11 +11,20 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        exclude = ['groups', 'user_permissions', 'is_superuser', 'is_staff', 'is_active', 'password']
+        exclude = [
+            "groups",
+            "user_permissions",
+            "is_superuser",
+            "is_staff",
+            "is_active",
+            "password",
+        ]
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
-    phone_number = serializers.CharField(validators=[phone_regex], max_length=17, required=True)
+    phone_number = serializers.CharField(
+        validators=[phone_regex], max_length=17, required=True
+    )
     email = serializers.CharField(validators=[email_regex], required=True)
     username = serializers.CharField(validators=[username_regex], required=True)
     password = serializers.CharField(required=True)
@@ -23,12 +32,18 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        exclude = ['groups', 'user_permissions', 'is_superuser', 'is_staff', 'is_active']
+        exclude = [
+            "groups",
+            "user_permissions",
+            "is_superuser",
+            "is_staff",
+            "is_active",
+        ]
 
     def validate(self, data):
-        if data['password'] != data['confirm_new_password']:
+        if data["password"] != data["confirm_new_password"]:
             raise serializers.ValidationError("Parolalar eşleşmiyor.")
-        if data['username'] != data['email']:
+        if data["username"] != data["email"]:
             raise serializers.ValidationError("Kullanıcı adı ve email eşleşmiyor.")
         return data
 
@@ -39,7 +54,7 @@ class PasswordChangeSerializer(serializers.Serializer):
     confirm_new_password = serializers.CharField(required=True)
 
     def validate(self, data):
-        if data['new_password'] != data['confirm_new_password']:
+        if data["new_password"] != data["confirm_new_password"]:
             raise serializers.ValidationError("Parolalar eşleşmiyor.")
         return data
 

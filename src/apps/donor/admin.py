@@ -6,14 +6,17 @@ from apps.payment.models import Donation
 
 # Register your models here.
 
+
 class DonationCategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'is_published')
-    list_editable = ('is_published',)
+    list_display = ("name", "is_published")
+    list_editable = ("is_published",)
 
     def has_delete_permission(self, request, obj=None):
         if obj is not None:
             donation_items = DonationItem.objects.filter(category_id=obj.id).all()
-            donations = Donation.objects.filter(donation_item__in=donation_items).count()
+            donations = Donation.objects.filter(
+                donation_item__in=donation_items
+            ).count()
             if donations != 0:
                 return False
             else:
@@ -21,8 +24,11 @@ class DonationCategoryAdmin(admin.ModelAdmin):
 
 
 class DonationItemAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'is_published', 'donation_type')
-    list_editable = ('category', 'is_published',)
+    list_display = ("name", "category", "is_published", "donation_type")
+    list_editable = (
+        "category",
+        "is_published",
+    )
 
     def has_delete_permission(self, request, obj=None):
         if obj is not None:
