@@ -7,6 +7,7 @@ from apps.payment.models import (
     Donation,
     DonationTransaction,
 )
+from helpers.template import filters
 
 
 # Register your models here.
@@ -85,10 +86,10 @@ class DonationTransactionAdmin(admin.ModelAdmin):
         "organization_name",
     )
     list_filter = [
-        "is_complete",
-        "status_code",
-        "group_name",
-        "organization_name",
+        ("is_complete", filters.DropdownFilter),
+        ("status_code", filters.DropdownFilter),
+        ("group_name", filters.DropdownFilter),
+        ("organization_name", filters.DropdownFilter),
     ]
     search_fields = [
         "first_name",
