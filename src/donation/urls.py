@@ -43,7 +43,7 @@ urlpatterns = [
         ),
         name="openapi-schema",
     ),
-    path("", include("apps.management.urls")),  # password change etc.
+    path("api/", include("apps.management.urls")),  # password change etc.
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -41,6 +41,7 @@ def send_password_reset_email(user, request):
             "domain": current_site.domain,
             "uid": urlsafe_base64_encode(force_bytes(user.pk)),
             "token": default_token_generator.make_token(user),
+            "protocol": "https" if settings.DEBUG == False else "http",
         },
     )
     recipient_list = [user.email]
