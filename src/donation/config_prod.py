@@ -35,7 +35,7 @@ DATABASES = {
     }
 }
 
-# Media root for dev mode
+# Media root for prod mode
 MEDIA_ROOT = BASE_DIR / "media"
 
 # KUVEYTTURK CONF
