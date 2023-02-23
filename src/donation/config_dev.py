@@ -8,7 +8,7 @@ APP_FAVICON_URL = "https://ihyavakfi.org.tr/media/site/favicon.png"
 
 SECRET_KEY = "verySECRETk3y"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
