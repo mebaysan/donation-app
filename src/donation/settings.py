@@ -21,6 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = int(os.environ.get("DEBUG", default=0))
 if DEBUG == 1:
     from .config_dev import *
+
+    DEBUG = True
 elif DEBUG == 2:
     from .config_dev import *
 
@@ -30,8 +32,11 @@ elif DEBUG == 2:
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
+    DEBUG = True
 else:
     from .config_prod import *
+
+    DEBUG = False
 
 # Application definition
 
@@ -108,18 +113,22 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "tr-TR"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Istanbul"
 
 USE_I18N = True
+
+USE_L10N = True
 
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "assets"]
+STATIC_URL = "/django-static/" # for proxy purposes
+STATICFILES_DIRS = [BASE_DIR / "staticfiles"]
 STATIC_ROOT = BASE_DIR / "static"
+
+MEDIA_URL = "/django-media/" # for proxy purposes
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
