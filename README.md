@@ -17,6 +17,7 @@
 - [Backup](#backup)
 - [CI \& CD with GitHub Actions](#ci--cd-with-github-actions)
 - [Codebase Related Topic](#codebase-related-topic)
+  - [Static \& Media Files for Production](#static--media-files-for-production)
   - [Custom Authentication Backend](#custom-authentication-backend)
 - [Development Environment](#development-environment)
   - [Run Project](#run-project)
@@ -67,14 +68,14 @@ You can use [dev-postgres.sh](scripts/dev-postgres.sh) to create a development d
 
 ## Load Default Superuser
 
-```
+```bash
 docker container exec -it baysan_web /bin/bash
 >>> make loaddata
 ```
 
 # Default Credentials for Django Admin
 
-```
+```bash
 username: admin
 password: Passw0rd!.
 ```
@@ -87,7 +88,7 @@ Steps:
 
 2. Put the content below into the file you created
 
-    ```
+    ```bash
     server {
             # `listen` can be changed for your nginx service in docker-compose.yml
             listen 80;
@@ -109,7 +110,7 @@ Steps:
 
 3. Create a symbolic link
 
-    ```
+    ```bash
         sudo ln -s /etc/nginx/sites-available/baysanproject /etc/nginx/sites-enabled
     ```
 
@@ -144,12 +145,20 @@ to have your own VPS.
   requests.
 - `./svc.sh help` command will help you to understand how to run a consistent runner. You will follow the command like
   below.
-    ```
+    ```bash
     ./svc.sh install
     ./svc.sh run
     ```
 
 # Codebase Related Topic
+
+## Static & Media Files for Production
+
+```bash
+STATIC_URL = "/django-static/" # for proxy purposes
+
+MEDIA_URL = "/django-media/" # for proxy purposes
+```
 
 ## Custom Authentication Backend
 
@@ -174,7 +183,7 @@ make runserver # run the project
 
 # Environment Variables
 
-```
+```bash
 # App Variables to use in templates
 APP_NAME=My Donation App
 APP_FAVICON_URL=xyz.com/favicon.png
