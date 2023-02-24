@@ -146,9 +146,6 @@ MESSAGE_TAGS = {
 # custom user model
 AUTH_USER_MODEL = "management.User"
 
-# Media URL
-MEDIA_URL = "/media/"
-
 LOGIN_URL = "/login"
 LOGIN_REDIRECT_URL = "/"
 
