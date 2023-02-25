@@ -46,8 +46,8 @@ KUVEYTTURK_CONF = {
     "password": os.environ.get("KUVEYTTURK_PASSWORD"),
     "ok_url": os.environ.get("KUVEYTTURK_OK_URL"),
     "fail_url": os.environ.get("KUVEYTTURK_FAIL_URL"),
-    "payment_request_url": "https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelPayGate",
-    "payment_approve_url": "https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelProvisionGate",
+    "payment_request_url": os.environ.get("KUVEYTTURK_PAYMENT_REQUEST_URL"), # https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelPayGate
+    "payment_approve_url": os.environ.get("KUVEYTTURK_PAYMENT_APPROVE_URL"), # https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelProvisionGate
 }
 
 # JWT CONF
