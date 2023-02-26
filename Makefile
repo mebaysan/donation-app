@@ -103,3 +103,6 @@ runproxyversion:
 
 format:
 	@black src
+
+load_countries_states:
+	@python src/manage.py load_countries_states

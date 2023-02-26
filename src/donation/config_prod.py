@@ -17,11 +17,13 @@ CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(" ")
 
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-SECURE_SSL_REDIRECT = True if os.environ.get("SECURE_SSL_REDIRECT") == 'True' else False
+SECURE_SSL_REDIRECT = True if os.environ.get("SECURE_SSL_REDIRECT") == "True" else False
 
-SESSION_COOKIE_SECURE = True if os.environ.get("SESSION_COOKIE_SECURE") == 'True' else False
+SESSION_COOKIE_SECURE = (
+    True if os.environ.get("SESSION_COOKIE_SECURE") == "True" else False
+)
 
-CSRF_COOKIE_SECURE = True if os.environ.get("CSRF_COOKIE_SECURE") == 'True' else False
+CSRF_COOKIE_SECURE = True if os.environ.get("CSRF_COOKIE_SECURE") == "True" else False
 
 
 DATABASES = {
@@ -46,8 +48,12 @@ KUVEYTTURK_CONF = {
     "password": os.environ.get("KUVEYTTURK_PASSWORD"),
     "ok_url": os.environ.get("KUVEYTTURK_OK_URL"),
     "fail_url": os.environ.get("KUVEYTTURK_FAIL_URL"),
-    "payment_request_url": os.environ.get("KUVEYTTURK_PAYMENT_REQUEST_URL"), # https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelPayGate
-    "payment_approve_url": os.environ.get("KUVEYTTURK_PAYMENT_APPROVE_URL"), # https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelProvisionGate
+    "payment_request_url": os.environ.get(
+        "KUVEYTTURK_PAYMENT_REQUEST_URL"
+    ),  # https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelPayGate
+    "payment_approve_url": os.environ.get(
+        "KUVEYTTURK_PAYMENT_APPROVE_URL"
+    ),  # https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelProvisionGate
 }
 
 # JWT CONF
@@ -58,7 +64,7 @@ EMAIL_HOST = os.environ.get("EMAIL_HOST")
 EMAIL_PORT = os.environ.get("EMAIL_PORT")
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
-EMAIL_USE_TLS = True if os.environ.get("EMAIL_USE_TLS") == 'True' else False
+EMAIL_USE_TLS = True if os.environ.get("EMAIL_USE_TLS") == "True" else False
 # EMAIL_USE_SSL = True if os.environ.get("EMAIL_USE_SSL") == 'True' else False
 
 # LOGGING

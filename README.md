@@ -177,6 +177,7 @@ To override the config variables, you can update the variables in [`config_dev.p
 ```bash
 make create-devdb # create project dev db (you have to have Docker on your machine)
 make migration # create the db
+make load_countries_states # load country and state_provinces data
 make superuser # create a super user 
 make runserver # run the project
 ```
