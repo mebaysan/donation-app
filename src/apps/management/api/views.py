@@ -2,7 +2,13 @@ from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 from rest_framework import views, status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.generics import RetrieveUpdateAPIView, UpdateAPIView, CreateAPIView
+from rest_framework.generics import (
+    RetrieveUpdateAPIView,
+    RetrieveAPIView,
+    UpdateAPIView,
+    CreateAPIView,
+    ListAPIView,
+)
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
@@ -12,7 +18,10 @@ from apps.management.api.serializers import (
     PasswordChangeSerializer,
     ObtainTokenSerializer,
     ForgotPasswordSerializer,
+    CountrySerializer,
+    CountryDetailSerializer,
 )
+from apps.management.models import Country, StateProvince
 from apps.management.authentication import JWTAuthentication
 from helpers.communication.email import send_password_reset_email
 
@@ -146,3 +155,16 @@ class ForgotPasswordAPIView(views.APIView):
         return Response(
             {"details": "Parola sıfırlama maili gönderildi."}, status=status.HTTP_200_OK
         )
+
+
+class CountryListAPIView(ListAPIView):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
+    permission_classes = [AllowAny]
+
+
+class CountryDetailsAPIView(RetrieveAPIView):
+    queryset = Country.objects.all()
+    serializer_class = CountryDetailSerializer
+    permission_classes = [AllowAny]
+    lookup_field = "country_code"

@@ -1,7 +1,10 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-
 from helpers.serializers.validators import email_regex, phone_regex, username_regex
+from apps.management.models import (
+    Country,
+    StateProvince,
+)
 
 User = get_user_model()
 
@@ -66,3 +69,31 @@ class ObtainTokenSerializer(serializers.Serializer):
 
 class ForgotPasswordSerializer(serializers.Serializer):
     username = serializers.CharField()
+
+
+class CountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = "__all__"
+
+
+class StateProvinceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StateProvince
+        fields = "__all__"
+
+
+class CountryDetailSerializer(serializers.ModelSerializer):
+    state_provinces = StateProvinceSerializer(many=True)
+
+    class Meta:
+        model = Country
+        fields = [
+            "id",
+            "name",
+            "country_code",
+            "country_code_alpha3",
+            "phone",
+            "currency",
+            "state_provinces",
+        ]

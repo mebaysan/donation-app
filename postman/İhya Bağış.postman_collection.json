@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\":\"admin\",\n    \"password\":\"123\"\n}",
+							"raw": "{\n    \"username\":\"mail@mebaysan.com\",\n    \"password\":\"123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -136,7 +136,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"admin\",\n    \"first_name\": \"Enes\",\n    \"last_name\": \"Baysan\",\n    \"email\": \"info@baysansoft.com\",\n    \"phone_number\": \"+905308626253\",\n    \"gender\": \"Male\",\n    \"country\": \"Turkey\",\n    \"city\": \"Istanbul\",\n    \"state\": \"Başakşehir\",\n    \"is_approved_to_be_in_touch\": true\n}",
+							"raw": "{\n    \"username\": \"mail@mebaysan.com\",\n    \"first_name\": \"Enes2\",\n    \"last_name\": \"Baysan\",\n    \"email\": \"mail@mebaysan.com\",\n    \"phone_number\": \"+901233211223\",\n    \"gender\": \"Male\",\n    \"country\": 226,\n    \"state_province\": 3434,\n    \"is_approved_to_be_in_touch\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -166,7 +166,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"phone_number\": \"+901233211223\",\n    \"password\": \"123\",\n    \"confirm_new_password\":\"123\",\n    \"username\": \"mail@mebaysan.com\",\n    \"email\": \"mail@mebaysan.com\"\n}",
+							"raw": "{\n    \"phone_number\": \"+901233211223\",\n    \"password\": \"123\",\n    \"confirm_new_password\":\"123\",\n    \"username\": \"mail@mebaysan.com\",\n    \"email\": \"mail@mebaysan.com\",\n    \"country\": 226,\n    \"state_province\": 3433\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -212,6 +212,46 @@
 								"management",
 								"forgot-password",
 								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Countries List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/management/countries/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"management",
+								"countries",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Countries Details (country_code)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/management/countries/TR",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"management",
+								"countries",
+								"TR"
 							]
 						}
 					},
