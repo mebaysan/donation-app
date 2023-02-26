@@ -4,8 +4,18 @@ from django.contrib.auth.models import Group
 
 from apps.management.models import User
 
+from helpers.template import filters
+
 
 class CustomUserAdmin(UserAdmin):
+    list_filter = (
+        ("is_superuser", filters.DropdownFilter),
+        ("is_staff", filters.DropdownFilter),
+        ("groups", filters.RelatedDropdownFilter),
+        ("is_approved_to_be_in_touch", filters.DropdownFilter),
+        ("country", filters.RelatedDropdownFilter),
+        ("state_province", filters.RelatedDropdownFilter),
+    )
     fieldsets = (
         *UserAdmin.fieldsets,  # original form fieldsets, expanded
         (  # new fieldset added on to the bottom
@@ -14,7 +24,15 @@ class CustomUserAdmin(UserAdmin):
                 "fields": ("phone_number", "gender", "is_approved_to_be_in_touch"),
             },
         ),
-        ("Location", {"fields": ("country", "city", "state")}),
+        (
+            "Location",
+            {
+                "fields": (
+                    "country",
+                    "state_province",
+                )
+            },
+        ),
     )
 
 

@@ -177,6 +177,7 @@ To override the config variables, you can update the variables in [`config_dev.p
 ```bash
 make create-devdb # create project dev db (you have to have Docker on your machine)
 make migration # create the db
+make load_countries_states # load country and state_provinces data
 make superuser # create a super user 
 make runserver # run the project
 ```
@@ -207,12 +208,14 @@ DB_USER=myuser
 DB_PASSWORD=myuser_password
 
 # KUVEYTTURK CONF
-KUVEYTTURK_STORE_NO=12345
-KUVEYTTURK_CUSTOMER_NO=1234
-KUVEYTTURK_USERNAME=your_api_username
-KUVEYTTURK_PASSWORD=your_api_password
+KUVEYTTURK_STORE_NO=57902 # Test Creds from KuveytTurk
+KUVEYTTURK_CUSTOMER_NO=97228291 # Test Creds from KuveytTurk
+KUVEYTTURK_USERNAME=TEPKVT2021 # Test Creds from KuveytTurk
+KUVEYTTURK_PASSWORD=api123 # Test Creds from KuveytTurk
 KUVEYTTURK_OK_URL=https://<YOUR_HOST>/api/payment-success/
 KUVEYTTURK_FAIL_URL=https://<YOUR_HOST>/api/payment-fail/
+KUVEYTTURK_PAYMENT_REQUEST_URL=https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelPayGate
+KUVEYTTURK_PAYMENT_APPROVE_URL=https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelProvisionGate
 
 # JWT CONF
 TOKEN_LIFETIME_HOURS=5

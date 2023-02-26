@@ -17,4 +17,10 @@ urlpatterns = [
         views.ForgotPasswordAPIView.as_view(),
         name="forgot_password",
     ),
+    path("countries/", views.CountryListAPIView.as_view(), name="country_list"),
+    path(
+        "countries/<str:country_code>/",
+        views.CountryDetailsAPIView.as_view(),
+        name="country_detail",
+    ),
 ]

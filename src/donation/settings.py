@@ -124,11 +124,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = "/django-static/" # for proxy purposes
+STATIC_URL = "/django-static/"  # for proxy purposes
 STATICFILES_DIRS = [BASE_DIR / "staticfiles"]
 STATIC_ROOT = BASE_DIR / "static"
 
-MEDIA_URL = "/django-media/" # for proxy purposes
+MEDIA_URL = "/django-media/"  # for proxy purposes
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
