@@ -34,7 +34,7 @@ class DonationTransactionListAPIView(ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return DonationTransaction.objects.filter(user=self.request.user).all()
+        return DonationTransaction.objects.filter(user=self.request.user).all().order_by('-date')
 
 
 class DonationTransactionRetrieveAPIView(RetrieveAPIView):
