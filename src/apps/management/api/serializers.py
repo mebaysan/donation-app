@@ -16,6 +16,10 @@ User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(validators=[phone_regex], max_length=17)
+    get_total_amount_of_donations = serializers.DecimalField(
+        max_digits=16, decimal_places=2
+    )
+    get_total_count_of_donations = serializers.IntegerField()
 
     class Meta:
         model = User

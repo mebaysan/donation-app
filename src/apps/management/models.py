@@ -41,3 +41,16 @@ class User(AbstractUser):
         StateProvince, on_delete=models.CASCADE, null=True, blank=True
     )
     is_approved_to_be_in_touch = models.BooleanField(default=False)
+
+    @property
+    def get_total_amount_of_donations(self):
+        return (
+            self.donation_transactions.filter(is_complete=True).aggregate(
+                models.Sum("amount")
+            )["amount__sum"]
+            or 0
+        )
+
+    @property
+    def get_total_count_of_donations(self):
+        return self.donation_transactions.filter(is_complete=True).count()
