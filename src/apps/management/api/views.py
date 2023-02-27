@@ -172,4 +172,4 @@ class CountryDetailsAPIView(RetrieveAPIView):
     queryset = Country.objects.all()
     serializer_class = CountryDetailSerializer
     permission_classes = [AllowAny]
-    lookup_field = "country_code"
+    lookup_field = "id"

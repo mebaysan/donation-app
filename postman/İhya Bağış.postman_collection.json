@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\":\"mail@mebaysan.com\",\n    \"password\":\"123\"\n}",
+							"raw": "{\n    \"username\":\"mail@mebaysan.com\",\n    \"password\":\"Passw0rd!.\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -99,7 +99,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"old_password\":\"Passw0rd!.\",\n    \"new_password\":\"123\",\n    \"confirm_new_password\":\"123\"\n}",
+							"raw": "{\n    \"old_password\":\"Passw0rd!\",\n    \"new_password\":\"Passw0rd!.\",\n    \"confirm_new_password\":\"Passw0rd!.\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -243,7 +243,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/management/countries/TR",
+							"raw": "{{BASE_URL}}/api/management/countries/226",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -251,7 +251,7 @@
 								"api",
 								"management",
 								"countries",
-								"TR"
+								"226"
 							]
 						}
 					},
@@ -627,7 +627,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{BASE_URL}}/api/payment/transactions/7",
+									"raw": "{{BASE_URL}}/api/payment/transactions/13",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -635,7 +635,7 @@
 										"api",
 										"payment",
 										"transactions",
-										"7"
+										"13"
 									]
 								}
 							},
