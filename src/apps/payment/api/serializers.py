@@ -1,11 +1,14 @@
 from rest_framework import serializers
 
 from apps.donor.models import DonationItem
+from apps.donor.api.serializers import DonationItemSerializer
 from apps.payment.models import Cart, CartItem, Donation, DonationTransaction
 from helpers.serializers.validators import email_regex, phone_regex, card_expiry_regex
 
 
 class DonationSerializer(serializers.ModelSerializer):
+    donation_item = DonationItemSerializer()
+
     class Meta:
         model = Donation
         fields = "__all__"

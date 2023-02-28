@@ -1,6 +1,11 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from helpers.serializers.validators import email_regex, phone_regex, username_regex
+from helpers.serializers.validators import (
+    email_regex,
+    phone_regex,
+    username_regex,
+    MIN_PASSWORD_LENGTH,
+)
 from apps.management.models import (
     Country,
     StateProvince,
@@ -11,6 +16,10 @@ User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(validators=[phone_regex], max_length=17)
+    get_total_amount_of_donations = serializers.DecimalField(
+        max_digits=16, decimal_places=2
+    )
+    get_total_count_of_donations = serializers.IntegerField()
 
     class Meta:
         model = User
@@ -48,6 +57,14 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Parolalar eşleşmiyor.")
         if data["username"] != data["email"]:
             raise serializers.ValidationError("Kullanıcı adı ve email eşleşmiyor.")
+
+        # Password validation
+        password = data.get("password")
+        if password:
+            if len(password) < MIN_PASSWORD_LENGTH:
+                raise serializers.ValidationError(
+                    f"Parola en az {MIN_PASSWORD_LENGTH} karakter uzunluğunda olmalıdır."
+                )
         return data
 
 
@@ -59,6 +76,14 @@ class PasswordChangeSerializer(serializers.Serializer):
     def validate(self, data):
         if data["new_password"] != data["confirm_new_password"]:
             raise serializers.ValidationError("Parolalar eşleşmiyor.")
+
+        # Password validation
+        password = data.get("password")
+        if password:
+            if len(password) < MIN_PASSWORD_LENGTH:
+                raise serializers.ValidationError(
+                    f"Parola en az {MIN_PASSWORD_LENGTH} karakter uzunluğunda olmalıdır."
+                )
         return data
 
 

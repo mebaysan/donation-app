@@ -18,3 +18,5 @@ username_regex = RegexValidator(
     regex=r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$",
     message="Kullanıcı adı şu formatta olmalı: 'example@domain.com'",
 )
+
+MIN_PASSWORD_LENGTH = 12

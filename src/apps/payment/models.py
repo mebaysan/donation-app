@@ -55,7 +55,7 @@ class DonationTransaction(models.Model):
     status_code_description = models.CharField(
         max_length=255, null=True, blank=True, default="Response not received from bank"
     )
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='donation_transactions')
     donation_platform = models.CharField(
         choices=DONATION_PLATFORMS, default="WEB", max_length=10
     )
