@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 from rest_framework import views, status
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import (
     RetrieveUpdateAPIView,
     RetrieveAPIView,
@@ -21,20 +20,34 @@ from apps.management.api.serializers import (
     CountrySerializer,
     CountryDetailSerializer,
 )
-from apps.management.models import Country, StateProvince
+from apps.management.models import Country
 from apps.management.authentication import JWTAuthentication
 from helpers.communication.email import send_password_reset_email
+import random
+import string
 
 User = get_user_model()
 
 
-@api_view(["GET"])
-@permission_classes([AllowAny])
-def healthcheck(request):
+class HealthCheckView(views.APIView):
     """
     A simple healthcheck endpoint that returns a 200 OK status if the API is up and running.
     """
-    return Response({"status": "ok"})
+
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        return Response({"status": "ok"})
+
+
+class GeneratePasswordView(views.APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        """Generates a random password."""
+        alphabet = string.ascii_letters + string.digits + string.punctuation
+        password = "".join(random.choices(alphabet, k=18))
+        return Response({"password": password})
 
 
 class ObtainTokenView(views.APIView):
