@@ -99,6 +99,16 @@ class DonationTransactionAdmin(admin.ModelAdmin):
         "group_name",
         "organization_name",
     ]
+    readonly_fields = [
+        "merchant_order_id",
+        "amount",
+        "amount_sent_to_bank",
+        "md_code",
+        "is_complete",
+        "status_code",
+        "status_code_description",
+        "user",
+    ]
 
 
 admin.site.register(DonationTransaction, DonationTransactionAdmin)
