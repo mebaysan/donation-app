@@ -56,6 +56,10 @@ class DonationAdmin(admin.ModelAdmin):
     ]
     readonly_fields = [
         "added_time",
+        "donation_transaction",
+        "user",
+        "donation_item",
+        "amount",
     ]
 
     def get_is_complete_transaction(self, obj):
@@ -67,6 +71,13 @@ class DonationAdmin(admin.ModelAdmin):
 class DonationInline(admin.TabularInline):
     model = Donation
     extra = 0
+    readonly_fields = ["donation_item", "amount", "user"]
+
+    def has_delete_permission(self, request, obj):
+        return False
+
+    def has_add_permission(self, request, obj):
+        return False
 
 
 class DonationTransactionAdmin(admin.ModelAdmin):
@@ -108,6 +119,12 @@ class DonationTransactionAdmin(admin.ModelAdmin):
         "status_code",
         "status_code_description",
         "user",
+        "first_name",
+        "last_name",
+        "email",
+        "phone_number",
+        "message",
+        "donation_platform",
     ]
 
 
