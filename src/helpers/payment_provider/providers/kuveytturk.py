@@ -140,7 +140,7 @@ class KuveytTurkPaymentProvider(object):
 
     def make_payment(self, request, request_data):
         payment_request_data = self.payment_request_parser(request_data)
-        merchant_order_id = f"{uuid.uuid4()}"  # istediğimiz değer yazılabilir bizim tuttuğumuz değer olacak (sabit veya değişken)
+        merchant_order_id = str(uuid.uuid4())  # istediğimiz değer yazılabilir bizim tuttuğumuz değer olacak (sabit veya değişken)
         ############## DonationTransaction instance create ##############
         new_transaction = DonationTransaction(
             first_name=payment_request_data["first_name"],
