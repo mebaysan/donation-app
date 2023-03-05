@@ -214,7 +214,7 @@ class KuveytTurkPaymentProvider(object):
         ).decode()
         hashed_data = base64.b64encode(
             hashlib.sha1(
-                f'{settings.KUVEYTTURK_CONF["store_no"]}{merchant_order_id}{payment_request_data["amount"]}{settings.KUVEYTTURK_CONF["ok_url"]}{settings.KUVEYTTURK_CONF["fail_url"]}{settings.KUVEYTTURK_CONF["username"]}{hashed_password}'.encode(
+                f'{settings.KUVEYTTURK_CONF["store_no"]}{merchant_order_id}{payment_request_data["amount_sent_to_bank"]}{settings.KUVEYTTURK_CONF["ok_url"]}{settings.KUVEYTTURK_CONF["fail_url"]}{settings.KUVEYTTURK_CONF["username"]}{hashed_password}'.encode(
                     "ISO-8859-9"
                 )
             ).digest()
