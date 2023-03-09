@@ -579,6 +579,42 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Update Cart Item Copy",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{ACCESS_TOKEN}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/payment/cart/clear/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"payment",
+										"cart",
+										"clear",
+										""
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
