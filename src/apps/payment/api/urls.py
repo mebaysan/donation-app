@@ -12,6 +12,7 @@ urlpatterns = [
         views.CartItemRetrieveUpdateDestroyAPIView.as_view(),
         name="cart_item_details",
     ),
+    path("cart/clear/", views.CartClearAPIView.as_view(), name="cart_clear"),
     path("payment/", views.payment, name="payment"),
     path("payment-success/", views.payment_success, name="payment_success"),
     path("payment-fail/", views.payment_fail, name="payment_fail"),
