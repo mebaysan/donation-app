@@ -29,24 +29,24 @@ urlpatterns = [
     path("api/healthcheck/", HealthCheckView.as_view(), name="healthcheck"),
     # AUTH ENDPOINT(S)
     path("api/token/", ObtainTokenView.as_view(), name="obtain_token"),
-    # API Doc (open api)
-    path(
-        "api/docs/",
-        get_schema_view(
-            title=settings.APP_NAME,
-            description="API Documentation",
-            version="1.0.0",
-            patterns=[
-                path("api/", include("apps.web.api.urls")),
-                path("api/token/", ObtainTokenView.as_view()),
-            ],
-        ),
-        name="openapi-schema",
-    ),
     path("api/", include("apps.management.urls")),  # password change etc.
 ]
+# API Doc (open api)
+if settings.DEBUG == False:
+    urlpatterns += (
+        path(
+            "api/docs/",
+            get_schema_view(
+                title=settings.APP_NAME,
+                description="API Documentation",
+                version="1.0.0",
+                patterns=[
+                    path("api/", include("apps.web.api.urls")),
+                    path("api/token/", ObtainTokenView.as_view()),
+                ],
+            ),
+            name="openapi-schema",
+        ),
+    )
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-# if settings.DEBUG == 1:
-#     urlpatterns += path('api/auth/', include('rest_framework.urls')),
