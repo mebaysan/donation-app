@@ -86,7 +86,7 @@ class BankAccount(models.Model):
         ("EUR", "EUR"),
     )
     account_name = models.CharField(max_length=500)
-    account_number = models.CharField(max_length=500, default='')
+    account_number = models.CharField(max_length=500, default="")
     branch = models.CharField(max_length=500)
     branch_no = models.IntegerField()
     swift_no = models.CharField(max_length=500)

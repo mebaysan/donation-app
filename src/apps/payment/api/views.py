@@ -92,7 +92,9 @@ class CartClearAPIView(APIView):
     def post(self, request):
         cart = request.user.cart
         cart.cart_items.all().delete()
-        return Response(status=status.HTTP_200_OK, data={"detail": "Sepet başarıyla temizlendi."})
+        return Response(
+            status=status.HTTP_200_OK, data={"detail": "Sepet başarıyla temizlendi."}
+        )
 
 
 @api_view(["POST"])
