@@ -13,7 +13,7 @@ class DonationCategory(models.Model):
     """
 
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     image = models.ImageField(upload_to="donation_category/", null=True, blank=True)
     is_published = models.BooleanField(default=True)
 
@@ -38,7 +38,7 @@ class DonationItem(models.Model):
 
     DONATION_TYPES = (("Dynamic", "Dynamic"), ("Static", "Static"))
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     category = models.ForeignKey(
         DonationCategory, on_delete=models.SET_NULL, null=True, related_name="items"
     )
