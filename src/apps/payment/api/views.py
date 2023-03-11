@@ -6,6 +6,7 @@ from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
     ListAPIView,
 )
+from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
@@ -34,7 +35,11 @@ class DonationTransactionListAPIView(ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return DonationTransaction.objects.filter(user=self.request.user).all().order_by('-date')
+        return (
+            DonationTransaction.objects.filter(user=self.request.user)
+            .all()
+            .order_by("-date")
+        )
 
 
 class DonationTransactionRetrieveAPIView(RetrieveAPIView):
@@ -79,6 +84,17 @@ class CartItemRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return CartItem.objects.filter(cart__user=self.request.user).all()
+
+
+class CartClearAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        cart = request.user.cart
+        cart.cart_items.all().delete()
+        return Response(
+            status=status.HTTP_200_OK, data={"detail": "Sepet başarıyla temizlendi."}
+        )
 
 
 @api_view(["POST"])

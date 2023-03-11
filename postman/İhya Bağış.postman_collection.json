@@ -256,6 +256,33 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Generate Password",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ACCESS_TOKEN}}",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/management/generate-password/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"management",
+								"generate-password",
+								""
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -547,6 +574,42 @@
 										"cart",
 										"items",
 										"10",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Cart Item Copy",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{ACCESS_TOKEN}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/payment/cart/clear/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"payment",
+										"cart",
+										"clear",
 										""
 									]
 								}

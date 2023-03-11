@@ -7,6 +7,11 @@ app_name = "management_api"
 urlpatterns = [
     path("users/me/", views.UserMeView.as_view(), name="user_details"),
     path(
+        "generate-password/",
+        views.GeneratePasswordView.as_view(),
+        name="generate_password",
+    ),
+    path(
         "users/me/password-change/",
         views.PasswordChangeView.as_view(),
         name="user_password_change",

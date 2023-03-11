@@ -140,7 +140,9 @@ class KuveytTurkPaymentProvider(object):
 
     def make_payment(self, request, request_data):
         payment_request_data = self.payment_request_parser(request_data)
-        merchant_order_id = f"{uuid.uuid4()}"  # istediğimiz değer yazılabilir bizim tuttuğumuz değer olacak (sabit veya değişken)
+        merchant_order_id = str(
+            uuid.uuid4()
+        )  # istediğimiz değer yazılabilir bizim tuttuğumuz değer olacak (sabit veya değişken)
         ############## DonationTransaction instance create ##############
         new_transaction = DonationTransaction(
             first_name=payment_request_data["first_name"],
@@ -214,7 +216,7 @@ class KuveytTurkPaymentProvider(object):
         ).decode()
         hashed_data = base64.b64encode(
             hashlib.sha1(
-                f'{settings.KUVEYTTURK_CONF["store_no"]}{merchant_order_id}{payment_request_data["amount"]}{settings.KUVEYTTURK_CONF["ok_url"]}{settings.KUVEYTTURK_CONF["fail_url"]}{settings.KUVEYTTURK_CONF["username"]}{hashed_password}'.encode(
+                f'{settings.KUVEYTTURK_CONF["store_no"]}{merchant_order_id}{payment_request_data["amount_sent_to_bank"]}{settings.KUVEYTTURK_CONF["ok_url"]}{settings.KUVEYTTURK_CONF["fail_url"]}{settings.KUVEYTTURK_CONF["username"]}{hashed_password}'.encode(
                     "ISO-8859-9"
                 )
             ).digest()
