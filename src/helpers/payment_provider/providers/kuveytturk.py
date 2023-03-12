@@ -346,10 +346,9 @@ class KuveytTurkPaymentProvider(object):
             )
 
     def payment_fail(self, request):
-        print(request.POST)
-        # todo: implement bank error message (bank_status_code & bank_status_code_description)
         approve_res = request.POST.get("AuthenticationResponse")
         approve_res = urllib.parse.unquote(approve_res)
+
         merchant_order_id_start = approve_res.find("<MerchantOrderId>")
         merchant_order_id_end = approve_res.find("</MerchantOrderId>")
         merchant_order_id = approve_res[
@@ -365,9 +364,13 @@ class KuveytTurkPaymentProvider(object):
         response_message = str(
             approve_res[response_message + 17 : response_message_end]
         )
+
+        # get the donation transaction instance
         transaction = get_object_or_404(
             DonationTransaction, merchant_order_id=str(merchant_order_id)
         )
+
+        # update the transaction status and save
         transaction.status_code = response_code
         transaction.status_code_description = response_message
         transaction.save()
