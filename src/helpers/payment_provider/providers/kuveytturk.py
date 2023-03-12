@@ -348,5 +348,33 @@ class KuveytTurkPaymentProvider(object):
     def payment_fail(self, request):
         print(request.POST)
         # todo: implement bank error message (bank_status_code & bank_status_code_description)
-        content = {"details": "Bağışınız tamamlanamadı."}
+        approve_res = request.POST.get("AuthenticationResponse")
+        approve_res = urllib.parse.unquote(approve_res)
+        merchant_order_id_start = approve_res.find("<MerchantOrderId>")
+        merchant_order_id_end = approve_res.find("</MerchantOrderId>")
+        merchant_order_id = approve_res[
+            merchant_order_id_start + 17 : merchant_order_id_end
+        ]
+
+        response_code_start = approve_res.find("<ResponseCode>")
+        response_code_end = approve_res.find("</ResponseCode>")
+        response_code = str(approve_res[response_code_start + 14 : response_code_end])
+
+        response_message = approve_res.find("<ResponseMessage>")
+        response_message_end = approve_res.find("</ResponseMessage>")
+        response_message = str(
+            approve_res[response_message + 17 : response_message_end]
+        )
+        transaction = get_object_or_404(
+            DonationTransaction, merchant_order_id=str(merchant_order_id)
+        )
+        transaction.status_code = response_code
+        transaction.status_code_description = response_message
+        transaction.save()
+
+        content = {
+            "details": "Bağışınız tamamlanamadı.",
+            "bank_status_code": transaction.status_code,
+            "bank_status_code_description": transaction.status_code_description,
+        }
         return Response(content, status.HTTP_402_PAYMENT_REQUIRED)
