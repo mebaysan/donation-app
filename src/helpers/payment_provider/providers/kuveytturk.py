@@ -339,12 +339,14 @@ class KuveytTurkPaymentProvider(object):
             return Response(
                 {
                     "details": "Bağışınız tamamlanamadı.",
-                    "bank_message": transaction.status_code_description,
+                    "bank_status_code": transaction.status_code,
+                    "bank_status_code_description": transaction.status_code_description,
                 },
                 status.HTTP_402_PAYMENT_REQUIRED,
             )
 
     def payment_fail(self, request):
-        # todo: implement bank error message (bank_message)
+        print(request)
+        # todo: implement bank error message (bank_status_code & bank_status_code_description)
         content = {"details": "Bağışınız tamamlanamadı."}
         return Response(content, status.HTTP_402_PAYMENT_REQUIRED)
