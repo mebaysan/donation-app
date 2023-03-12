@@ -331,9 +331,18 @@ class KuveytTurkPaymentProvider(object):
 
         transaction.save()
 
-        return Response(
-            {"details": "Başarıyla bağışınız tamamlandı."}, status.HTTP_200_OK
-        )
+        if transaction.is_complete:
+            return Response(
+                {"details": "Başarıyla bağışınız tamamlandı."}, status.HTTP_200_OK
+            )
+        else:
+            return Response(
+                {
+                    "details": "Bağışınız tamamlanamadı.",
+                    "bank_response": transaction.status_code_description,
+                },
+                status.HTTP_402_PAYMENT_REQUIRED,
+            )
 
     def payment_fail(self, request):
         content = {"details": "Bağışınız tamamlanamadı."}
