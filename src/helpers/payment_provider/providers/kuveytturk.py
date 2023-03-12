@@ -8,7 +8,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -332,18 +332,36 @@ class KuveytTurkPaymentProvider(object):
         transaction.save()
 
         if transaction.is_complete:
-            return Response(
-                {"details": "Başarıyla bağışınız tamamlandı."}, status.HTTP_200_OK
+            # return Response(
+            #     {"details": "Başarıyla bağışınız tamamlandı."}, status.HTTP_200_OK
+            # )
+            query_string = urllib.parse.urlencode(
+                {
+                    "details": "Bağışınız tamamlandı.",
+                    "bank_status_code": transaction.status_code,
+                    "bank_status_code_description": transaction.status_code_description,
+                }
             )
+            redirect_url = f"https://bagis.ihyavakfi.org.tr/cart?{query_string}"
+            return redirect(redirect_url)
         else:
-            return Response(
+            # return Response(
+            #     {
+            #         "details": "Bağışınız tamamlanamadı.",
+            #         "bank_status_code": transaction.status_code,
+            #         "bank_status_code_description": transaction.status_code_description,
+            #     },
+            #     status.HTTP_402_PAYMENT_REQUIRED,
+            # )
+            query_string = urllib.parse.urlencode(
                 {
                     "details": "Bağışınız tamamlanamadı.",
                     "bank_status_code": transaction.status_code,
                     "bank_status_code_description": transaction.status_code_description,
-                },
-                status.HTTP_402_PAYMENT_REQUIRED,
+                }
             )
+            redirect_url = f"https://bagis.ihyavakfi.org.tr/cart?{query_string}"
+            return redirect(redirect_url)
 
     def payment_fail(self, request):
         approve_res = request.POST.get("AuthenticationResponse")
@@ -380,4 +398,14 @@ class KuveytTurkPaymentProvider(object):
             "bank_status_code": transaction.status_code,
             "bank_status_code_description": transaction.status_code_description,
         }
-        return Response(content, status.HTTP_402_PAYMENT_REQUIRED)
+        # return Response(content, status.HTTP_402_PAYMENT_REQUIRED)
+
+        query_string = urllib.parse.urlencode(
+            {
+                "details": "Bağışınız tamamlanamadı.",
+                "bank_status_code": transaction.status_code,
+                "bank_status_code_description": transaction.status_code_description,
+            }
+        )
+        redirect_url = f"https://bagis.ihyavakfi.org.tr/cart?{query_string}"
+        return redirect(redirect_url)
