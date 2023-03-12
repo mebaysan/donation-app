@@ -75,15 +75,17 @@ EMAIL_USE_TLS = True if os.environ.get("EMAIL_USE_TLS") == "True" else False
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {"format": "%(levelname)s %(asctime)s %(name)s %(message)s"},
+    },
     "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-        },
+        "console": {"class": "logging.StreamHandler", "formatter": "verbose"},
     },
     "loggers": {
         "django": {
             "handlers": ["console"],
-            "level": "ERROR",
+            "level": "DEBUG",
+            "propagate": True,
         },
     },
 }
