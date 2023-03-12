@@ -393,11 +393,11 @@ class KuveytTurkPaymentProvider(object):
         transaction.status_code_description = response_message
         transaction.save()
 
-        content = {
-            "details": "Bağışınız tamamlanamadı.",
-            "bank_status_code": transaction.status_code,
-            "bank_status_code_description": transaction.status_code_description,
-        }
+        # content = {
+        #     "details": "Bağışınız tamamlanamadı.",
+        #     "bank_status_code": transaction.status_code,
+        #     "bank_status_code_description": transaction.status_code_description,
+        # }
         # return Response(content, status.HTTP_402_PAYMENT_REQUIRED)
 
         query_string = urllib.parse.urlencode(
