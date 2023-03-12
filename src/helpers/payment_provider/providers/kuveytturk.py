@@ -140,6 +140,9 @@ class KuveytTurkPaymentProvider(object):
 
     def make_payment(self, request, request_data):
         payment_request_data = self.payment_request_parser(request_data)
+        print("REQUEST DATA")  # todo: remove this line
+        print(request_data) # todo: remove this line
+        print("PAYMENT REQUEST DATA")  # todo: remove this line
         print(payment_request_data) # todo: remove this line
         merchant_order_id = str(
             uuid.uuid4()
