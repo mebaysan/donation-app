@@ -140,6 +140,7 @@ class KuveytTurkPaymentProvider(object):
 
     def make_payment(self, request, request_data):
         payment_request_data = self.payment_request_parser(request_data)
+        print(payment_request_data) # todo: remove this line
         merchant_order_id = str(
             uuid.uuid4()
         )  # istediğimiz değer yazılabilir bizim tuttuğumuz değer olacak (sabit veya değişken)
@@ -208,6 +209,7 @@ class KuveytTurkPaymentProvider(object):
                 donation_transaction=new_transaction,
                 user=new_transaction.user,
             )
+            new_donation.save()
         ########### HASH Process #############
         hashed_password = base64.b64encode(
             hashlib.sha1(
