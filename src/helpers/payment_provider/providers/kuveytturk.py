@@ -252,6 +252,7 @@ class KuveytTurkPaymentProvider(object):
             data=data.encode("ISO-8859-9"),
             headers=headers,
         )
+        print("payment request response: ", r.text) # todo: remove this line
         return HttpResponse(r)
 
     def approve_payment(self, request):
@@ -335,5 +336,7 @@ class KuveytTurkPaymentProvider(object):
         )
 
     def payment_fail(self, request):
+        print("PAYMENT FAIL")  # todo: remove
+        print(request.POST) # todo: remove
         content = {"details": "Bağışınız tamamlanamadı."}
         return Response(content, status.HTTP_200_OK)
