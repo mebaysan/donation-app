@@ -51,7 +51,7 @@ class DonationTransaction(models.Model):
     message = models.TextField(null=True, blank=True)
     is_complete = models.BooleanField(default=False, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
-    status_code = models.CharField(null=True, blank=True, default="-1", max_length=3)
+    status_code = models.CharField(null=True, blank=True, default="-1", max_length=10)
     status_code_description = models.CharField(
         max_length=255, null=True, blank=True, default="Response not received from bank"
     )
