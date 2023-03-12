@@ -333,3 +333,7 @@ class KuveytTurkPaymentProvider(object):
         return Response(
             {"details": "Başarıyla bağışınız tamamlandı."}, status.HTTP_200_OK
         )
+
+    def payment_fail(self, request):
+        content = {"details": "Bağışınız tamamlanamadı."}
+        return Response(content, status.HTTP_200_OK)

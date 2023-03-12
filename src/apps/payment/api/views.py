@@ -125,5 +125,5 @@ def payment_success(request):
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def payment_fail(request):
-    content = {"detail": "Payment failed!"}
-    return Response(content, status.HTTP_400_BAD_REQUEST)
+    provider = PaymentProviderFactory.get_payment_provider()
+    return provider.payment_fail(request)
