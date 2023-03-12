@@ -92,15 +92,11 @@ LOGGING = {
             "level": "WARNING",
             "propagate": True,
         },
-        "django.request": {
+        "donation": {
             "handlers": ["console"],
             "level": "ERROR",
             "propagate": True,
         },
-        "django.db.backends": {
-            "handlers": ["console"],
-            "level": "DEBUG",
-            "propagate": True,
-        },
     },
 }
+
