@@ -141,9 +141,9 @@ class KuveytTurkPaymentProvider(object):
     def make_payment(self, request, request_data):
         payment_request_data = self.payment_request_parser(request_data)
         print("REQUEST DATA")  # todo: remove this line
-        print(request_data) # todo: remove this line
+        print(request_data)  # todo: remove this line
         print("PAYMENT REQUEST DATA")  # todo: remove this line
-        print(payment_request_data) # todo: remove this line
+        print(payment_request_data)  # todo: remove this line
         merchant_order_id = str(
             uuid.uuid4()
         )  # istediğimiz değer yazılabilir bizim tuttuğumuz değer olacak (sabit veya değişken)
@@ -257,7 +257,7 @@ class KuveytTurkPaymentProvider(object):
             data=data.encode("ISO-8859-9"),
             headers=headers,
         )
-        print("payment request response: ", r.text) # todo: remove this line
+        print("payment request response: ", r.text)  # todo: remove this line
         return HttpResponse(r)
 
     def approve_payment(self, request):
@@ -342,6 +342,6 @@ class KuveytTurkPaymentProvider(object):
 
     def payment_fail(self, request):
         print("PAYMENT FAIL")  # todo: remove
-        print(request.POST) # todo: remove
+        print(request.POST)  # todo: remove
         content = {"details": "Bağışınız tamamlanamadı."}
-        return Response(content, status.HTTP_200_OK)
+        return Response(content, status.HTTP_402_PAYMENT_REQUIRED)
