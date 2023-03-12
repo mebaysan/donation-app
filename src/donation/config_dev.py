@@ -6,6 +6,8 @@ from donation.settings import BASE_DIR
 APP_NAME = "Donation App"
 APP_FAVICON_URL = "https://ihyavakfi.org.tr/media/site/favicon.png"
 
+APP_PAYMENT_RESPONSE_URL = "https://bagis.ihyavakfi.org.tr/cart"  # this will be used in payment success and fail urls to redirect user from payment page to cart page
+
 SECRET_KEY = "verySECRETk3y"
 
 ALLOWED_HOSTS = ["*"]
