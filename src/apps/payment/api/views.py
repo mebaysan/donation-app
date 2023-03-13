@@ -18,6 +18,7 @@ from apps.payment.api.serializers import (
     DonationTransactionDetailsSerializer,
 )
 from apps.payment.models import Cart, CartItem, Donation, DonationTransaction
+from helpers.pagination.paginators import DonationTransactionListPagination
 from helpers.payment_provider.payment_provider_factory import PaymentProviderFactory
 
 
@@ -33,6 +34,7 @@ class DonationListAPIView(ListAPIView):
 class DonationTransactionListAPIView(ListAPIView):
     serializer_class = DonationTransactionSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = DonationTransactionListPagination
 
     def get_queryset(self):
         return (

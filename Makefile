@@ -1,7 +1,7 @@
 .PHONY: help
 
 help:
-	@echo "{{project_name}} Projects"
+	@echo "Donation Backend"
 	@echo "~~~~~~~~~~~~~~~"
 	@echo ""
 	@echo "check        : Health check"

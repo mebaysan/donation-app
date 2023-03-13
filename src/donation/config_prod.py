@@ -7,7 +7,9 @@ from donation.settings import BASE_DIR
 APP_NAME = os.environ.get("APP_NAME")
 APP_FAVICON_URL = os.environ.get("APP_FAVICON_URL")
 
-APP_PAYMENT_RESPONSE_URL = os.environ.get("APP_PAYMENT_RESPONSE_URL")  # this will be used in payment success and fail urls to redirect user from payment page to cart page
+APP_PAYMENT_RESPONSE_URL = os.environ.get(
+    "APP_PAYMENT_RESPONSE_URL"
+)  # this will be used in payment success and fail urls to redirect user from payment page to cart page
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
