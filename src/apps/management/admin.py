@@ -5,6 +5,7 @@ from django.contrib.auth.models import Group
 from apps.management.models import User
 
 from helpers.template import filters
+from helpers.communication.email import send_password_reset_email
 
 
 class CustomUserAdmin(UserAdmin):
@@ -26,6 +27,7 @@ class CustomUserAdmin(UserAdmin):
         "is_staff",
         "is_superuser",
     ]
+    actions = ["send_password_reset_email_admin_action"]
     fieldsets = (
         *UserAdmin.fieldsets,  # original form fieldsets, expanded
         (  # new fieldset added on to the bottom
@@ -43,6 +45,15 @@ class CustomUserAdmin(UserAdmin):
                 )
             },
         ),
+    )
+
+    # the following method executes send_password_reset_email for each user in the queryset
+    def send_password_reset_email_admin_action(self, request, queryset):
+        for user in queryset:
+            send_password_reset_email(user, request)
+
+    send_password_reset_email_admin_action.short_description = (
+        "Send password reset email"
     )
 
 
