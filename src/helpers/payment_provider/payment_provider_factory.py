@@ -17,8 +17,9 @@ class PaymentProviderFactory:
         Return Published Payment Provider Class
         """
         provider = cls.get_published_payment_provider_instance()
-        if provider and provider.code_name == "KT":
-            return KuveytTurkPaymentProvider()
+        if provider:
+            if provider.code_name == "KT":
+                return KuveytTurkPaymentProvider()
         return KuveytTurkPaymentProvider()  # for now we return KuveytTurk for default
 
     @classmethod

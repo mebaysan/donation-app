@@ -8,7 +8,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -208,6 +208,7 @@ class KuveytTurkPaymentProvider(object):
                 donation_transaction=new_transaction,
                 user=new_transaction.user,
             )
+            new_donation.save()
         ########### HASH Process #############
         hashed_password = base64.b64encode(
             hashlib.sha1(
@@ -330,6 +331,81 @@ class KuveytTurkPaymentProvider(object):
 
         transaction.save()
 
-        return Response(
-            {"details": "Başarıyla bağışınız tamamlandı."}, status.HTTP_200_OK
+        if transaction.is_complete:
+            # return Response(
+            #     {"details": "Başarıyla bağışınız tamamlandı."}, status.HTTP_200_OK
+            # )
+            query_string = urllib.parse.urlencode(
+                {
+                    "details": "Bağışınız tamamlandı.",
+                    "bank_status_code": transaction.status_code,
+                    "bank_status_code_description": transaction.status_code_description,
+                }
+            )
+            redirect_url = f"https://bagis.ihyavakfi.org.tr/cart?{query_string}"  # front end app will handle this response by using query string
+            return redirect(redirect_url)
+        else:
+            # return Response(
+            #     {
+            #         "details": "Bağışınız tamamlanamadı.",
+            #         "bank_status_code": transaction.status_code,
+            #         "bank_status_code_description": transaction.status_code_description,
+            #     },
+            #     status.HTTP_402_PAYMENT_REQUIRED,
+            # )
+            query_string = urllib.parse.urlencode(
+                {
+                    "details": "Bağışınız tamamlanamadı.",
+                    "bank_status_code": transaction.status_code,
+                    "bank_status_code_description": transaction.status_code_description,
+                }
+            )
+            redirect_url = f"{settings.APP_PAYMENT_RESPONSE_URL}?{query_string}"  # front end app will handle this response by using query string
+            return redirect(redirect_url)
+
+    def payment_fail(self, request):
+        approve_res = request.POST.get("AuthenticationResponse")
+        approve_res = urllib.parse.unquote(approve_res)
+
+        merchant_order_id_start = approve_res.find("<MerchantOrderId>")
+        merchant_order_id_end = approve_res.find("</MerchantOrderId>")
+        merchant_order_id = approve_res[
+            merchant_order_id_start + 17 : merchant_order_id_end
+        ]
+
+        response_code_start = approve_res.find("<ResponseCode>")
+        response_code_end = approve_res.find("</ResponseCode>")
+        response_code = str(approve_res[response_code_start + 14 : response_code_end])
+
+        response_message = approve_res.find("<ResponseMessage>")
+        response_message_end = approve_res.find("</ResponseMessage>")
+        response_message = str(
+            approve_res[response_message + 17 : response_message_end]
         )
+
+        # get the donation transaction instance
+        transaction = get_object_or_404(
+            DonationTransaction, merchant_order_id=str(merchant_order_id)
+        )
+
+        # update the transaction status and save
+        transaction.status_code = response_code
+        transaction.status_code_description = response_message
+        transaction.save()
+
+        # content = {
+        #     "details": "Bağışınız tamamlanamadı.",
+        #     "bank_status_code": transaction.status_code,
+        #     "bank_status_code_description": transaction.status_code_description,
+        # }
+        # return Response(content, status.HTTP_402_PAYMENT_REQUIRED)
+
+        query_string = urllib.parse.urlencode(
+            {
+                "details": "Bağışınız tamamlanamadı.",
+                "bank_status_code": transaction.status_code,
+                "bank_status_code_description": transaction.status_code_description,
+            }
+        )
+        redirect_url = f"{settings.APP_PAYMENT_RESPONSE_URL}?{query_string}"  # front end app will handle this response by using query string
+        return redirect(redirect_url)

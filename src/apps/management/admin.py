@@ -16,6 +16,16 @@ class CustomUserAdmin(UserAdmin):
         ("country", filters.RelatedDropdownFilter),
         ("state_province", filters.RelatedDropdownFilter),
     )
+    search_fields = ["username", "first_name", "last_name", "email", "phone_number"]
+    list_display = [
+        "username",
+        "email",
+        "first_name",
+        "last_name",
+        "phone_number",
+        "is_staff",
+        "is_superuser",
+    ]
     fieldsets = (
         *UserAdmin.fieldsets,  # original form fieldsets, expanded
         (  # new fieldset added on to the bottom

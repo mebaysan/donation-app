@@ -7,6 +7,10 @@ from donation.settings import BASE_DIR
 APP_NAME = os.environ.get("APP_NAME")
 APP_FAVICON_URL = os.environ.get("APP_FAVICON_URL")
 
+APP_PAYMENT_RESPONSE_URL = os.environ.get(
+    "APP_PAYMENT_RESPONSE_URL"
+)  # this will be used in payment success and fail urls to redirect user from payment page to cart page
+
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
@@ -15,7 +19,9 @@ CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ALLOWED_ORIGINS").split(" ")
 
 CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(" ")
 
-X_FRAME_OPTIONS = os.environ.get("X_FRAME_OPTIONS", "SAMEORIGIN") # DENY ALLOWALL SAMEORIGIN
+X_FRAME_OPTIONS = os.environ.get(
+    "X_FRAME_OPTIONS", "SAMEORIGIN"
+)  # DENY ALLOWALL SAMEORIGIN
 
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
@@ -73,15 +79,27 @@ EMAIL_USE_TLS = True if os.environ.get("EMAIL_USE_TLS") == "True" else False
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {"format": "%(levelname)s %(asctime)s %(name)s %(message)s"},
+    },
     "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-        },
+        "console": {"class": "logging.StreamHandler", "formatter": "verbose"},
     },
     "loggers": {
         "django": {
             "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+        "": {  # root logger
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": True,
+        },
+        "donation": {
+            "handlers": ["console"],
             "level": "ERROR",
+            "propagate": True,
         },
     },
 }

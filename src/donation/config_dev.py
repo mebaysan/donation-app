@@ -6,6 +6,8 @@ from donation.settings import BASE_DIR
 APP_NAME = "Donation App"
 APP_FAVICON_URL = "https://ihyavakfi.org.tr/media/site/favicon.png"
 
+APP_PAYMENT_RESPONSE_URL = "https://bagis.ihyavakfi.org.tr/cart"  # this will be used in payment success and fail urls to redirect user from payment page to cart page
+
 SECRET_KEY = "verySECRETk3y"
 
 ALLOWED_HOSTS = ["*"]
@@ -38,9 +40,9 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 # KUVEYTTURK CONF
 KUVEYTTURK_CONF = {
-    "store_no": "57902",
-    "customer_no": "97228291",
-    "username": "TEPKVT2021",
+    "store_no": "57902",  # 57902 || 496
+    "customer_no": "97228291",  # 97228291 || 400235
+    "username": "TEPKVT2021",  # TEPKVT2021 || apitest
     "password": "api123",
     "ok_url": "http://127.0.0.1:8000/api/payment-success/",
     "fail_url": "http://127.0.0.1:8000/api/payment-fail/",
@@ -49,9 +51,9 @@ KUVEYTTURK_CONF = {
 }
 # TEST CARD FOR KUVEYTTURK
 # Test Kart Bilgileri
-# Kart No: 5188 9619 3919 2544
-# CVV2: 929
-# Expirydate: 06/25
+# Kart No: 5188 9619 3919 2544 || 4033 6025 6202 0327
+# CVV2: 929 || 861
+# Expirydate: 06/25 || 01/30
 
 # JWT CONF
 TOKEN_LIFETIME_HOURS = 5

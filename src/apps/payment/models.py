@@ -51,7 +51,7 @@ class DonationTransaction(models.Model):
     message = models.TextField(null=True, blank=True)
     is_complete = models.BooleanField(default=False, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
-    status_code = models.CharField(null=True, blank=True, default="-1", max_length=3)
+    status_code = models.CharField(null=True, blank=True, default="-1", max_length=10)
     status_code_description = models.CharField(
         max_length=255, null=True, blank=True, default="Response not received from bank"
     )
@@ -154,14 +154,5 @@ class Cart(models.Model):
         self.save()
 
     def clean_cart(self):
-        cart_items = self.cart_items.all()
-        for cart_item in cart_items:
-            new_donation = Donation.objects.create(
-                donation_item=cart_item.donation_item,
-                amount=cart_item.amount,
-                added_time=datetime.now(),
-                user=cart_item.cart.user,
-            )
-            new_donation.save()
         self.cart_items.all().delete()
         self.save()

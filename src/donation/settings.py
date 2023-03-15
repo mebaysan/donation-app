@@ -156,6 +156,8 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "apps.management.authentication.JWTAuthentication",
     ],
+    # "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    # "PAGE_SIZE": 20,
 }
 
 JWT_CONF = {"TOKEN_LIFETIME_HOURS": TOKEN_LIFETIME_HOURS}
