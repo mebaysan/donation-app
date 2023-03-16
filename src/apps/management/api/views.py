@@ -178,7 +178,7 @@ class ForgotPasswordAPIView(views.APIView):
 
         if user is None:
             return Response(
-                {"details": "There is no user"}, status=status.HTTP_400_BAD_REQUEST
+                {"details": "Böyle bir kullanıcı bulunamadı."}, status=status.HTTP_400_BAD_REQUEST
             )
 
         send_password_reset_email(user, request)
