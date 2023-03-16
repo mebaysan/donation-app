@@ -85,11 +85,24 @@ class UserMeView(RetrieveUpdateAPIView):
         return self.request.user
 
     def update(self, request, *args, **kwargs):
-        user = self.get_object()
-        serializer = self.serializer_class(user, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
+        try:
+            user = self.get_object()
+            serializer = self.serializer_class(user, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+        except IntegrityError:
+            return Response(
+                {
+                    "details": "Kayıt etmek istediğiniz bilgiler başka bir kullanıcı tarafından alınmış."
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        except Exception:
+            return Response(
+                {"details": "Kullanıcı oluşturulurken hata."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 
 class PasswordChangeView(UpdateAPIView):
