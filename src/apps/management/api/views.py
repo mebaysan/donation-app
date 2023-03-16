@@ -77,6 +77,36 @@ class ObtainTokenView(views.APIView):
         return Response({"token": jwt_token})
 
 
+class UserCreateAPIView(CreateAPIView):
+    serializer_class = UserRegisterSerializer
+    permission_classes = [AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            validated_data.pop("confirm_new_password")
+            try:
+                user = User.objects.create_user(**validated_data)
+                return Response(
+                    {"details": "Kullanıcı başarıyla oluşturuldu."},
+                    status=status.HTTP_201_CREATED,
+                )
+            except IntegrityError:
+                return Response(
+                    {
+                        "details": "Kayıt etmek istediğiniz bilgiler başka bir kullanıcı tarafından alınmış."
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            except Exception:
+                return Response(
+                    {"details": "Kullanıcı oluşturulurken hata."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class UserMeView(RetrieveUpdateAPIView):
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
@@ -129,36 +159,6 @@ class PasswordChangeView(UpdateAPIView):
                     "details": "Parola başarıyla değiştirildi.",
                 },
             )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class UserCreateAPIView(CreateAPIView):
-    serializer_class = UserRegisterSerializer
-    permission_classes = [AllowAny]
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            validated_data = serializer.validated_data
-            validated_data.pop("confirm_new_password")
-            try:
-                user = User.objects.create_user(**validated_data)
-                return Response(
-                    {"details": "Kullanıcı başarıyla oluşturuldu."},
-                    status=status.HTTP_201_CREATED,
-                )
-            except IntegrityError:
-                return Response(
-                    {
-                        "details": "Kayıt etmek istediğiniz bilgiler başka bir kullanıcı tarafından alınmış."
-                    },
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            except Exception:
-                return Response(
-                    {"details": "Kullanıcı oluşturulurken hata."},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
