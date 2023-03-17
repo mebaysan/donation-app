@@ -33,14 +33,21 @@ def send_password_reset_email(user):
 
     # send email
     subject = f"{settings.APP_NAME} Bağışçı Hesabınız İçin Parola Sıfırlama Formu"
+
+    # generate url
+    protocol = "https" if settings.DEBUG == False else "http"
+    domain = settings.ALLOWED_HOSTS[0]
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    token = default_token_generator.make_token(user)
+    password_reset_url = (
+        f"{ protocol }://{ domain }/api/password-reset/{ uid }/{ token }/"
+    )
+
     message = render_to_string(
         "mail_templates/password_reset.html",
         {
             "user": user,
-            "domain": settings.ALLOWED_HOSTS[0],
-            "uid": urlsafe_base64_encode(force_bytes(user.pk)),
-            "token": default_token_generator.make_token(user),
-            "protocol": "https" if settings.DEBUG == False else "http",
+            "password_reset_url": password_reset_url,
             "app_name": settings.APP_NAME,
         },
     )

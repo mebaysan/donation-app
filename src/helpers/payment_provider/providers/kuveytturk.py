@@ -178,7 +178,7 @@ class KuveytTurkPaymentProvider(object):
                     new_user.set_password(str(uuid.uuid4()))
                     new_user.save()
                     new_transaction.user = new_user
-                    send_password_reset_email(new_user, request)
+                    send_password_reset_email(new_user)
                 except IntegrityError as e:
                     # mail_templates != phone_number for User
                     context = {

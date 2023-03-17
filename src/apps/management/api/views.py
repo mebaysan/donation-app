@@ -182,7 +182,7 @@ class ForgotPasswordAPIView(views.APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        send_password_reset_email(user, request)
+        send_password_reset_email(user)
 
         return Response(
             {"details": "Parola sıfırlama maili gönderildi."}, status=status.HTTP_200_OK

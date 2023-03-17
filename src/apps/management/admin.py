@@ -50,7 +50,7 @@ class CustomUserAdmin(UserAdmin):
     # the following method executes send_password_reset_email for each user in the queryset
     def send_password_reset_email_admin_action(self, request, queryset):
         for user in queryset:
-            send_password_reset_email(user, request)
+            send_password_reset_email(user)
 
     send_password_reset_email_admin_action.short_description = (
         "Send password reset email"
