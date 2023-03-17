@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import SetPasswordForm
@@ -57,4 +58,8 @@ def password_reset(request, uidb64, token):
 
 def password_reset_complete(request):
     messages.success(request, "Başarıyla şifreniz değişti.")
-    return render(request, "management/reset_password_complete.html")
+    redirect_url = settings.CORS_ALLOWED_ORIGINS[0]
+    context = {
+        "redirect_url": redirect_url,
+    }
+    return render(request, "management/reset_password_complete.html", context=context)
