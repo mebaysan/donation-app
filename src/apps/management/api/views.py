@@ -130,7 +130,7 @@ class UserMeView(RetrieveUpdateAPIView):
             )
         except Exception:
             return Response(
-                {"details": "Kullanıcı oluşturulurken hata."},
+                {"details": "Kullanıcı güncellenirken bir hata meydana geldi hata."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -178,7 +178,8 @@ class ForgotPasswordAPIView(views.APIView):
 
         if user is None:
             return Response(
-                {"details": "Böyle bir kullanıcı bulunamadı."}, status=status.HTTP_400_BAD_REQUEST
+                {"details": "Böyle bir kullanıcı bulunamadı."},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         send_password_reset_email(user, request)
