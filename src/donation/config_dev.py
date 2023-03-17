@@ -10,7 +10,7 @@ APP_PAYMENT_RESPONSE_URL = "https://bagis.ihyavakfi.org.tr/cart"  # this will be
 
 SECRET_KEY = "verySECRETk3y"
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
