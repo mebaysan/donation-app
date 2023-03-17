@@ -42,6 +42,7 @@ def send_password_reset_email(user, request):
             "uid": urlsafe_base64_encode(force_bytes(user.pk)),
             "token": default_token_generator.make_token(user),
             "protocol": "https" if settings.DEBUG == False else "http",
+            "app_name": settings.APP_NAME,
         },
     )
     recipient_list = [user.email]
@@ -56,6 +57,7 @@ def send_password_reset_success_email(user):
         {
             "user": user,
             "message": f"Bağışçı hesabınızın parolası güncellendi. Eğer işlem size ait değilse lütfen {settings.APP_NAME} ile iletişime geçin.",
+            "app_name": settings.APP_NAME,
         },
     )
     recipient_list = [user.email]
