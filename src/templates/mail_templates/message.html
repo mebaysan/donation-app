@@ -1,14 +1,32 @@
-{% extends 'partials/base.html' %}
+<!doctype html>
+<html lang="tr">
 
-{% block content %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ app_name }}</title>
+
+    {% include 'partials/css.html' %}
+</head>
+
+<body>
+
 
     {% if user %}
-        <p>Sayın {{ user.first_name }} {{ user.last_name }},</p>
+    <p>Sayın {{ user.first_name }} {{ user.last_name }},</p>
     {% endif %}
 
     <p>{{ message }}</p>
 
     <p>Teşekkürler,</p>
-    <p>{{app_name}}</p>
+    <p>{{ app_name }}</p>
 
-{% endblock %}
+
+
+    {% include 'partials/js.html' %}
+
+    {% include 'partials/notification.html' %}
+
+</body>
+
+</html>
