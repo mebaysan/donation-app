@@ -26,22 +26,29 @@ def send_email(subject, body, to_emails, html_message=None):
     email.send()
 
 
-def send_password_reset_email(user, request):
+def send_password_reset_email(user):
     # change user's password randomly
     user.set_password(str(uuid.uuid4()))
     user.save()
 
     # send email
-    current_site = get_current_site(request)
     subject = f"{settings.APP_NAME} Bağışçı Hesabınız İçin Parola Sıfırlama Formu"
+
+    # generate url
+    protocol = "https" if settings.DEBUG == False else "http"
+    domain = settings.ALLOWED_HOSTS[0]
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    token = default_token_generator.make_token(user)
+    password_reset_url = (
+        f"{ protocol }://{ domain }/api/password-reset/{ uid }/{ token }/"
+    )
+
     message = render_to_string(
         "mail_templates/password_reset.html",
         {
             "user": user,
-            "domain": current_site.domain,
-            "uid": urlsafe_base64_encode(force_bytes(user.pk)),
-            "token": default_token_generator.make_token(user),
-            "protocol": "https" if settings.DEBUG == False else "http",
+            "password_reset_url": password_reset_url,
+            "app_name": settings.APP_NAME,
         },
     )
     recipient_list = [user.email]
@@ -56,6 +63,7 @@ def send_password_reset_success_email(user):
         {
             "user": user,
             "message": f"Bağışçı hesabınızın parolası güncellendi. Eğer işlem size ait değilse lütfen {settings.APP_NAME} ile iletişime geçin.",
+            "app_name": settings.APP_NAME,
         },
     )
     recipient_list = [user.email]

@@ -1,14 +1,9 @@
-{% extends 'partials/base.html' %}
+{% if user %}
+<p>Sayın {{ user.first_name }} {{ user.last_name }},</p>
+{% endif %}
 
-{% block content %}
+<p>{{ message }}</p>
 
-    {% if user %}
-        <p>Sayın {{ user.first_name }} {{ user.last_name }},</p>
-    {% endif %}
+<p>Teşekkürler,</p>
 
-    <p>{{ message }}</p>
-
-    <p>Teşekkürler,</p>
-    <p>{{get_app_name}}</p>
-
-{% endblock %}
+<p>{{ app_name }}</p>

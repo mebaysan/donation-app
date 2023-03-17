@@ -77,48 +77,6 @@ class ObtainTokenView(views.APIView):
         return Response({"token": jwt_token})
 
 
-class UserMeView(RetrieveUpdateAPIView):
-    serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_object(self):
-        return self.request.user
-
-    def update(self, request, *args, **kwargs):
-        user = self.get_object()
-        serializer = self.serializer_class(user, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-
-
-class PasswordChangeView(UpdateAPIView):
-    serializer_class = PasswordChangeSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_object(self):
-        return self.request.user
-
-    def update(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            if not self.object.check_password(serializer.data.get("old_password")):
-                return Response(
-                    {"old_password": ["Yanlış parola."]},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            self.object.set_password(serializer.data.get("new_password"))
-            self.object.save()
-            return Response(
-                status=status.HTTP_200_OK,
-                data={
-                    "details": "Parola başarıyla değiştirildi.",
-                },
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 class UserCreateAPIView(CreateAPIView):
     serializer_class = UserRegisterSerializer
     permission_classes = [AllowAny]
@@ -149,6 +107,61 @@ class UserCreateAPIView(CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class UserMeView(RetrieveUpdateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        try:
+            user = self.get_object()
+            serializer = self.serializer_class(user, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+        except IntegrityError:
+            return Response(
+                {
+                    "details": "Kayıt etmek istediğiniz bilgiler başka bir kullanıcı tarafından alınmış."
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        except Exception:
+            return Response(
+                {"details": "Kullanıcı güncellenirken bir hata meydana geldi hata."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+
+class PasswordChangeView(UpdateAPIView):
+    serializer_class = PasswordChangeSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            if not self.object.check_password(serializer.data.get("old_password")):
+                return Response(
+                    {"old_password": ["Yanlış parola."]},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            self.object.set_password(serializer.data.get("new_password"))
+            self.object.save()
+            return Response(
+                status=status.HTTP_200_OK,
+                data={
+                    "details": "Parola başarıyla değiştirildi.",
+                },
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class ForgotPasswordAPIView(views.APIView):
     permission_classes = [AllowAny]
     serializer_class = ForgotPasswordSerializer
@@ -165,10 +178,11 @@ class ForgotPasswordAPIView(views.APIView):
 
         if user is None:
             return Response(
-                {"details": "There is no user"}, status=status.HTTP_400_BAD_REQUEST
+                {"details": "Böyle bir kullanıcı bulunamadı."},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
-        send_password_reset_email(user, request)
+        send_password_reset_email(user)
 
         return Response(
             {"details": "Parola sıfırlama maili gönderildi."}, status=status.HTTP_200_OK
