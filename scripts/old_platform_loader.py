@@ -6,9 +6,7 @@ import uuid
 
 User = get_user_model()
 
-df = pd.read_csv(
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vRdkoW7BTw82QwMlvtb6QO5tlr8S8DokIcsAgAtXuCTwo7jzMZfZNlD6UVNJwGEt1PM5NVdwexNVHl9/pub?gid=1902504576&single=true&output=csv"
-)
+df = pd.read_csv("<PATH_TO_CSV_FILE>")
 
 df["telefon"] = df["telefon"].apply(
     lambda x: "+" + str(x) if str(x).startswith("9") else x
