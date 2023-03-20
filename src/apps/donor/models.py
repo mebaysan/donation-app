@@ -85,13 +85,14 @@ class BankAccount(models.Model):
         ("USD", "USD"),
         ("EUR", "EUR"),
     )
-    account_name = models.CharField(max_length=500)
-    account_number = models.CharField(max_length=500, default="")
-    branch = models.CharField(max_length=500)
-    branch_no = models.IntegerField()
-    swift_no = models.CharField(max_length=500)
-    iban_no = models.CharField(max_length=500)
+    account_name = models.CharField(max_length=500, null=True, blank=True)
+    account_number = models.CharField(max_length=500, default="", null=True, blank=True)
+    branch = models.CharField(max_length=500, null=True, blank=True)
+    branch_no = models.IntegerField(null=True, blank=True)
+    swift_no = models.CharField(max_length=500, null=True, blank=True)
+    iban_no = models.CharField(max_length=500, null=True, blank=True)
     currency = models.CharField(choices=CURRENCY_TYPES, max_length=3)
+    description = models.CharField(max_length=500, null=True, blank=True)
     bank = models.ForeignKey(
         Bank, on_delete=models.CASCADE, related_name="bank_accounts"
     )
