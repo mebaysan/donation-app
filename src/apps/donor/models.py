@@ -92,7 +92,7 @@ class BankAccount(models.Model):
     swift_no = models.CharField(max_length=500, null=True, blank=True)
     iban_no = models.CharField(max_length=500, null=True, blank=True)
     currency = models.CharField(choices=CURRENCY_TYPES, max_length=3)
-    description = models.CharField(max_length=500, null=True, blank=True)
+    description = models.CharField(max_length=500, null=True, blank=True, default="")
     bank = models.ForeignKey(
         Bank, on_delete=models.CASCADE, related_name="bank_accounts"
     )
