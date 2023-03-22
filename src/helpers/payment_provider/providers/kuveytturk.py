@@ -342,7 +342,7 @@ class KuveytTurkPaymentProvider(object):
                     "bank_status_code_description": transaction.status_code_description,
                 }
             )
-            redirect_url = f"https://bagis.ihyavakfi.org.tr/cart?{query_string}"  # front end app will handle this response by using query string
+            redirect_url = f"{settings.APP_PAYMENT_RESPONSE_URL}?{query_string}"  # front end app will handle this response by using query string
             return redirect(redirect_url)
         else:
             # return Response(

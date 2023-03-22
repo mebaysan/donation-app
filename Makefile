@@ -47,7 +47,7 @@ migration:
 
 install:
 	@pip install --upgrade pip
-	@pip install -r requirements.txt
+	@pip install -r src/requirements.txt
 
 recover: install docdown docup wait migration loaddata
 	@echo "\n\t~~~~~~~~~~~~~~~"
@@ -87,14 +87,14 @@ create-devdb:
 	@bash ./scripts/dev-postgres.sh
 
 start-devdb:
-	@docker container start ihya_database_dev
+	@docker container start donation_database_dev
 
 stop-devdb:
-	@docker container stop ihya_database_dev
+	@docker container stop donation_database_dev
 
 rm-devdb:
-	@docker rm -f -v ihya_database_dev
-	@docker volume rm ihya_database_dev
+	@docker rm -f -v donation_database_dev
+	@docker volume rm donation_database_dev
 
 runproxyversion:
 	@make collect

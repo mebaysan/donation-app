@@ -1,6 +1,6 @@
 #! /bin/bash
 
-CONTAINER_NAME=ihya_database
+CONTAINER_NAME=donation_database
 
 BACKUP_FOLDER=/opt/"$CONTAINER_NAME"_backup
 

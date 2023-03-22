@@ -1,9 +1,9 @@
 #! /bin/bash
 
 # to use this script, you need to pass the latest (or wanted backup file) as an argument without .json.gz name
-# ./restorer.sh /opt/ihya_database_backup/2022-09-07-18-23-22
+# ./restorer.sh /opt/donation_database_backup/2022-09-07-18-23-22
 
-CONTAINER_NAME=ihya_database
+CONTAINER_NAME=donation_database
 
 docker container exec $CONTAINER_NAME mkdir backup
 
