@@ -45,6 +45,13 @@ class BankAccountInline(admin.TabularInline):
 
 class BankAdmin(admin.ModelAdmin):
     inlines = [BankAccountInline]
+    list_display = [
+        "name",
+        "is_published",
+    ]
+    list_editable = [
+        "is_published",
+    ]
 
 
 class BankAccountAdmin(admin.ModelAdmin):
