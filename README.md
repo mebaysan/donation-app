@@ -230,5 +230,5 @@ EMAIL_PORT=587
 EMAIL_HOST_USER=yourmail@gmail.com
 EMAIL_HOST_PASSWORD=your_password
 EMAIL_USE_TLS=True
-EMAIL_USE_SSL=True
+EMAIL_USE_SSL=False
 ```
