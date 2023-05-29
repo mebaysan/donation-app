@@ -16,7 +16,7 @@ class DonationCategory(models.Model):
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(upload_to="donation_category/", null=True, blank=True)
     is_published = models.BooleanField(default=True)
-    order = models.IntegerField(unique=True, blank=True, null=True)
+    order = models.IntegerField(blank=True, null=True)
 
     class Meta:
         verbose_name = "Donation Category"
