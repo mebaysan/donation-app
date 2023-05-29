@@ -11,7 +11,7 @@ from apps.donor.models import DonationCategory, DonationItem, Bank
 
 class DonationCategoryListAPIView(ListAPIView):
     serializer_class = DonationCategorySerializer
-    queryset = DonationCategory.objects.filter(is_published=True).all()
+    queryset = DonationCategory.objects.filter(is_published=True).order_by('order').all()
 
 
 class DonationCategoryRetrieveAPIView(RetrieveAPIView):
