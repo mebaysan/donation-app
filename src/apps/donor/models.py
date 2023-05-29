@@ -68,6 +68,7 @@ class Bank(models.Model):
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to="donation_category/", null=True, blank=True)
     is_published = models.BooleanField(default=True)
+    order = models.IntegerField(blank=True, null=True)
 
     class Meta:
         verbose_name = "Bank"

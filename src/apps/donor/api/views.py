@@ -33,4 +33,4 @@ class DonationItemRetrieveAPIView(RetrieveAPIView):
 
 class BankListAPIView(ListAPIView):
     serializer_class = BankSerializer
-    queryset = Bank.objects.filter(is_published=True).all()
+    queryset = Bank.objects.filter(is_published=True).order_by("order").all()

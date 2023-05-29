@@ -48,9 +48,11 @@ class BankAdmin(admin.ModelAdmin):
     list_display = [
         "name",
         "is_published",
+        "order",
     ]
     list_editable = [
         "is_published",
+        "order",
     ]
 
 
