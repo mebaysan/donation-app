@@ -8,8 +8,15 @@ from apps.payment.models import Donation
 
 
 class DonationCategoryAdmin(admin.ModelAdmin):
-    list_display = ("name", "is_published", "order",)
-    list_editable = ("is_published", "order",)
+    list_display = (
+        "name",
+        "is_published",
+        "order",
+    )
+    list_editable = (
+        "is_published",
+        "order",
+    )
 
     def has_delete_permission(self, request, obj=None):
         if obj is not None:
