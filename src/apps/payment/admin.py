@@ -8,6 +8,7 @@ from apps.payment.models import (
     DonationTransaction,
 )
 from helpers.template import filters
+from helpers.http.writers import get_csv_response_of_queryset
 
 
 # Register your models here.
@@ -61,11 +62,31 @@ class DonationAdmin(admin.ModelAdmin):
         "donation_item",
         "amount",
     ]
+    actions = ["export_to_csv", "export_all_to_csv"]
 
     def get_is_complete_transaction(self, obj):
         return "Yes" if obj.is_complete_transaction else "No"
 
     get_is_complete_transaction.short_description = "Is Transaction Completed"
+
+    def export_to_csv(self, request, queryset):
+        """
+        Export the selected donations to CSV
+        """
+        res = get_csv_response_of_queryset(queryset, "donations")
+        return res
+
+    export_to_csv.short_description = "Export Donations to CSV"
+
+    def export_all_to_csv(self, request, *args, **kwargs):
+        """
+        Export all donations to CSV
+        """
+        queryset = Donation.objects.all()
+        res = get_csv_response_of_queryset(queryset, "donations")
+        return res
+
+    export_all_to_csv.short_description = "Export All Donations to CSV"
 
 
 class DonationInline(admin.TabularInline):
@@ -126,6 +147,26 @@ class DonationTransactionAdmin(admin.ModelAdmin):
         "message",
         "donation_platform",
     ]
+    actions = ["export_to_csv", "export_all_to_csv"]
+
+    def export_to_csv(self, request, queryset):
+        """
+        Export the selected donation transactions to CSV
+        """
+        res = get_csv_response_of_queryset(queryset, "donation_transactions")
+        return res
+
+    export_to_csv.short_description = "Export Donation Transactions to CSV"
+
+    def export_all_to_csv(self, request, *args, **kwargs):
+        """
+        Export all donation transactions to CSV
+        """
+        queryset = DonationTransaction.objects.all()
+        res = get_csv_response_of_queryset(queryset, "donation_transactions")
+        return res
+
+    export_all_to_csv.short_description = "Export All Donation Transactions to CSV"
 
 
 admin.site.register(DonationTransaction, DonationTransactionAdmin)
