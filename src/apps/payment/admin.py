@@ -9,6 +9,8 @@ from apps.payment.models import (
 )
 from helpers.template import filters
 from helpers.http.writers import get_csv_response_of_queryset
+from rangefilter.filters import DateRangeFilterBuilder, DateTimeRangeFilterBuilder
+from datetime import datetime
 
 
 # Register your models here.
@@ -122,6 +124,12 @@ class DonationTransactionAdmin(admin.ModelAdmin):
         ("status_code", filters.DropdownFilter),
         ("group_name", filters.DropdownFilter),
         ("organization_name", filters.DropdownFilter),
+        (
+            "date",
+            DateTimeRangeFilterBuilder(
+                title="Date",
+            ),
+        ),
     ]
     search_fields = [
         "first_name",

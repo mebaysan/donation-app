@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     # 3rd party packages
     "rest_framework",
     "corsheaders",
+    "rangefilter",
     # custom apps
     "apps.management.apps.ManagementConfig",
     "apps.donor.apps.DonorConfig",
