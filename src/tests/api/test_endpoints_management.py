@@ -124,3 +124,19 @@ def test_login_user_fail(client, user):
     response = client.post("/api/token/", payload)
 
     assert response.status_code == 401
+
+
+@pytest.mark.django_db
+def test_user_me(client, user):
+    """Tests the user me endpoint."""
+    client.force_authenticate(user=user)
+    response = client.get("/api/management/users/me/")
+    assert response.status_code == 200
+    assert response.json().get("id") == user.id
+    assert response.json().get("username") == user.username
+    assert response.json().get("email") == user.email
+    assert response.json().get("phone_number") == user.phone_number
+    assert response.json().get("first_name") == user.first_name
+    assert response.json().get("last_name") == user.last_name
+    assert response.json().get("country") == user.country
+    assert response.json().get("state_province") == user.state_province
