@@ -68,13 +68,13 @@ class ObtainTokenView(views.APIView):
         if user is None or not user.check_password(password):
             return Response(
                 {"details": "Lütfen geçerli giriş bilgileri girin."},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_401_UNAUTHORIZED,
             )
 
         # Generate the JWT token
         jwt_token = JWTAuthentication.create_jwt(user)
 
-        return Response({"token": jwt_token})
+        return Response({"token": jwt_token}, status=status.HTTP_200_OK)
 
 
 class UserCreateAPIView(CreateAPIView):
