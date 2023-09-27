@@ -32,6 +32,11 @@ class UserSerializer(serializers.ModelSerializer):
             "password",
         ]
 
+    def validate(self, data):
+        if data["username"] != data["email"]:
+            raise serializers.ValidationError("Kullanıcı adı ve email eşleşmiyor.")
+        return data
+
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(

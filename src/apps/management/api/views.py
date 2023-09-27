@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
+from rest_framework.exceptions import ValidationError
 from rest_framework import views, status
 from rest_framework.generics import (
     RetrieveUpdateAPIView,
@@ -99,6 +100,13 @@ class UserCreateAPIView(CreateAPIView):
                     },
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+            except ValidationError:
+                return Response(
+                    {
+                        "details": "Kayıt etmek istediğiniz bilgiler başka bir kullanıcı tarafından alınmış."
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             except Exception:
                 return Response(
                     {"details": "Kullanıcı oluşturulurken hata."},
@@ -128,9 +136,16 @@ class UserMeView(RetrieveUpdateAPIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
+        except ValidationError:
+            return Response(
+                {
+                    "details": "Kayıt etmek istediğiniz bilgiler başka bir kullanıcı tarafından alınmış."
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         except Exception:
             return Response(
-                {"details": "Kullanıcı güncellenirken bir hata meydana geldi hata."},
+                {"details": "Kullanıcı güncellenirken bir hata meydana geldi."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
