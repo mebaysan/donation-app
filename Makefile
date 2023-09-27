@@ -104,5 +104,8 @@ runproxyversion:
 format:
 	@black src
 
+lint:
+	@flake8 src
+
 load_countries_states:
 	@python src/manage.py load_countries_states
