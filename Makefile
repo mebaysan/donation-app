@@ -73,9 +73,6 @@ collect:
 superuser:
 	@python src/manage.py createsuperuser
 
-tests:
-	@python manage.py test
-
 translation:
 	@python manage.py makemessages -l tr
 	@python manage.py compilemessages
@@ -106,6 +103,9 @@ format:
 
 lint:
 	@flake8 src
+
+test:
+	@pytest src/
 
 load_countries_states:
 	@python src/manage.py load_countries_states
