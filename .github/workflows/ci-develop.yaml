@@ -1,4 +1,4 @@
-name: CI - Image Deploy To Docker Hub
+name: CI - Develop Branch Test
 
 on:
   push:
