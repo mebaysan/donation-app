@@ -34,7 +34,7 @@ def state():
 @pytest.fixture
 def user():
     """Return a new User instance."""
-    user = User.objects.create(
+    new_user = User.objects.create(
         username="testuser@email.com",
         email="testuser@email.com",
         first_name="Test",
@@ -44,6 +44,6 @@ def user():
         is_approved_to_be_in_touch=True,
     )
 
-    user.set_password("testpass123")
-    user.save()
-    return user
+    new_user.set_password("testpass123")
+    new_user.save()
+    return new_user
