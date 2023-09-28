@@ -5,16 +5,17 @@ from django.core.management import call_command
 from rest_framework.test import APIClient
 from apps.management.models import Country, StateProvince
 from apps.donor.models import DonationCategory, DonationItem, Bank, BankAccount
+from apps.payment.models import Donation, DonationTransaction, Cart, CartItem
+from helpers.payment_provider.payment_provider_factory import PaymentProviderFactory
 
 User = get_user_model()
 
 
-@pytest.fixture(scope="session")
-def django_db_setup(django_db_setup, django_db_blocker):
-    """Load countries and states."""
-    with django_db_blocker.unblock():
-
-        call_command("load_countries_states")
+# @pytest.fixture(scope="session")
+# def django_db_setup(django_db_setup, django_db_blocker):
+#     """Load countries and states."""
+#     with django_db_blocker.unblock():
+#         call_command("load_countries_states")
 
 
 @pytest.fixture
@@ -103,6 +104,7 @@ def donation_item_static(donation_category):
         category=donation_category,
         is_published=True,
         donation_type="Static",
+        quantity_price=25.0,
     )
 
 
@@ -130,3 +132,21 @@ def bank_account(bank):
         branch="Test Bank Account Branch",
         branch_no="00000",
     )
+
+
+@pytest.fixture
+def user_cart(user):
+    """Return a new Cart instance."""
+    return user.cart
+
+
+@pytest.fixture
+def payment_provider_kuveytturk():
+    """Return a new Kuveytturk PaymentProvider instance."""
+    return PaymentProviderFactory.get_payment_provider("KT")
+
+
+@pytest.fixture
+def payment_provider_serializer_kuveytturk():
+    """Return a new Kuveytturk PaymentProviderSerializer instance."""
+    return PaymentProviderFactory.get_payment_provider_payment_request_serializer("KT")
