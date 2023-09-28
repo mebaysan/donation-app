@@ -23,12 +23,6 @@ help:
 check:
 	@python manage.py check
 
-coverage:
-	@coverage run --source='.' manage.py test
-	@coverage report -m
-	@coverage html
-	@coverage xml
-
 docup:
 	@docker compose up -d --build
 
@@ -105,7 +99,12 @@ lint:
 	@flake8 src
 
 test:
-	@pytest src/
+	@pytest src/ -vv --disable-warnings --cov
+
+coverage:
+	@coverage report -m
+	@coverage html
+	@coverage xml
 
 load_countries_states:
 	@python src/manage.py load_countries_states
