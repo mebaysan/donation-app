@@ -4,6 +4,9 @@ from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from rest_framework.test import APIClient
 from apps.management.models import Country, StateProvince
+from apps.donor.models import DonationCategory, DonationItem, Bank, BankAccount
+from apps.payment.models import PaymentProvider
+from helpers.payment_provider.payment_provider_factory import PaymentProviderFactory
 
 User = get_user_model()
 
@@ -67,3 +70,82 @@ def user2():
     new_user.set_password("testpass123")
     new_user.save()
     return new_user
+
+
+@pytest.fixture
+def donation_category():
+    """Return a new DonationCategory instance."""
+    return DonationCategory.objects.create(
+        name="Test Donation Category",
+        description="Test Donation Category Description",
+        order=1,
+        is_published=True,
+    )
+
+
+@pytest.fixture
+def donation_item_dynamic(donation_category):
+    """Return a new dynamic DonationItem instance."""
+    return DonationItem.objects.create(
+        name="Test Donation Item Dynamic",
+        description="Test Donation Item Dynamic Description",
+        category=donation_category,
+        is_published=True,
+        donation_type="Dynamic",
+    )
+
+
+@pytest.fixture
+def donation_item_static(donation_category):
+    """Return a new static DonationItem instance."""
+    return DonationItem.objects.create(
+        name="Test Donation Item Static",
+        description="Test Donation Item Static Description",
+        category=donation_category,
+        is_published=True,
+        donation_type="Static",
+        quantity_price=25.0,
+    )
+
+
+@pytest.fixture
+def bank():
+    """Return a new Bank instance."""
+    return Bank.objects.create(
+        name="Test Bank",
+        order=1,
+        is_published=True,
+    )
+
+
+@pytest.fixture
+def bank_account(bank):
+    """Return a new BankAccount instance."""
+    return BankAccount.objects.create(
+        bank=bank,
+        account_name="Test Bank Account Name",
+        description="Test Bank Account Description",
+        account_number="00000",
+        currency="TRY",
+        swift_no="00000",
+        iban_no="00000",
+        branch="Test Bank Account Branch",
+        branch_no="00000",
+    )
+
+
+@pytest.fixture
+def user_cart(user):
+    """Return a new Cart instance."""
+    return user.cart
+
+
+@pytest.fixture
+def payment_provider_kuveytturk():
+    """Return a new KuveytturkPaymentProvider instance."""
+    PaymentProvider.objects.create(
+        name="KuveytTurk",
+        is_provider=True,
+        code_name="KT",
+    )
+    return PaymentProviderFactory.get_published_payment_provider_instance()

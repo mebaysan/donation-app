@@ -167,3 +167,4 @@ media/
 db.sqlite3
 .gitignore/
 .nginx/
+tests/

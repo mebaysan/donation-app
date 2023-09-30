@@ -210,7 +210,7 @@ def test_user_me_update_user_fail_already_created(client, user, user2):
         "email": user.email,
     }
     response = client.patch("/api/management/users/me/", payload)
-    print(response.json())
+
     assert response.status_code == 400
 
 
@@ -225,7 +225,7 @@ def test_user_change_password(client, user):
         "confirm_new_password": "testpass1234!.",
     }
     response = client.patch("/api/management/users/me/password-change/", payload)
-    print(response.json())
+
     assert response.status_code == 200
 
 
@@ -240,7 +240,7 @@ def test_user_change_password_fail(client, user):
         "confirm_new_password": "testpass1234!.",
     }
     response = client.patch("/api/management/users/me/password-change/", payload)
-    print(response.json())
+
     assert response.status_code == 400
 
 
