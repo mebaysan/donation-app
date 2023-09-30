@@ -11,11 +11,11 @@ from helpers.payment_provider.payment_provider_factory import PaymentProviderFac
 User = get_user_model()
 
 
-# @pytest.fixture(scope="session")
-# def django_db_setup(django_db_setup, django_db_blocker):
-#     """Load countries and states."""
-#     with django_db_blocker.unblock():
-#         call_command("load_countries_states")
+@pytest.fixture(scope="session")
+def django_db_setup(django_db_setup, django_db_blocker):
+    """Load countries and states."""
+    with django_db_blocker.unblock():
+        call_command("load_countries_states")
 
 
 @pytest.fixture
