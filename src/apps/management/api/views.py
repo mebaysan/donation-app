@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.db import IntegrityError
 from rest_framework.exceptions import ValidationError
 from rest_framework import views, status
 from rest_framework.generics import (
@@ -93,13 +92,6 @@ class UserCreateAPIView(CreateAPIView):
                     {"details": "Kullanıcı başarıyla oluşturuldu."},
                     status=status.HTTP_201_CREATED,
                 )
-            except IntegrityError:
-                return Response(
-                    {
-                        "details": "Kayıt etmek istediğiniz bilgiler başka bir kullanıcı tarafından alınmış."
-                    },
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
             except ValidationError:
                 return Response(
                     {
@@ -129,13 +121,6 @@ class UserMeView(RetrieveUpdateAPIView):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data)
-        except IntegrityError:
-            return Response(
-                {
-                    "details": "Kayıt etmek istediğiniz bilgiler başka bir kullanıcı tarafından alınmış."
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
         except ValidationError:
             return Response(
                 {
