@@ -1,3 +1,6 @@
+"""
+    Payment Provider APIs' Provider Classes
+"""
 import base64
 import hashlib
 import urllib.parse
@@ -18,61 +21,20 @@ from helpers.communication.email import send_password_reset_email
 User = get_user_model()
 
 
-class KuveytTurkPaymentProvider(object):
-    RESPONSE_CODES = {
-        "00": "Otorizasyon Verildi",
-        "01": "Kartı Veren Bankayı Arayınız",
-        "02": "Kartı Veren Bankayı Arayınız",
-        "03": "Geçersiz Üye İşyeri",
-        "04": "Karta el koyunuz",
-        "05": "İşlem onaylanmadı",
-        "09": "Tekrar Deneyiniz",
-        "11": "VIP İşlem İçin Onay Verildi",
-        "12": "Geçersiz İşlem",
-        "13": "Geçersiz İşlem amountı",
-        "14": "Geçersiz Kart Numarası",
-        "15": "Kart Veren Banka Tanımsız",
-        "33": "Vade Sonu Geçmiş Kart",
-        "34": "Sahtekarlık",
-        "36": "Kısıtlı Kart",
-        "37": "Güvenliği Uyarınız, Karta El Konulmalı",
-        "38": "Hatalı Şifre",
-        "41": "Kayıp Kart - Karta El Konulmalı",
-        "43": "Çalıntı Kart - Karta El Konulmalı",
-        "51": "Bakiyesi - Kredisi Yetersiz",
-        "53": "Döviz Hesabı Bulunamadı",
-        "54": "Vade Sonu Geçmiş Kart",
-        "55": "Hatalı Kart Şifresi",
-        "56": "Kart Tanımlı Değil",
-        "57": "İşlem Tipine İzin Yok",
-        "58": "İşlem Tipi Terminale Kapalı",
-        "59": "Sahtekarlık Şüphesi",
-        "61": "Para Çekme - amount Limiti Aşıldı",
-        "62": "Kısıtlanmış Kart",
-        "63": "Güvenlik İhlali",
-        "65": "Para Çekme Adet Limiti Aşıldı",
-        "66": "İşlemi Reddediniz",
-        "67": "Bu Hesapta Hiçbir İşlem Yapılamaz",
-        "68": "Tanımsız Şube",
-        "75": "Şifre Deneme Sayısı Aşıldı",
-        "76": "Şifreler Uyuşmuyor",
-        "77": "Şifre Script Talebi Reddedildi",
-        "78": "Şifre Güvenilir Bulunmadı",
-        "79": "ARQC Güvenlik Kontrolü Başarısız",
-        "85": "Şifre Değişikliği / YÜkleme Onay",
-        "88": "İşlem Şüpheli Tamamlandı",
-        "89": "Ek Kart İle Bu İşlem Yapılamaz",
-        "90": "Gün Sonu Devam Ediyor",
-        "91": "Kartı Veren Banka Hizmet Dışı",
-        "92": "Kart Veren Banka Tanımlı Değil",
-        "93": "AYARLANACAK",
-        "96": "SİSTEM ARIZASI",
-    }
-    CONF = settings.KUVEYTTURK_CONF
+class BasePaymentProvider(object):
+    """
+    Base class for payment providers
+    """
 
     def payment_request_parser(self, request_data):
         """
-        request_data (OrderedDict): Serialized data
+        Parses the payment request data and returns a dictionary
+
+        Args:
+            request_data (OrderedDict): Serialized data
+
+        Returns:
+            dict: Parsed data
         """
         ####### Bagisci Bilgileri #######
         first_name = request_data.get("first_name")
@@ -139,11 +101,28 @@ class KuveytTurkPaymentProvider(object):
         }
 
     def make_payment(self, request, request_data):
-        payment_request_data = self.payment_request_parser(request_data)
-        merchant_order_id = str(
-            uuid.uuid4()
-        )  # istediğimiz değer yazılabilir bizim tuttuğumuz değer olacak (sabit veya değişken)
-        ############## DonationTransaction instance create ##############
+        """
+        Makes the payment request to the payment provider
+
+        This can be a different method for each payment provider
+        """
+        raise NotImplementedError
+
+    def create_transaction(self, request, payment_request_data, merchant_order_id):
+        """
+        Creates a DonationTransaction instance
+
+        Payment transaction will be connected to this instance
+
+        Args:
+            request (Request): Request object
+            payment_request_data (dict): Parsed payment request data
+            merchant_order_id (str): Merchant order id
+
+        Returns:
+            DonationTransaction: Created instance
+        """
+
         new_transaction = DonationTransaction(
             first_name=payment_request_data["first_name"],
             last_name=payment_request_data["last_name"],
@@ -200,7 +179,15 @@ class KuveytTurkPaymentProvider(object):
 
         new_transaction.save()
 
-        ########### Donation Create for DonationTransaction #############
+        # create donations for the transaction
+        self.create_donation(payment_request_data, new_transaction)
+
+        return new_transaction
+
+    def create_donation(self, payment_request_data, new_transaction):
+        """
+        Creates Donation instances for the transaction
+        """
         for donation in payment_request_data["donations"]:
             new_donation = Donation.objects.create(
                 donation_item=donation.get("donation_item"),
@@ -209,6 +196,68 @@ class KuveytTurkPaymentProvider(object):
                 user=new_transaction.user,
             )
             new_donation.save()
+
+
+class KuveytTurkPaymentProvider(BasePaymentProvider):
+    RESPONSE_CODES = {
+        "00": "Otorizasyon Verildi",
+        "01": "Kartı Veren Bankayı Arayınız",
+        "02": "Kartı Veren Bankayı Arayınız",
+        "03": "Geçersiz Üye İşyeri",
+        "04": "Karta el koyunuz",
+        "05": "İşlem onaylanmadı",
+        "09": "Tekrar Deneyiniz",
+        "11": "VIP İşlem İçin Onay Verildi",
+        "12": "Geçersiz İşlem",
+        "13": "Geçersiz İşlem amountı",
+        "14": "Geçersiz Kart Numarası",
+        "15": "Kart Veren Banka Tanımsız",
+        "33": "Vade Sonu Geçmiş Kart",
+        "34": "Sahtekarlık",
+        "36": "Kısıtlı Kart",
+        "37": "Güvenliği Uyarınız, Karta El Konulmalı",
+        "38": "Hatalı Şifre",
+        "41": "Kayıp Kart - Karta El Konulmalı",
+        "43": "Çalıntı Kart - Karta El Konulmalı",
+        "51": "Bakiyesi - Kredisi Yetersiz",
+        "53": "Döviz Hesabı Bulunamadı",
+        "54": "Vade Sonu Geçmiş Kart",
+        "55": "Hatalı Kart Şifresi",
+        "56": "Kart Tanımlı Değil",
+        "57": "İşlem Tipine İzin Yok",
+        "58": "İşlem Tipi Terminale Kapalı",
+        "59": "Sahtekarlık Şüphesi",
+        "61": "Para Çekme - amount Limiti Aşıldı",
+        "62": "Kısıtlanmış Kart",
+        "63": "Güvenlik İhlali",
+        "65": "Para Çekme Adet Limiti Aşıldı",
+        "66": "İşlemi Reddediniz",
+        "67": "Bu Hesapta Hiçbir İşlem Yapılamaz",
+        "68": "Tanımsız Şube",
+        "75": "Şifre Deneme Sayısı Aşıldı",
+        "76": "Şifreler Uyuşmuyor",
+        "77": "Şifre Script Talebi Reddedildi",
+        "78": "Şifre Güvenilir Bulunmadı",
+        "79": "ARQC Güvenlik Kontrolü Başarısız",
+        "85": "Şifre Değişikliği / YÜkleme Onay",
+        "88": "İşlem Şüpheli Tamamlandı",
+        "89": "Ek Kart İle Bu İşlem Yapılamaz",
+        "90": "Gün Sonu Devam Ediyor",
+        "91": "Kartı Veren Banka Hizmet Dışı",
+        "92": "Kart Veren Banka Tanımlı Değil",
+        "93": "AYARLANACAK",
+        "96": "SİSTEM ARIZASI",
+    }
+    CONF = settings.KUVEYTTURK_CONF
+
+    def make_payment(self, request, request_data):
+        payment_request_data = self.payment_request_parser(request_data)
+        merchant_order_id = str(
+            uuid.uuid4()
+        )  # it can be anything, we use uuid for uniqueness
+
+        # create new transaction
+        self.create_transaction(request, payment_request_data, merchant_order_id)
         ########### HASH Process #############
         hashed_password = base64.b64encode(
             hashlib.sha1(
@@ -222,6 +271,8 @@ class KuveytTurkPaymentProvider(object):
                 )
             ).digest()
         ).decode()
+
+        ########### Payment Request #############
         data = f"""
            <KuveytTurkVPosMessage xmlns:xsi="http://www.w3.org/2001/XMLSchemainstance"
            xmlns:xsd="http://www.w3.org/2001/XMLSchema">
@@ -256,6 +307,9 @@ class KuveytTurkPaymentProvider(object):
         return HttpResponse(r)
 
     def approve_payment(self, request):
+        """
+        Approves the payment request
+        """
         approve_res = request.POST.get("AuthenticationResponse")
         approve_res = urllib.parse.unquote(approve_res)
         amount_start = approve_res.find("<Amount>")
@@ -364,6 +418,9 @@ class KuveytTurkPaymentProvider(object):
             return redirect(redirect_url)
 
     def payment_fail(self, request):
+        """
+        Payment fail view
+        """
         approve_res = request.POST.get("AuthenticationResponse")
         approve_res = urllib.parse.unquote(approve_res)
 
