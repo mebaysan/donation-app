@@ -37,6 +37,8 @@ jobs:
           python-version: 3.11  # Choose your desired Python version
       - name: Install dependencies
         run: pip install -r src/requirements.txt  # Install your app's dependencies
+      - name: Create .env file # Create a .env file for your development environment
+        run: mv src/.env.dev src/.env
       - name: Run pytest
         run: pytest src # Adjust this command to run your pytest tests
         env:
