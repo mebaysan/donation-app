@@ -62,7 +62,8 @@ To obtain a token, we use `/api/token/` endpoint. It uses [`ObtainTokenView`](./
 To override the config variables, you can update the variables in [`config_dev.py`](./src/donation/config_dev.py) file.
 
 ```bash
-export DEBUG=1 # to use the dev conf
+mv src/.env.dev src/.env # create .env file
+make install # install the requirements
 make create-devdb # create project dev db (you have to have Docker on your machine)
 make migration # create the db
 make load_countries_states # load country and state_provinces data
@@ -70,53 +71,13 @@ make superuser # create a super user
 make runserver # run the project
 ```
 
-# Environment Variables
+## Test Project
 
 ```bash
-# App Variables to use in templates
-APP_NAME=My Donation App
-APP_FAVICON_URL=xyz.com/favicon.png
-
-APP_PAYMENT_RESPONSE_URL=https://domain.com/cart # this will be used in payment success and fail urls to redirect user from payment page to cart page
-
-SECRET_KEY=secret
-
-ALLOWED_HOSTS=HOST_1 HOST_2
-
-CORS_ALLOWED_ORIGINS=ORIGIN_1 ORIGIN_2
-
-CSRF_TRUSTED_ORIGINS=ORIGIN_1 ORIGIN_2
-
-X_FRAME_OPTIONS=SAMEORIGIN # DENY ALLOWALL SAMEORIGIN
-
-SECURE_SSL_REDIRECT=True
-SESSION_COOKIE_SECURE=True
-CSRF_COOKIE_SECURE=True
-
-DB_NAME=somedb
-DB_HOST=127.0.0.1
-DB_PORT=5432
-DB_USER=myuser
-DB_PASSWORD=myuser_password
-
-# KUVEYTTURK CONF
-KUVEYTTURK_STORE_NO=57902 # Test Creds from KuveytTurk
-KUVEYTTURK_CUSTOMER_NO=97228291 # Test Creds from KuveytTurk
-KUVEYTTURK_USERNAME=TEPKVT2021 # Test Creds from KuveytTurk
-KUVEYTTURK_PASSWORD=api123 # Test Creds from KuveytTurk
-KUVEYTTURK_OK_URL=https://<YOUR_HOST>/api/payment-success/
-KUVEYTTURK_FAIL_URL=https://<YOUR_HOST>/api/payment-fail/
-KUVEYTTURK_PAYMENT_REQUEST_URL=https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelPayGate
-KUVEYTTURK_PAYMENT_APPROVE_URL=https://sanalpos.kuveytturk.com.tr/ServiceGateWay/Home/ThreeDModelProvisionGate
-
-# JWT CONF
-TOKEN_LIFETIME_HOURS=5
-
-# EMAIL
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_HOST_USER=yourmail@gmail.com
-EMAIL_HOST_PASSWORD=your_password
-EMAIL_USE_TLS=True
-EMAIL_USE_SSL=False
+make install # install the requirements
+make test # run the tests
 ```
+
+# Environment Variables
+
+You can check [`.env.example`](./src/.env.dev) file to see the environment variables.
