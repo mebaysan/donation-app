@@ -5,8 +5,6 @@ from django.core.management import call_command
 from rest_framework.test import APIClient
 from apps.management.models import Country, StateProvince
 from apps.donor.models import DonationCategory, DonationItem, Bank, BankAccount
-from apps.payment.models import PaymentProvider
-from helpers.payment_provider.payment_provider_factory import PaymentProviderFactory
 
 User = get_user_model()
 
@@ -138,14 +136,3 @@ def bank_account(bank):
 def user_cart(user):
     """Return a new Cart instance."""
     return user.cart
-
-
-@pytest.fixture
-def payment_provider_kuveytturk():
-    """Return a new KuveytturkPaymentProvider instance."""
-    PaymentProvider.objects.create(
-        name="KuveytTurk",
-        is_provider=True,
-        code_name="KT",
-    )
-    return PaymentProviderFactory.get_published_payment_provider_instance()
