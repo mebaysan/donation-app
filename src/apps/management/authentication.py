@@ -25,7 +25,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
             payload = jwt.decode(jwt_token, settings.SECRET_KEY, algorithms=["HS256"])
         except jwt.exceptions.InvalidSignatureError:
             raise AuthenticationFailed("Geçersiz imza.")
-        except:
+        except Exception:
             raise ParseError()
 
         # Get the user from the database

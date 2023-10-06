@@ -65,11 +65,10 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
         # Password validation
         password = data.get("password")
-        if password:
-            if len(password) < MIN_PASSWORD_LENGTH:
-                raise serializers.ValidationError(
-                    f"Parola en az {MIN_PASSWORD_LENGTH} karakter uzunluğunda olmalıdır."
-                )
+        if password and len(password) < MIN_PASSWORD_LENGTH:
+            raise serializers.ValidationError(
+                f"Parola en az {MIN_PASSWORD_LENGTH} karakter uzunluğunda olmalıdır."
+            )
         return data
 
 
@@ -84,11 +83,10 @@ class PasswordChangeSerializer(serializers.Serializer):
 
         # Password validation
         password = data.get("password")
-        if password:
-            if len(password) < MIN_PASSWORD_LENGTH:
-                raise serializers.ValidationError(
-                    f"Parola en az {MIN_PASSWORD_LENGTH} karakter uzunluğunda olmalıdır."
-                )
+        if password and len(password) < MIN_PASSWORD_LENGTH:
+            raise serializers.ValidationError(
+                f"Parola en az {MIN_PASSWORD_LENGTH} karakter uzunluğunda olmalıdır."
+            )
         return data
 
 

@@ -64,11 +64,11 @@ class CartSerializer(serializers.ModelSerializer):
 
 
 class PaymentRequestSerializer(serializers.Serializer):
+    # we sum manually in the provider method to check "amount" field
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     email = serializers.EmailField(validators=[email_regex])
     phone_number = serializers.CharField(validators=[phone_regex])
-    # amount = serializers.FloatField(min_value=0) # we sum manually in the provider method
     card_number = serializers.CharField(max_length=19)
     card_holder_name = serializers.CharField()
     card_expiry = serializers.CharField(max_length=5, validators=[card_expiry_regex])

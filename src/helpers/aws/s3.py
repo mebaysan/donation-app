@@ -39,7 +39,7 @@ def get_files_of_folder(bucket_name, file_prefix):
         files = [get_presigned_url(bucket_name, file["Key"]) for file in files][
             1:
         ]  # the first (0) element is the folder url, not a resource file
-    except:
+    except Exception:
         # if there is exception, (probably) there is no image to show
         files = None
 
