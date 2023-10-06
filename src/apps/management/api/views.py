@@ -87,7 +87,8 @@ class UserCreateAPIView(CreateAPIView):
             validated_data = serializer.validated_data
             validated_data.pop("confirm_new_password")
             try:
-                user = User.objects.create_user(**validated_data)
+                # create a new user
+                User.objects.create_user(**validated_data)
                 return Response(
                     {"details": "Kullanıcı başarıyla oluşturuldu."},
                     status=status.HTTP_201_CREATED,
