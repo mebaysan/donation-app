@@ -1,5 +1,5 @@
 from apps.payment.api.serializers import KuveytTurkPaymentRequestSerializer
-from helpers.payment_provider.providers import KuveytTurkPaymentProvider
+from helpers.payment.providers import KuveytTurkPaymentProvider
 from apps.payment.models import PaymentProvider
 
 

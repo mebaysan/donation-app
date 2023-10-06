@@ -1,9 +1,9 @@
 """Test endpoints for payment app."""
 import pytest
 from django.contrib.auth import get_user_model
-from helpers.payment_provider.providers import KuveytTurkPaymentProvider
+from helpers.payment.providers import KuveytTurkPaymentProvider
+from helpers.payment.factory import PaymentProviderFactory
 from apps.payment.models import PaymentProvider
-from helpers.payment_provider.factory import PaymentProviderFactory
 from django.http import HttpResponse
 
 User = get_user_model()

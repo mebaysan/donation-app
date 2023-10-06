@@ -19,7 +19,7 @@ from apps.payment.api.serializers import (
 )
 from apps.payment.models import Cart, CartItem, Donation, DonationTransaction
 from helpers.pagination.paginators import DonationTransactionListPagination
-from helpers.payment_provider.factory import PaymentProviderFactory
+from helpers.payment.factory import PaymentProviderFactory
 
 
 class DonationListAPIView(ListAPIView):
