@@ -9,9 +9,25 @@ from apps.donor.models import DonationCategory, DonationItem, Bank, BankAccount
 User = get_user_model()
 
 
-@pytest.fixture(scope="session")
-def django_db_setup(django_db_setup, django_db_blocker):
+@pytest.fixture()
+def django_db_setup(mocker, django_db_setup, django_db_blocker):
     """Load countries and states."""
+    mocker.patch(
+        "apps.management.management.commands.load_countries_states.Command.get_data_from_api",
+        return_value=[
+            {
+                "name": "Turkey",
+                "countryCode": "TR",
+                "countryCodeAlpha3": "TUR",
+                "phone": "90",
+                "currency": "TRY",
+                "stateProvinces": [
+                    {"name": "Istanbul"},
+                    {"name": "Ankara"},
+                ],
+            }
+        ],
+    )
     with django_db_blocker.unblock():
         call_command("load_countries_states")
 
