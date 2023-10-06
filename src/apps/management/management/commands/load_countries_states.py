@@ -6,11 +6,14 @@ from apps.management.models import Country, StateProvince
 class Command(BaseCommand):
     help = "Imports countries and state provinces from JSON file"
 
-    def handle(self, *args, **options):
+    def get_data_from_api(self):
         # Get the JSON data from the URL
         url = "https://gist.githubusercontent.com/mebaysan/610479b2e5362853b876637aa1f58883/raw/0969bb2ba61f28da6e6d55a881b088cd83e53ba6/country_state.json"
         response = requests.get(url)
-        data = response.json()
+        return response.json()
+
+    def handle(self, *args, **options):
+        data = self.get_data_from_api()
 
         for country_data in data:
             country, created = Country.objects.get_or_create(
