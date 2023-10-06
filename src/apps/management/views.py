@@ -12,6 +12,7 @@ User = get_user_model()
 
 
 def password_reset(request, uidb64, token):
+    view_template_name = "management/reset_password.html"
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
         user = User.objects.get(pk=uid)
@@ -27,7 +28,7 @@ def password_reset(request, uidb64, token):
                 messages.error(request, "Parolalar eşleşmiyor")
                 return render(
                     request,
-                    "management/reset_password.html",
+                    view_template_name,
                     {
                         "form": form,
                         "validlink": True,
@@ -43,7 +44,7 @@ def password_reset(request, uidb64, token):
 
         return render(
             request,
-            "management/reset_password.html",
+            view_template_name,
             {
                 "form": form,
                 "validlink": True,
@@ -53,7 +54,7 @@ def password_reset(request, uidb64, token):
             },
         )
     else:
-        return render(request, "management/reset_password.html", {"validlink": False})
+        return render(request, view_template_name, {"validlink": False})
 
 
 def password_reset_complete(request):

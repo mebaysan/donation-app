@@ -50,13 +50,13 @@ class User(AbstractUser):
         if self.username:
             if User.objects.filter(username=self.username).exclude(id=self.id).exists():
                 raise IntegrityError("Username already exists")
-        if self.phone_number:
-            if (
-                User.objects.filter(phone_number=self.phone_number)
-                .exclude(id=self.id)
-                .exists()
-            ):
-                raise IntegrityError("Phone number already exists")
+        if (
+            self.phone_number
+            and User.objects.filter(phone_number=self.phone_number)
+            .exclude(id=self.id)
+            .exists()
+        ):
+            raise IntegrityError("Phone number already exists")
         super().save(*args, **kwargs)
 
     @property
