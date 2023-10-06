@@ -278,7 +278,6 @@ def test_payment(
 def test_payment_for_unauthenticated_new_user(
     mocker,
     client,
-    user,
     donation_item_dynamic,
 ):
     """
