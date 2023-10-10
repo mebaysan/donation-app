@@ -226,25 +226,25 @@ if DEBUG is False:
         "handlers": {
             "console": {"class": "logging.StreamHandler", "formatter": "verbose"},
             "file": {
-                "level": "ERROR",
+                "level": "INFO",
                 "class": "logging.FileHandler",
                 "filename": "/var/log/donation/donation.log",
                 "formatter": "verbose",
             },
         },
         "loggers": {
-            "django": {
+            "": {  # root logger
                 "handlers": ["console", "file"],
+                "level": "INFO",
+                "propagate": True,
+            },
+            "django": {
+                "handlers": ["console"],
                 "level": "DEBUG",
                 "propagate": True,
             },
-            "": {  # root logger
-                "handlers": ["console", "file"],
-                "level": "WARNING",
-                "propagate": True,
-            },
             "donation": {
-                "handlers": ["console", "file"],
+                "handlers": ["console"],
                 "level": "ERROR",
                 "propagate": True,
             },
