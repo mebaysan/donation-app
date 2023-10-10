@@ -1,4 +1,6 @@
+"""Email helper functions."""
 import uuid
+import logging
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -7,6 +9,8 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
+
+logger = logging.getLogger(__name__)
 
 User = get_user_model()
 
@@ -53,7 +57,7 @@ def send_password_reset_email(user):
         recipient_list = [user.email]
         send_email(subject, message, recipient_list, html_message=message)
     except Exception as e:
-        print(e)
+        logger.error("Error while sending password reset email: %s", str(e))
 
 
 def send_password_reset_success_email(user):
@@ -71,4 +75,4 @@ def send_password_reset_success_email(user):
         recipient_list = [user.email]
         send_email(subject, message, recipient_list, html_message=message)
     except Exception as e:
-        print(e)
+        logger.error("Error while sending password reset success email: %s", str(e))

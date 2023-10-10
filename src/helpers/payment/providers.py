@@ -1,12 +1,11 @@
-"""
-    Payment Provider APIs' Provider Classes
-"""
+"""Payment Provider APIs' Provider Classes"""
 import base64
 import hashlib
 import urllib.parse
 import uuid
-
+import logging
 import requests
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
@@ -17,6 +16,8 @@ from rest_framework.response import Response
 
 from apps.payment.models import DonationTransaction, Donation
 from helpers.communication.email import send_password_reset_email
+
+logger = logging.getLogger(__name__)
 
 User = get_user_model()
 
@@ -251,6 +252,7 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
     CONF = settings.KUVEYTTURK_CONF
 
     def make_payment(self, request, request_data):
+        logger.info("KuveytTurkPaymentProvider.make_payment() called")
         payment_request_data = self.payment_request_parser(request_data)
         merchant_order_id = str(
             uuid.uuid4()
@@ -304,12 +306,14 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
             data=data.encode("ISO-8859-9"),
             headers=headers,
         )
+        logger.info("KuveytTurkPaymentProvider.make_payment() request sent")
         return HttpResponse(r)
 
     def approve_payment(self, request):
         """
         Approves the payment request
         """
+        logger.info("KuveytTurkPaymentProvider.approve_payment() called")
         approve_res = request.POST.get("AuthenticationResponse")
         approve_res = urllib.parse.unquote(approve_res)
         amount_start = approve_res.find("<Amount>")
@@ -397,6 +401,7 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
                 }
             )
             redirect_url = f"{settings.APP_PAYMENT_RESPONSE_URL}?{query_string}"  # front end app will handle this response by using query string
+            logger.info("KuveytTurkPaymentProvider.approve_payment() success")
             return redirect(redirect_url)
         else:
             # return Response(
@@ -415,6 +420,11 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
                 }
             )
             redirect_url = f"{settings.APP_PAYMENT_RESPONSE_URL}?{query_string}"  # front end app will handle this response by using query string
+            logger.info(
+                "KuveytTurkPaymentProvider.approve_payment() success (not_completed). Bank status code: %s - %s",
+                transaction.status_code,
+                transaction.status_code_description,
+            )
             return redirect(redirect_url)
 
     def payment_fail(self, request):
@@ -465,4 +475,9 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
             }
         )
         redirect_url = f"{settings.APP_PAYMENT_RESPONSE_URL}?{query_string}"  # front end app will handle this response by using query string
+        logger.info(
+            "KuveytTurkPaymentProvider.approve_payment() fail. Bank status code: %s - %s",
+            transaction.status_code,
+            transaction.status_code_description,
+        )
         return redirect(redirect_url)
