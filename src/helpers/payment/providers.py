@@ -306,7 +306,10 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
             data=data.encode("ISO-8859-9"),
             headers=headers,
         )
-        logger.info("KuveytTurkPaymentProvider.make_payment() request sent")
+        logger.info(
+            "KuveytTurkPaymentProvider.make_payment() request sent. Transaction merchant order id: %s",
+            merchant_order_id,
+        )
         return HttpResponse(r)
 
     def approve_payment(self, request):
@@ -401,7 +404,10 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
                 }
             )
             redirect_url = f"{settings.APP_PAYMENT_RESPONSE_URL}?{query_string}"  # front end app will handle this response by using query string
-            logger.info("KuveytTurkPaymentProvider.approve_payment() success")
+            logger.info(
+                "KuveytTurkPaymentProvider.approve_payment() called (completed). Transaction merchant order id: %s",
+                transaction.merchant_order_id,
+            )
             return redirect(redirect_url)
         else:
             # return Response(
@@ -420,10 +426,11 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
                 }
             )
             redirect_url = f"{settings.APP_PAYMENT_RESPONSE_URL}?{query_string}"  # front end app will handle this response by using query string
-            logger.info(
-                "KuveytTurkPaymentProvider.approve_payment() success (not_completed). Bank status code: %s - %s",
+            logger.warning(
+                "KuveytTurkPaymentProvider.approve_payment() called (not_completed). Bank status code: %s - %s. Transaction merchant order id: %s",
                 transaction.status_code,
                 transaction.status_code_description,
+                transaction.merchant_order_id,
             )
             return redirect(redirect_url)
 
@@ -475,9 +482,10 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
             }
         )
         redirect_url = f"{settings.APP_PAYMENT_RESPONSE_URL}?{query_string}"  # front end app will handle this response by using query string
-        logger.info(
-            "KuveytTurkPaymentProvider.approve_payment() fail. Bank status code: %s - %s",
+        logger.warning(
+            "KuveytTurkPaymentProvider.payment_fail() called. Bank status code: %s - %s. Transaction merchant order id: %s",
             transaction.status_code,
             transaction.status_code_description,
+            transaction.merchant_order_id,
         )
         return redirect(redirect_url)
