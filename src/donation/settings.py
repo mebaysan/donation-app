@@ -228,7 +228,7 @@ if DEBUG is False:
             "file": {
                 "level": "ERROR",
                 "class": "logging.FileHandler",
-                "filename": "/var/logs/donation/error.log",
+                "filename": "/var/log/donation/donation.log",
                 "formatter": "verbose",
             },
         },
