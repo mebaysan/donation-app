@@ -222,6 +222,9 @@ if DEBUG is False:
         "disable_existing_loggers": False,
         "formatters": {
             "verbose": {"format": "%(levelname)s %(asctime)s %(name)s %(message)s"},
+            "json": {
+                "()": "helpers.logging.formatter.JSONFormatter",
+            },
         },
         "handlers": {
             "console": {"class": "logging.StreamHandler", "formatter": "verbose"},
@@ -229,11 +232,11 @@ if DEBUG is False:
                 "level": "INFO",
                 "class": "logging.FileHandler",
                 "filename": "/var/log/donation/donation.log",
-                "formatter": "verbose",
+                "formatter": "json",
             },
         },
         "loggers": {
-            "": {  # root logger
+            "": {
                 "handlers": ["console", "file"],
                 "level": "INFO",
                 "propagate": True,
@@ -246,6 +249,33 @@ if DEBUG is False:
             "donation": {
                 "handlers": ["console"],
                 "level": "ERROR",
+                "propagate": True,
+            },
+        },
+    }
+else:
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "verbose": {"format": "%(levelname)s %(asctime)s %(name)s %(message)s"},
+            "json": {
+                "()": "helpers.logging.formatter.JSONFormatter",
+            },
+        },
+        "handlers": {
+            "console": {"class": "logging.StreamHandler", "formatter": "verbose"},
+            "file": {
+                "level": "INFO",
+                "class": "logging.FileHandler",
+                "filename": "donation.log",
+                "formatter": "json",
+            },
+        },
+        "loggers": {
+            "": {
+                "handlers": ["file"],
+                "level": "INFO",
                 "propagate": True,
             },
         },
