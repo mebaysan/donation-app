@@ -3,14 +3,16 @@
 # Table of Contents
 
 - [Table of Contents](#table-of-contents)
+- [Introducing the Donation App - Empowering Non-Profits](#introducing-the-donation-app---empowering-non-profits)
 - [Core Django Settings](#core-django-settings)
 - [For Development](#for-development)
 - [Backup](#backup)
 - [Codebase Related Topic](#codebase-related-topic)
-    - [Static \& Media Files for Production](#static--media-files-for-production)
-    - [Custom Authentication Backend](#custom-authentication-backend)
+  - [Static \& Media Files for Production](#static--media-files-for-production)
+  - [Custom Authentication Backend](#custom-authentication-backend)
 - [Development Environment](#development-environment)
-    - [Run Project](#run-project)
+  - [Run Project](#run-project)
+  - [Test Project](#test-project)
 - [Environment Variables](#environment-variables)
 
 # Introducing the Donation App - Empowering Non-Profits
@@ -30,6 +32,7 @@ on [GitHub](https://github.com/mebaysan/donation-app).
 You can access the Docker image from [Docker Hub](https://hub.docker.com/r/mebaysan/donation-app).
 
 ![Donation App](./readme/wallpaper.png)
+*Image above is example of one of the pre-built apps that are used this project. In the future, the frontend repository will be open-source.
 
 # Core Django Settings
 
