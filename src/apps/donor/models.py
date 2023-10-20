@@ -3,8 +3,12 @@ from django.db import models
 
 User = get_user_model()
 
-
-# Create your models here.
+DONATION_TYPES = (("Dynamic", "Dynamic"), ("Static", "Static"))
+CURRENCY_TYPES = (
+    ("TRY", "TRY"),
+    ("USD", "USD"),
+    ("EUR", "EUR"),
+)
 
 
 class DonationCategory(models.Model):
@@ -37,7 +41,6 @@ class DonationItem(models.Model):
     Holds donation item
     """
 
-    DONATION_TYPES = (("Dynamic", "Dynamic"), ("Static", "Static"))
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     category = models.ForeignKey(
@@ -82,11 +85,6 @@ class Bank(models.Model):
 
 
 class BankAccount(models.Model):
-    CURRENCY_TYPES = (
-        ("TRY", "TRY"),
-        ("USD", "USD"),
-        ("EUR", "EUR"),
-    )
     account_name = models.CharField(max_length=500, null=True, blank=True)
     account_number = models.CharField(max_length=500, default="", null=True, blank=True)
     branch = models.CharField(max_length=500, null=True, blank=True)

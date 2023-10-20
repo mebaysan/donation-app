@@ -5,6 +5,8 @@ from django.db import models
 
 User = get_user_model()
 
+DONATION_PLATFORMS = [("WEB", "WEB")]
+
 
 class Donation(models.Model):
     """
@@ -39,7 +41,6 @@ class DonationTransaction(models.Model):
     Holds transaction of donations in the same line with total number
     """
 
-    DONATION_PLATFORMS = [("WEB", "WEB")]
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     email = models.CharField(max_length=255)

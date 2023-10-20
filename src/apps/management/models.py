@@ -1,6 +1,11 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import IntegrityError, models
 
+GENDER_CHOICES = [
+    ("Male", "Male"),
+    ("Female", "Female"),
+]
+
 
 class Country(models.Model):
     name = models.CharField(max_length=255)
@@ -24,15 +29,9 @@ class StateProvince(models.Model):
 
 
 class User(AbstractUser):
-    MALE = "Male"
-    FEMALE = "Female"
-    GENDER_IN_CHOICES = [
-        (MALE, "Male"),
-        (FEMALE, "Female"),
-    ]
     phone_number = models.CharField(max_length=20, blank=True, null=True, unique=True)
     gender = models.CharField(
-        max_length=6, choices=GENDER_IN_CHOICES, null=True, blank=True
+        max_length=6, choices=GENDER_CHOICES, null=True, blank=True
     )
     country = models.ForeignKey(
         Country, on_delete=models.CASCADE, null=True, blank=True
