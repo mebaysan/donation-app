@@ -17,16 +17,7 @@
 
 # Introducing the Donation App - Empowering Non-Profits
 
-Welcome to the Donation App, a testament to the power of open-source collaboration. This project has its roots in a
-dream – a dream of developing a Software as a Service (SaaS) solution tailor-made for non-profit organizations. However,
-through interactions with various charitable entities, it became evident that many sought a more personalized approach.
-Concerns over data privacy, varying donation volumes, and the desire for local financial autonomy led us to rethink our
-approach. Thus, we embarked on a journey to create a versatile, multi-instance backend that empowers organizations to
-set up their own donation infrastructure within their preferred systems, be it on a hybrid cloud, private cloud, or
-other solutions. The result? A cost-effective and customizable platform that allows non-profits to receive donations
-directly via local banks, reducing their reliance on third-party payment providers. I am excited to share this project
-with the volunteers who are passionated to work for non-profits and invite you to explore, contribute, and make it even
-better. Together, let's make a positive impact! Explore the code and contribute
+Welcome to the Donation App, a testament to the power of open-source collaboration. This project has its roots in a dream – a dream of developing a Software as a Service (SaaS) solution tailor-made for non-profit organizations. However, through interactions with various charitable entities, it became evident that many sought a more personalized approach. Concerns over data privacy, varying donation volumes, and the desire for local financial autonomy led me to rethink my approach. Thus, I embarked on a journey to create a versatile, multi-instance backend that empowers organizations to set up their own donation infrastructure within their preferred systems, be it on a hybrid cloud, private cloud, or other solutions. The result? A cost-effective and customizable platform that allows non-profits to receive donations directly via local banks, reducing their reliance on third-party payment providers. I am excited to share this project with the volunteers who are passionate to work for non-profits and invite you to explore, contribute, and make it even better. Together, let's make a positive impact! Explore the code and contribute
 on [GitHub](https://github.com/mebaysan/donation-app).
 
 You can access the Docker image from [Docker Hub](https://hub.docker.com/r/mebaysan/donation-app).
