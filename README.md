@@ -8,22 +8,32 @@
 - [For Development](#for-development)
 - [Backup](#backup)
 - [Codebase Related Topic](#codebase-related-topic)
-  - [Static \& Media Files for Production](#static--media-files-for-production)
-  - [Custom Authentication Backend](#custom-authentication-backend)
+    - [Static \& Media Files for Production](#static--media-files-for-production)
+    - [Custom Authentication Backend](#custom-authentication-backend)
 - [Development Environment](#development-environment)
-  - [Run Project](#run-project)
-  - [Test Project](#test-project)
+    - [Run Project](#run-project)
+    - [Test Project](#test-project)
 - [Environment Variables](#environment-variables)
 
 # Introducing the Donation App - Empowering Non-Profits
 
-Welcome to the Donation App, a testament to the power of open-source collaboration. This project has its roots in a dream – a dream of developing a Software as a Service (SaaS) solution tailor-made for non-profit organizations. However, through interactions with various charitable entities, it became evident that many sought a more personalized approach. Concerns over data privacy, varying donation volumes, and the desire for local financial autonomy led me to rethink my approach. Thus, I embarked on a journey to create a versatile, multi-instance backend that empowers organizations to set up their own donation infrastructure within their preferred systems, be it on a hybrid cloud, private cloud, or other solutions. The result? A cost-effective and customizable platform that allows non-profits to receive donations directly via local banks, reducing their reliance on third-party payment providers. I am excited to share this project with the volunteers who are passionate to work for non-profits and invite you to explore, contribute, and make it even better. Together, let's make a positive impact! Explore the code and contribute
+Welcome to the Donation App, a testament to the power of open-source collaboration. This project has its roots in a
+dream – a dream of developing a Software as a Service (SaaS) solution tailor-made for non-profit organizations. However,
+through interactions with various charitable entities, it became evident that many sought a more personalized approach.
+Concerns over data privacy, varying donation volumes, and the desire for local financial autonomy led me to rethink my
+approach. Thus, I embarked on a journey to create a versatile, multi-instance backend that empowers organizations to set
+up their own donation infrastructure within their preferred systems, be it on a hybrid cloud, private cloud, or other
+solutions. The result? A cost-effective and customizable platform that allows non-profits to receive donations directly
+via local banks, reducing their reliance on third-party payment providers. I am excited to share this project with the
+volunteers who are passionate to work for non-profits and invite you to explore, contribute, and make it even better.
+Together, let's make a positive impact! Explore the code and contribute
 on [GitHub](https://github.com/mebaysan/donation-app).
 
 You can access the Docker image from [Docker Hub](https://hub.docker.com/r/mebaysan/donation-app).
 
 ![Donation App](./readme/wallpaper.png)
-*Image above is example of one of the pre-built apps that are used this project. In the future, the frontend repository will be open-source.
+*Image above is example of one of the pre-built apps that are used this project. In the future, the frontend repository
+will be open-source.
 
 # Core Django Settings
 
@@ -69,7 +79,7 @@ To obtain a token, we use `/api/token/` endpoint. It uses [`ObtainTokenView`](./
 
 ## Run Project
 
-To override the config variables, you can update the variables in [`config_dev.py`](./src/donation/config_dev.py) file.
+To override the config variables, you can update the variables in [`src/.env.dev`](./src/.env.dev) file.
 
 ```bash
 mv src/.env.dev src/.env # create .env file
@@ -90,4 +100,5 @@ make test # run the tests
 
 # Environment Variables
 
-You can check [`.env.example`](./src/.env.dev) file to see the environment variables.
+You can check [`.env.dev`](./src/.env.dev) file to see the environment variables. All environment variables are have to
+be provided in production environment.
