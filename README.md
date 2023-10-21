@@ -4,16 +4,18 @@
 
 - [Table of Contents](#table-of-contents)
 - [Introducing the Donation App - Empowering Non-Profits](#introducing-the-donation-app---empowering-non-profits)
-- [Core Django Settings](#core-django-settings)
 - [For Development](#for-development)
 - [Backup](#backup)
 - [Codebase Related Topic](#codebase-related-topic)
-    - [Static \& Media Files for Production](#static--media-files-for-production)
-    - [Custom Authentication Backend](#custom-authentication-backend)
+  - [Static \& Media Files for Production](#static--media-files-for-production)
+  - [Custom Authentication Backend](#custom-authentication-backend)
+  - [API Endpoints](#api-endpoints)
+  - [Implemented Banks](#implemented-banks)
 - [Development Environment](#development-environment)
-    - [Run Project](#run-project)
-    - [Test Project](#test-project)
+  - [Run Project](#run-project)
+  - [Test Project](#test-project)
 - [Environment Variables](#environment-variables)
+- [Docker](#docker)
 
 # Introducing the Donation App - Empowering Non-Profits
 
