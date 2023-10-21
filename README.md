@@ -79,7 +79,7 @@ Also you can check `/api/docs` endpoint for API documentation.
 ## Implemented Banks
 
 - [x] [Kuveyt Türk](https://www.kuveytturk.com.tr/). You can see its provider under
-  [`helpers.payment.providers`](./src/helpers/payment/providers#L202) module.
+  [`helpers.payment.providers`](./src/helpers/payment/providers.py#L202) module.
 
 # Development Environment
 
