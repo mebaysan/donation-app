@@ -35,12 +35,6 @@ You can access the Docker image from [Docker Hub](https://hub.docker.com/r/mebay
 *Image above is example of one of the pre-built apps that are used this project. In the future, the frontend repository
 will be open-source.
 
-# Core Django Settings
-
-I seperate the prod and dev environments. [config_prod.py](./settings/config_prod.py) file is being used for prod
-environments and [config_prod.py](./settings/config_dev.py) for dev environments. We need to implement the lines
-in [settings.py](./settings/settings.py) file to use these seperated environments.
-
 # For Development
 
 You can use [dev-postgres.sh](scripts/dev-postgres.sh) to create a development database.
@@ -69,11 +63,17 @@ MEDIA_URL = "/django-media/" # for proxy purposes
 
 ## Custom Authentication Backend
 
-For this app's purpose, we can be logged in via username or phone_number. Application
+For this app, **we can be logged in via username or phone_number**. Application
 uses [`apps.management.authentication.JWTAuthentication`](./src/apps/management/authentication.py) class for rest
 framework views.
 
 To obtain a token, we use `/api/token/` endpoint. It uses [`ObtainTokenView`](./src/apps/management/api/views.py) view.
+
+## API Endpoints
+
+You can easily import Postman collection from [here](./postman/BaysanSoft-Donation-App.postman_collection.json).
+
+Also you can check `/api/docs` endpoint for API documentation.
 
 # Development Environment
 
@@ -95,6 +95,8 @@ make runserver # run the project
 
 ```bash
 make install # install the requirements
+make format # format the code
+make lint # lint the code
 make test # run the tests
 ```
 
@@ -102,3 +104,12 @@ make test # run the tests
 
 You can check [`.env.dev`](./src/.env.dev) file to see the environment variables. All environment variables are have to
 be provided in production environment.
+
+# Docker
+
+You can access the Docker image from [Docker Hub](https://hub.docker.com/r/mebaysan/donation-app).
+
+```bash
+docker image pull mebaysan/donation-app:latest # pull the latest image
+docker image pull mebaysan/donation-app:develop # pull the develop image
+```
