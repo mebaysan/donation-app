@@ -9,8 +9,8 @@ class JSONFormatter(logging.Formatter):
             "level": record.levelname,
             "message": record.getMessage(),
             "logger_name": record.name,
-            "module": record.module,
-            "function": record.funcName,
-            "line_number": record.lineno,
+            # "module": record.module,
+            # "function": record.funcName,
+            # "line_number": record.lineno,
         }
         return json.dumps(log_data)
