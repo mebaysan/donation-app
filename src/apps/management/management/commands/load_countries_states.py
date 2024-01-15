@@ -16,26 +16,32 @@ class Command(BaseCommand):
         data = self.get_data_from_api()
         try:
             for country_data in data:
-                country, created = Country.objects.get_or_create(
-                    name=country_data["name"],
-                    country_code=country_data["countryCode"],
-                    country_code_alpha3=country_data["countryCodeAlpha3"],
-                    phone=country_data["phone"],
-                    currency=country_data["currency"],
-                )
+                if Country.objects.filter(name=country_data["name"]).exists():
+                    continue
+                else:
+                    country = Country.objects.create(
+                        name=country_data["name"],
+                        country_code=country_data["countryCode"],
+                        country_code_alpha3=country_data["countryCodeAlpha3"],
+                        phone=country_data["phone"],
+                        currency=country_data["currency"],
+                    )
+                    self.stdout.write(f"Created country: {country.name}")
                 if country_data["stateProvinces"] != None:
                     for state_data in sorted(
                         country_data["stateProvinces"], key=lambda x: x["name"]
                     ):
-                        
-                            state, created = StateProvince.objects.get_or_create(
+                        if StateProvince.objects.filter(
+                            name=state_data["name"]
+                        ).exists():
+                            continue
+                        else:
+                            state = StateProvince.objects.create(
                                 name=state_data["name"],
                                 country=country,
                             )
-
-                            if created:
-                                self.stdout.write(
-                                    f"Created state: {state.name} ({country.name})"
-                                )
+                            self.stdout.write(
+                                f"Created state: {state.name} ({country.name})"
+                            )
         except Exception as e:
             self.stdout.write(f"Error: {e}")
