@@ -1,6 +1,6 @@
 asgiref==3.5.2
 astroid==2.15.8
-black==22.10.0
+black==24.3.0
 boto3==1.26.57
 botocore==1.29.57
 certifi==2023.7.22
