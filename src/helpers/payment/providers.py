@@ -311,7 +311,9 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
             payment_request_data["amount"],
             payment_request_data["amount_sent_to_bank"],
         )
-        return HttpResponse(r)
+        bank_response = HttpResponse(r)
+        logger.info("Bank response in make_payment: %s", bank_response)
+        return bank_response
 
     def approve_payment(self, request):
         """
@@ -369,6 +371,7 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
             data=data.encode("ISO-8859-9"),
             headers=headers,
         )
+        logger.info("Bank response in approve_payment: %s" % r)
 
         ##### Transaction Status Check #####
         response_code_start = r.text.find("<ResponseCode>")
