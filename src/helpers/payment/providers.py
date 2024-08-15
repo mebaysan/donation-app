@@ -176,6 +176,7 @@ class BasePaymentProvider(object):
                         context[
                             "details"
                         ] = "Email farklı bir bağışçı profilinde kullanılıyor. Lütfen hesabınıza tanımlı email ve telefon numarasını kullanın."
+                    # TODO: this causes Server Error (500) because of the response type in Caprover setup...
                     return Response(context, status.HTTP_400_BAD_REQUEST)
 
         new_transaction.save()
