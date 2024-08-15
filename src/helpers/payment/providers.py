@@ -312,7 +312,7 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
             payment_request_data["amount_sent_to_bank"],
         )
         bank_request = HttpResponse(r)
-        logger.info("Bank request: %s - %s", (bank_request, bank_request.content))
+        logger.info("Bank request: %s - %s" % (bank_request, bank_request.content))
         return bank_request
 
     def approve_payment(self, request):
