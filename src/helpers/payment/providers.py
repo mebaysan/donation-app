@@ -379,65 +379,66 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
         response_code = str(r.text[response_code_start + 14 : response_code_end])
 
         ####### DonationTransaction get instance from payment ##############
-        transaction = get_object_or_404(
-            DonationTransaction, merchant_order_id=str(merchant_order_id)
-        )
-        transaction.status_code = response_code
-        transaction.status_code_description = (
-            self.RESPONSE_CODES[response_code]
-            if self.RESPONSE_CODES[response_code]
-            else f"{str(response_code)}"
-        )
-        transaction.md_code = md
-
-        if response_code == "00":
-            transaction.is_complete = True
-
-        transaction.save()
-
-        if transaction.is_complete:
-            # return Response(
-            #     {"details": "Başarıyla bağışınız tamamlandı."}, status.HTTP_200_OK
-            # )
-            query_string = urllib.parse.urlencode(
-                {
-                    "details": "Bağışınız tamamlandı.",
-                    "bank_status_code": transaction.status_code,
-                    "bank_status_code_description": transaction.status_code_description,
-                }
-            )
-            redirect_url = f"{settings.APP_PAYMENT_RESPONSE_URL}?{query_string}"  # front end app will handle this response by using query string
-            logger.info(
-                "Payment approved. Transaction merchant order id: %s with amount %s",
-                transaction.merchant_order_id,
-                transaction.amount,
-            )
-            return redirect(redirect_url)
+        transaction = DonationTransaction.objects.filter(merchant_order_id=str(merchant_order_id)).first()
+        if transaction is None:
+            logger.warning("There is no transaction with merchant order id: %s", merchant_order_id)
         else:
-            # return Response(
-            #     {
-            #         "details": "Bağışınız tamamlanamadı.",
-            #         "bank_status_code": transaction.status_code,
-            #         "bank_status_code_description": transaction.status_code_description,
-            #     },
-            #     status.HTTP_402_PAYMENT_REQUIRED,
-            # )
-            query_string = urllib.parse.urlencode(
-                {
-                    "details": "Bağışınız tamamlanamadı.",
-                    "bank_status_code": transaction.status_code,
-                    "bank_status_code_description": transaction.status_code_description,
-                }
+            transaction.status_code = response_code
+            transaction.status_code_description = (
+                self.RESPONSE_CODES[response_code]
+                if self.RESPONSE_CODES[response_code]
+                else f"{str(response_code)}"
             )
-            redirect_url = f"{settings.APP_PAYMENT_RESPONSE_URL}?{query_string}"  # front end app will handle this response by using query string
-            logger.warning(
-                "Payment couldn't approved. Bank status code: %s - %s. Transaction merchant order id: %s with amount %s",
-                transaction.status_code,
-                transaction.status_code_description,
-                transaction.merchant_order_id,
-                transaction.amount,
-            )
-            return redirect(redirect_url)
+            transaction.md_code = md
+
+            if response_code == "00":
+                transaction.is_complete = True
+
+            transaction.save()
+
+            if transaction.is_complete:
+                # return Response(
+                #     {"details": "Başarıyla bağışınız tamamlandı."}, status.HTTP_200_OK
+                # )
+                query_string = urllib.parse.urlencode(
+                    {
+                        "details": "Bağışınız tamamlandı.",
+                        "bank_status_code": transaction.status_code,
+                        "bank_status_code_description": transaction.status_code_description,
+                    }
+                )
+                redirect_url = f"{settings.APP_PAYMENT_RESPONSE_URL}?{query_string}"  # front end app will handle this response by using query string
+                logger.info(
+                    "Payment approved. Transaction merchant order id: %s with amount %s",
+                    transaction.merchant_order_id,
+                    transaction.amount,
+                )
+                return redirect(redirect_url)
+    
+        # return Response(
+        #     {
+        #         "details": "Bağışınız tamamlanamadı.",
+        #         "bank_status_code": transaction.status_code,
+        #         "bank_status_code_description": transaction.status_code_description,
+        #     },
+        #     status.HTTP_402_PAYMENT_REQUIRED,
+        # )
+        query_string = urllib.parse.urlencode(
+            {
+                "details": "Bağışınız tamamlanamadı.",
+                "bank_status_code": transaction.status_code,
+                "bank_status_code_description": transaction.status_code_description,
+            }
+        )
+        redirect_url = f"{settings.APP_PAYMENT_RESPONSE_URL}?{query_string}"  # front end app will handle this response by using query string
+        logger.warning(
+            "Payment couldn't approved. Bank status code: %s - %s. Transaction merchant order id: %s with amount %s",
+            transaction.status_code,
+            transaction.status_code_description,
+            transaction.merchant_order_id,
+            transaction.amount,
+        )
+        return redirect(redirect_url)
 
     def payment_fail(self, request):
         """
@@ -463,14 +464,15 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
         )
 
         # get the donation transaction instance
-        transaction = get_object_or_404(
-            DonationTransaction, merchant_order_id=str(merchant_order_id)
-        )
-
-        # update the transaction status and save
-        transaction.status_code = response_code
-        transaction.status_code_description = response_message
-        transaction.save()
+        transaction = DonationTransaction.objects.filter(merchant_order_id=str(merchant_order_id)).first()
+        if transaction is None:
+            logger.warning("There is no transaction with merchant order id: %s", merchant_order_id)
+        else:    
+            # update the transaction status and save
+            transaction.status_code = response_code
+            transaction.status_code_description = response_message
+            transaction.save()
+        
 
         # content = {
         #     "details": "Bağışınız tamamlanamadı.",
