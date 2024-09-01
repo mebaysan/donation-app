@@ -20,7 +20,7 @@ class BasePaymentProvider(ABC):
     Base class for payment providers
     """
 
-    def payment_request_parser(self, request_data):
+    def payment_request_parser(self, request, request_data):
         """
         Parses the payment request data and returns a dictionary
 
@@ -92,6 +92,7 @@ class BasePaymentProvider(ABC):
             "donations": donations,
             "group_name": group_name,
             "organization_name": organization_name,
+            "client_ip_address": request.META.get("REMOTE_ADDR"),
         }
 
     @abstractmethod
@@ -129,6 +130,7 @@ class BasePaymentProvider(ABC):
             message=payment_request_data["message"],
             group_name=payment_request_data["group_name"],
             organization_name=payment_request_data["organization_name"],
+            client_ip_address=payment_request_data["client_ip_address"],
         )
         if request.user.is_authenticated:
             new_transaction.user = request.user
@@ -192,4 +194,17 @@ class BasePaymentProvider(ABC):
                 user=new_transaction.user,
             )
             new_donation.save()
+    
+    def parse_phone_number(self, phone_number):
+        """
+        Parses the phone number to split country code and phone number
 
+        Args:
+            phone_number (str): Phone number, +905555555555
+        
+        Returns:
+            str, str: Country code excluded +, Phone number
+        """
+        country_code = phone_number[1:3]
+        phone_number = phone_number[3:]
+        return country_code, phone_number

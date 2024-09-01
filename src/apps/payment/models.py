@@ -68,6 +68,7 @@ class DonationTransaction(models.Model):
     )
     group_name = models.CharField(max_length=255, null=True, blank=True)
     organization_name = models.CharField(max_length=255, null=True, blank=True)
+    client_ip_address = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         verbose_name = "Donation Transaction"

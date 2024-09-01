@@ -1,4 +1,5 @@
 """Payment Provider APIs' Provider Classes"""
+
 import base64
 import hashlib
 import urllib.parse
@@ -71,7 +72,7 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
     CONF = settings.KUVEYTTURK_CONF
 
     def make_payment(self, request, request_data):
-        payment_request_data = self.payment_request_parser(request_data)
+        payment_request_data = self.payment_request_parser(request, request_data)
         merchant_order_id = str(
             uuid.uuid4()
         )  # it can be anything, we use uuid for uniqueness
@@ -92,32 +93,50 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
             ).digest()
         ).decode()
 
+        mobile_phone_cc, mobile_phone_subscriber = self.parse_phone_number(payment_request_data["phone"])
+
         ########### Payment Request #############
-        data = f"""
-           <KuveytTurkVPosMessage xmlns:xsi="http://www.w3.org/2001/XMLSchemainstance"
-           xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-           <APIVersion>1.0.0</APIVersion>
-           <OkUrl>{str(settings.KUVEYTTURK_CONF["ok_url"])}</OkUrl>
-           <FailUrl>{str(settings.KUVEYTTURK_CONF["fail_url"])}</FailUrl>
-           <HashData>{hashed_data}</HashData>
-           <MerchantId>{int(settings.KUVEYTTURK_CONF['store_no'])}</MerchantId>
-           <CustomerId>{int(settings.KUVEYTTURK_CONF['customer_no'])}</CustomerId>
-           <UserName>{str(settings.KUVEYTTURK_CONF['username'])}</UserName>
-           <CardNumber>{str(payment_request_data['card_number'])}</CardNumber>
-           <CardExpireDateYear>{str(payment_request_data['card_year'])}</CardExpireDateYear>
-           <CardExpireDateMonth>{str(payment_request_data['card_month'])}</CardExpireDateMonth>
-           <CardCVV2>{str(payment_request_data['card_cvc'])}</CardCVV2>
-           <CardHolderName>{str(payment_request_data['card_holder_name'])}</CardHolderName>
-           <CardType>{str(payment_request_data['card_type'])}</CardType>
-           <TransactionType>Sale</TransactionType>
-           <InstallmentCount>{int('0')}</InstallmentCount>
-           <Amount>{int(payment_request_data['amount_sent_to_bank'])}</Amount>
-           <DisplayAmount>{int(payment_request_data['amount_sent_to_bank'])}</DisplayAmount>
-           <CurrencyCode>{str('0949')}</CurrencyCode>
-           <MerchantOrderId>{str(merchant_order_id)}</MerchantOrderId>
-           <TransactionSecurity>{int('3')}</TransactionSecurity>
-           </KuveytTurkVPosMessage>
-           """
+        #TODO: Implement the payment request; BillAddrCity, BillAddrCountry, BillAddrLine1, BillAddrPostCode, BillAddrState
+        data = f"""<KuveytTurkVPosMessage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <APIVersion>1.0.0</APIVersion>
+                    <OkUrl>{str(settings.KUVEYTTURK_CONF["ok_url"])}</OkUrl>
+                    <FailUrl>{str(settings.KUVEYTTURK_CONF["fail_url"])}</FailUrl>
+                    <HashData>{hashed_data}</HashData>
+                    <MerchantId>{int(settings.KUVEYTTURK_CONF['store_no'])}</MerchantId>
+                    <CustomerId>{int(settings.KUVEYTTURK_CONF['customer_no'])}</CustomerId>
+                    <DeviceData>
+                        <DeviceChannel>02</DeviceChannel>
+                        <ClientIP>{str(payment_request_data['client_ip_address'])}</ClientIP>
+                    </DeviceData>
+                    <CardHolderData>
+                        <BillAddrCity>İstanbul</BillAddrCity>
+                        <BillAddrCountry>792</BillAddrCountry>
+                        <BillAddrLine1>XXX Mahallesi XXX Caddesi No 55 Daire 1</BillAddrLine1>
+                        <BillAddrPostCode>34000</BillAddrPostCode>
+                        <BillAddrState>40</BillAddrState>
+                        <Email>{str(payment_request_data['email'])}</Email>
+                        <MobilePhone>
+                            <Cc>{str(mobile_phone_cc)}</Cc>
+                            <Subscriber>{str(mobile_phone_subscriber)}</Subscriber>
+                        </MobilePhone>
+                    </CardHolderData>
+                    <UserName>{str(settings.KUVEYTTURK_CONF['username'])}</UserName>
+                    <CardNumber>{str(payment_request_data['card_number'])}</CardNumber>
+                    <CardExpireDateYear>{str(payment_request_data['card_year'])}</CardExpireDateYear>
+                    <CardExpireDateMonth>{str(payment_request_data['card_month'])}</CardExpireDateMonth>
+                    <CardCVV2>{str(payment_request_data['card_cvc'])}</CardCVV2>
+                    <CardHolderName>{str(payment_request_data['card_holder_name'])}</CardHolderName>
+                    <CardType>{str(payment_request_data['card_type'])}</CardType>
+                    <TransactionType>Sale</TransactionType>
+                    <InstallmentCount>{int('0')}</InstallmentCount>
+                    <Amount>{int(payment_request_data['amount_sent_to_bank'])}</Amount>
+                    <DisplayAmount>{int(payment_request_data['amount_sent_to_bank'])}</DisplayAmount>
+                    <CurrencyCode>{str('0949')}</CurrencyCode>
+                    <MerchantOrderId>{str(merchant_order_id)}</MerchantOrderId>
+                    <TransactionSecurity>{int('3')}</TransactionSecurity>
+                </KuveytTurkVPosMessage>
+                """
         headers = {"Content-Type": "application/xml", "Content-Length": str(len(data))}
         r = requests.post(
             settings.KUVEYTTURK_CONF["payment_request_url"],
@@ -199,9 +218,13 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
         response_code = str(r.text[response_code_start + 14 : response_code_end])
 
         ####### DonationTransaction get instance from payment ##############
-        transaction = DonationTransaction.objects.filter(merchant_order_id=str(merchant_order_id)).first()
+        transaction = DonationTransaction.objects.filter(
+            merchant_order_id=str(merchant_order_id)
+        ).first()
         if transaction is None:
-            logger.warning("There is no transaction with merchant order id: %s", merchant_order_id)
+            logger.warning(
+                "There is no transaction with merchant order id: %s", merchant_order_id
+            )
         else:
             transaction.status_code = response_code
             transaction.status_code_description = (
@@ -272,15 +295,19 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
         )
 
         # get the donation transaction instance
-        transaction = DonationTransaction.objects.filter(merchant_order_id=str(merchant_order_id)).first()
+        transaction = DonationTransaction.objects.filter(
+            merchant_order_id=str(merchant_order_id)
+        ).first()
         if transaction is None:
-            logger.warning("There is no transaction with merchant order id: %s", merchant_order_id)
-        else:    
+            logger.warning(
+                "There is no transaction with merchant order id: %s", merchant_order_id
+            )
+        else:
             # update the transaction status and save
             transaction.status_code = response_code
             transaction.status_code_description = response_message
             transaction.save()
-        
+
         query_string = urllib.parse.urlencode(
             {
                 "details": "Bağışınız tamamlanamadı.",
