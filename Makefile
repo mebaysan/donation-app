@@ -24,10 +24,10 @@ check:
 	@python manage.py check
 
 docup:
-	@docker compose up -d --build
+	@docker compose -f docker-compose-dev.yml up -d
 
 docdown:
-	@docker compose down -v
+	@docker compose down
 
 dumpdata:
 	@python manage.py dumpdata -o dummy.json
@@ -108,3 +108,4 @@ coverage:
 
 load_countries_states:
 	@python src/manage.py load_countries_states
+
