@@ -9,7 +9,14 @@ from helpers.template import filters
 from helpers.communication.email import send_password_reset_email
 
 
+class BillAddressInline(admin.TabularInline):
+    model = BillAddress
+    extra = 0
+    readonly_fields = ["state_code"]
+
+
 class CustomUserAdmin(UserAdmin):
+    inlines = [BillAddressInline]
     list_filter = (
         ("is_superuser", filters.DropdownFilter),
         ("is_staff", filters.DropdownFilter),
@@ -62,10 +69,6 @@ class CustomGroupAdmin(GroupAdmin):
     pass
 
 
-class BillAddressAdmin(admin.ModelAdmin):
-    pass
-
-
 class StateProvincetInline(admin.TabularInline):
     model = StateProvince
     extra = 0
@@ -87,9 +90,18 @@ class CountryAdmin(admin.ModelAdmin):
     ]
 
 
+class BillAddressAdmin(admin.ModelAdmin):
+    list_filter = (
+        ("country", filters.RelatedDropdownFilter),
+        ("state_province", filters.RelatedDropdownFilter),
+    )
+    search_fields = ["user__username", "country__name", "state_province__name"]
+    readonly_fields = ["state_code"]
+
+
 admin.site.unregister(Group)
 
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Group, CustomGroupAdmin)
-admin.site.register(BillAddress, BillAddressAdmin)
 admin.site.register(Country, CountryAdmin)
+admin.site.register(BillAddress, BillAddressAdmin)

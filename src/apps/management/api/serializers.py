@@ -6,10 +6,7 @@ from helpers.serializers.validators import (
     username_regex,
     MIN_PASSWORD_LENGTH,
 )
-from apps.management.models import (
-    Country,
-    StateProvince,
-)
+from apps.management.models import Country, StateProvince, BillAddress
 
 User = get_user_model()
 
@@ -125,3 +122,18 @@ class CountryDetailSerializer(serializers.ModelSerializer):
             "currency",
             "state_provinces",
         ]
+
+
+class BillAddressDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BillAddress
+        fields = "__all__"
+
+
+class BillAddressListSerializer(BillAddressDetailsSerializer):
+    country = CountrySerializer()
+    state_province = StateProvinceSerializer()
+
+    class Meta:
+        model = BillAddress
+        fields = "__all__"
