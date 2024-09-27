@@ -20,3 +20,4 @@ username_regex = RegexValidator(
 )
 
 MIN_PASSWORD_LENGTH = 12
+

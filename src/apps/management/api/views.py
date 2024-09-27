@@ -220,6 +220,10 @@ class BillAddressListCreateAPIView(ListCreateAPIView):
             return BillAddressDetailsSerializer
         return BillAddressListSerializer
 
+    def perform_create(self, serializer):
+        # Set the authenticated user as the 'user' of the BillAddress
+        serializer.save(user=self.request.user)
+
 
 class BillAddressRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     queryset = BillAddress.objects.all()

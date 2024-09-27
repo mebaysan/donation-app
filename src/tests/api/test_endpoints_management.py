@@ -1,4 +1,5 @@
 """Tests for the management app API."""
+
 import pytest
 from apps.management.models import Country, StateProvince
 
@@ -313,3 +314,70 @@ def test_country_details(client, country):
     assert response.json().get("country_code_alpha3") == country.country_code_alpha3
     assert response.json().get("phone") == country.phone
     assert response.json().get("currency") == country.currency
+
+
+@pytest.mark.django_db
+def test_bill_address_list(client, user, user_bill_address):
+    """Tests the bill address list endpoint."""
+    client.force_authenticate(user)
+    response = client.get("/api/management/bill-address/")
+    assert response.status_code == 200
+    assert len(response.json()) == 1
+
+
+@pytest.mark.django_db
+def test_bill_address_create(client, user, country, state):
+    """Tests the bill address create endpoint."""
+    client.force_authenticate(user)
+
+    payload = {
+        "address_name": "Home address for test purposes",
+        "add_line": "Uskudar Istanbul",
+        "postal_code": "340000",
+        "state_province": state.id,
+        "country": country.id,
+    }
+    response = client.post("/api/management/bill-address/", payload)
+    assert response.status_code == 201
+
+
+@pytest.mark.django_db
+def test_bill_address_delete(client, user, user_bill_address):
+    """Tests the bill address delete endpoint."""
+    client.force_authenticate(user)
+    response = client.delete(f"/api/management/bill-address/{user_bill_address.id}/")
+    assert response.status_code == 204
+
+
+@pytest.mark.django_db
+def test_bill_address_update(client, user, user_bill_address):
+    """Tests the bill address update endpoint."""
+    client.force_authenticate(user)
+
+    payload = {
+        "address_name": "Home address for test purposes UPDATED",
+        "add_line": "Uskudar Istanbul",
+        "postal_code": "340000",
+        "state_province": user_bill_address.state_province.id,
+        "country": user_bill_address.country.id,
+    }
+    response = client.patch(
+        f"/api/management/bill-address/{user_bill_address.id}/", payload
+    )
+    assert response.status_code == 200
+    assert response.json().get("address_name") == payload.get("address_name")
+    assert response.json().get("add_line") == payload.get("add_line")
+    assert response.json().get("postal_code") == payload.get("postal_code")
+    assert response.json().get("state_province") == payload.get("state_province")
+
+@pytest.fixture
+def test_bill_address_get(client, user, user_bill_address):
+    """Tests the bill address get endpoint."""
+    client.force_authenticate(user)
+    response = client.get(f"/api/management/bill-address/{user_bill_address.id}/")
+    assert response.status_code == 200
+    assert response.json().get("address_name") == user_bill_address.address_name
+    assert response.json().get("add_line") == user_bill_address.add_line
+    assert response.json().get("postal_code") == user_bill_address.postal_code
+    assert response.json().get("state_province") == user_bill_address.state_province.id
+    assert response.json().get("country") == user_bill_address.country.id

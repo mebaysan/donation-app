@@ -127,13 +127,9 @@ class CountryDetailSerializer(serializers.ModelSerializer):
 class BillAddressDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = BillAddress
-        fields = "__all__"
+        exclude = ["user"]
 
 
 class BillAddressListSerializer(BillAddressDetailsSerializer):
     country = CountrySerializer()
     state_province = StateProvinceSerializer()
-
-    class Meta:
-        model = BillAddress
-        fields = "__all__"
