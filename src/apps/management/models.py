@@ -14,8 +14,16 @@ class Country(models.Model):
     phone = models.CharField(max_length=20)
     currency = models.CharField(max_length=5)
 
+    class Meta:
+        verbose_name = "Country"
+        verbose_name_plural = "Countries"
+
     def __str__(self):
         return self.name
+
+    @property
+    def total_state_province_count(self):
+        return self.state_provinces.count()
 
 
 class StateProvince(models.Model):
@@ -23,6 +31,11 @@ class StateProvince(models.Model):
     country = models.ForeignKey(
         Country, on_delete=models.CASCADE, related_name="state_provinces"
     )
+    state_code = models.CharField(max_length=50, default="")
+
+    class Meta:
+        verbose_name = "StateProvince"
+        verbose_name_plural = "StateProvinces"
 
     def __str__(self):
         return self.name
@@ -70,3 +83,20 @@ class User(AbstractUser):
     @property
     def get_total_count_of_donations(self):
         return self.donation_transactions.filter(is_complete=True).count()
+
+
+class BillAddress(models.Model):
+    address_name = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    state_province = models.ForeignKey(StateProvince, on_delete=models.CASCADE)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    state_code = models.CharField(max_length=255, blank=True)
+    add_line = models.CharField(max_length=255)
+    postal_code = models.CharField(max_length=255)
+
+    class Meta:
+        verbose_name = "Bill Address"
+        verbose_name_plural = "Bill Addresses"
+
+    def __str__(self):
+        return f"{self.user.username} - {self.address_name}"

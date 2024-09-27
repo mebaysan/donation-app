@@ -1,8 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
 from django.contrib.auth.models import Group
+from django.http import HttpRequest
 
-from apps.management.models import User
+from apps.management.models import User, BillAddress, Country, StateProvince
 
 from helpers.template import filters
 from helpers.communication.email import send_password_reset_email
@@ -61,7 +62,34 @@ class CustomGroupAdmin(GroupAdmin):
     pass
 
 
+class BillAddressAdmin(admin.ModelAdmin):
+    pass
+
+
+class StateProvincetInline(admin.TabularInline):
+    model = StateProvince
+    extra = 0
+
+
+class CountryAdmin(admin.ModelAdmin):
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    inlines = [StateProvincetInline]
+    search_fields = ["name", "country_code", "country_code_alpha3", "phone", "currency"]
+    list_display = [
+        "name",
+        "country_code",
+        "country_code_alpha3",
+        "phone",
+        "currency",
+        "total_state_province_count",
+    ]
+
+
 admin.site.unregister(Group)
 
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Group, CustomGroupAdmin)
+admin.site.register(BillAddress, BillAddressAdmin)
+admin.site.register(Country, CountryAdmin)
