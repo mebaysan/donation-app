@@ -100,3 +100,7 @@ class BillAddress(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.address_name}"
+
+    def save(self, *args, **kwargs):
+        self.state_code = self.state_province.state_code
+        super(BillAddress, self).save(*args, **kwargs)
