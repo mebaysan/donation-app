@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "0c8a1dcb-f85c-44a6-a6b9-614d0291aa13",
+		"_postman_id": "2b653037-29a3-44d3-b5d6-cc3f65f440b1",
 		"name": "BaysanSoft Donation App",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7926373"
 	},
 	"item": [
 		{
@@ -61,228 +62,415 @@
 			"name": "Management",
 			"item": [
 				{
-					"name": "User Profile",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{ACCESS_TOKEN}}",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{BASE_URL}}/api/management/users/me",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"management",
-								"users",
-								"me"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "User Password Change",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{ACCESS_TOKEN}}",
-								"type": "default"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"old_password\":\"Passw0rd!\",\n    \"new_password\":\"Passw0rd!.\",\n    \"confirm_new_password\":\"Passw0rd!.\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "BillAddress",
+					"item": [
+						{
+							"name": "BillAddress List",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{ACCESS_TOKEN}}",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/management/bill-address/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"management",
+										"bill-address",
+										""
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{BASE_URL}}/api/management/users/me/password-change/",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"management",
-								"users",
-								"me",
-								"password-change",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "User Profile Update",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{ACCESS_TOKEN}}",
-								"type": "default"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"username\": \"mail@mebaysan.com\",\n    \"first_name\": \"Enes2\",\n    \"last_name\": \"Baysan\",\n    \"email\": \"mail@mebaysan.com\",\n    \"phone_number\": \"+901233211223\",\n    \"gender\": \"Male\",\n    \"country\": 226,\n    \"state_province\": 3434,\n    \"is_approved_to_be_in_touch\": true\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "BillAddress Create",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{ACCESS_TOKEN}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"address_name\": \"Ev adresi 4\",\n    \"state_code\": \"34\",\n    \"add_line\": \"Uskudar Istanbul\",\n    \"postal_code\": \"340000\",\n    \"state_province\": 3386,\n    \"country\": 226\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/management/bill-address/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"management",
+										"bill-address",
+										""
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{BASE_URL}}/api/management/users/me/",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"management",
-								"users",
-								"me",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "User Create",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"phone_number\": \"+901233211223\",\n    \"password\": \"123\",\n    \"confirm_new_password\":\"123\",\n    \"username\": \"mail@mebaysan.com\",\n    \"email\": \"mail@mebaysan.com\",\n    \"country\": 226,\n    \"state_province\": 3433\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "BillAddress Update",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{ACCESS_TOKEN}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"address_name\": \"Home address test\",\n    \"state_code\": \"34\",\n    \"add_line\": \"Uskudar Istanbul\",\n    \"postal_code\": \"340000\",\n    \"state_province\": 3386,\n    \"country\": 226\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/management/bill-address/5/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"management",
+										"bill-address",
+										"5",
+										""
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{BASE_URL}}/api/management/users/",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"management",
-								"users",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Forgot Password",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"username\": \"menesbaysan@gmail.com\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "BillAddress Create Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{ACCESS_TOKEN}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/management/bill-address/3/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"management",
+										"bill-address",
+										"3",
+										""
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{BASE_URL}}/api/management/forgot-password/",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"management",
-								"forgot-password",
-								""
-							]
+						{
+							"name": "BillAddress Get",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{ACCESS_TOKEN}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/management/bill-address/4/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"management",
+										"bill-address",
+										"4",
+										""
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Countries List",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/management/countries/",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"management",
-								"countries",
-								""
-							]
+					"name": "Countries",
+					"item": [
+						{
+							"name": "Countries List",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/api/management/countries/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"management",
+										"countries",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Countries Details (country_code)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/api/management/countries/226",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"management",
+										"countries",
+										"226"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Countries Details (country_code)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/management/countries/226",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"management",
-								"countries",
-								"226"
-							]
+					"name": "User",
+					"item": [
+						{
+							"name": "User Profile",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{ACCESS_TOKEN}}",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/management/users/me",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"management",
+										"users",
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User Password Change",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{ACCESS_TOKEN}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"old_password\":\"Passw0rd!\",\n    \"new_password\":\"Passw0rd!.\",\n    \"confirm_new_password\":\"Passw0rd!.\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/management/users/me/password-change/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"management",
+										"users",
+										"me",
+										"password-change",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User Profile Update",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{ACCESS_TOKEN}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"mail@mebaysan.com\",\n    \"first_name\": \"Enes2\",\n    \"last_name\": \"Baysan\",\n    \"email\": \"mail@mebaysan.com\",\n    \"phone_number\": \"+901233211223\",\n    \"gender\": \"Male\",\n    \"country\": 226,\n    \"state_province\": 3434,\n    \"is_approved_to_be_in_touch\": true\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/management/users/me/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"management",
+										"users",
+										"me",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User Create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"phone_number\": \"+901233211223\",\n    \"password\": \"123\",\n    \"confirm_new_password\":\"123\",\n    \"username\": \"mail@mebaysan.com\",\n    \"email\": \"mail@mebaysan.com\",\n    \"country\": 226,\n    \"state_province\": 3433\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/management/users/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"management",
+										"users",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Forgot Password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"menesbaysan@gmail.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/management/forgot-password/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"management",
+										"forgot-password",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Generate Password",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{ACCESS_TOKEN}}",
+										"type": "default",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/management/generate-password/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"management",
+										"generate-password",
+										""
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
-				},
-				{
-					"name": "Generate Password",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{ACCESS_TOKEN}}",
-								"type": "default",
-								"disabled": true
-							}
-						],
-						"url": {
-							"raw": "{{BASE_URL}}/api/management/generate-password/",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"management",
-								"generate-password",
-								""
-							]
-						}
-					},
-					"response": []
+					]
 				}
 			]
 		},
