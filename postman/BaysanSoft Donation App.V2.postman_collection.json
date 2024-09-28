@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "2b653037-29a3-44d3-b5d6-cc3f65f440b1",
 		"name": "BaysanSoft Donation App",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "7926373"
 	},
 	"item": [
@@ -23,17 +23,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{BASE_URL}}/api/token/",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"token",
-								""
-							]
-						}
+						"url": "{{BASE_URL}}/api/token/"
 					},
 					"response": []
 				},
@@ -42,17 +32,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/healthcheck/",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"healthcheck",
-								""
-							]
-						}
+						"url": "{{BASE_URL}}/api/healthcheck/"
 					},
 					"response": []
 				}
@@ -75,18 +55,7 @@
 										"type": "default"
 									}
 								],
-								"url": {
-									"raw": "{{BASE_URL}}/api/management/bill-address/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"management",
-										"bill-address",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/management/bill-address/"
 							},
 							"response": []
 						},
@@ -103,25 +72,14 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"address_name\": \"Ev adresi 4\",\n    \"state_code\": \"34\",\n    \"add_line\": \"Uskudar Istanbul\",\n    \"postal_code\": \"340000\",\n    \"state_province\": 3386,\n    \"country\": 226\n}",
+									"raw": "{\n    \"address_name\": \"Ev adresi 4\",\n    \"add_line\": \"Uskudar Istanbul\",\n    \"postal_code\": \"340000\",\n    \"state_province\": 3386,\n    \"country\": 226\n}",
 									"options": {
 										"raw": {
 											"language": "json"
 										}
 									}
 								},
-								"url": {
-									"raw": "{{BASE_URL}}/api/management/bill-address/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"management",
-										"bill-address",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/management/bill-address/"
 							},
 							"response": []
 						},
@@ -138,26 +96,14 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"address_name\": \"Home address test\",\n    \"state_code\": \"34\",\n    \"add_line\": \"Uskudar Istanbul\",\n    \"postal_code\": \"340000\",\n    \"state_province\": 3386,\n    \"country\": 226\n}",
+									"raw": "{\n    \"address_name\": \"Home address test\",\n    \"add_line\": \"Uskudar Istanbul\",\n    \"postal_code\": \"340000\",\n    \"state_province\": 3386,\n    \"country\": 226\n}",
 									"options": {
 										"raw": {
 											"language": "json"
 										}
 									}
 								},
-								"url": {
-									"raw": "{{BASE_URL}}/api/management/bill-address/5/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"management",
-										"bill-address",
-										"5",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/management/bill-address/24/"
 							},
 							"response": []
 						},
@@ -181,19 +127,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{BASE_URL}}/api/management/bill-address/3/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"management",
-										"bill-address",
-										"3",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/management/bill-address/3/"
 							},
 							"response": []
 						},
@@ -220,19 +154,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{BASE_URL}}/api/management/bill-address/4/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"management",
-										"bill-address",
-										"4",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/management/bill-address/24/"
 							},
 							"response": []
 						}
@@ -246,18 +168,7 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{BASE_URL}}/api/management/countries/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"management",
-										"countries",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/management/countries/"
 							},
 							"response": []
 						},
@@ -266,18 +177,7 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{BASE_URL}}/api/management/countries/226",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"management",
-										"countries",
-										"226"
-									]
-								}
+								"url": "{{BASE_URL}}/api/management/countries/226"
 							},
 							"response": []
 						}
@@ -297,18 +197,7 @@
 										"type": "default"
 									}
 								],
-								"url": {
-									"raw": "{{BASE_URL}}/api/management/users/me",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"management",
-										"users",
-										"me"
-									]
-								}
+								"url": "{{BASE_URL}}/api/management/users/me"
 							},
 							"response": []
 						},
@@ -332,20 +221,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{BASE_URL}}/api/management/users/me/password-change/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"management",
-										"users",
-										"me",
-										"password-change",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/management/users/me/password-change/"
 							},
 							"response": []
 						},
@@ -369,19 +245,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{BASE_URL}}/api/management/users/me/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"management",
-										"users",
-										"me",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/management/users/me/"
 							},
 							"response": []
 						},
@@ -399,18 +263,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{BASE_URL}}/api/management/users/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"management",
-										"users",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/management/users/"
 							},
 							"response": []
 						},
@@ -428,18 +281,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{BASE_URL}}/api/management/forgot-password/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"management",
-										"forgot-password",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/management/forgot-password/"
 							},
 							"response": []
 						},
@@ -455,18 +297,7 @@
 										"disabled": true
 									}
 								],
-								"url": {
-									"raw": "{{BASE_URL}}/api/management/generate-password/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"management",
-										"generate-password",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/management/generate-password/"
 							},
 							"response": []
 						}
@@ -485,18 +316,7 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{BASE_URL}}/api/donor/categories/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"donor",
-										"categories",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/donor/categories/"
 							},
 							"response": []
 						},
@@ -505,19 +325,7 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{BASE_URL}}/api/donor/categories/1/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"donor",
-										"categories",
-										"1",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/donor/categories/1/"
 							},
 							"response": []
 						}
@@ -531,18 +339,7 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{BASE_URL}}/api/donor/items/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"donor",
-										"items",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/donor/items/"
 							},
 							"response": []
 						},
@@ -551,19 +348,7 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{BASE_URL}}/api/donor/items/1/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"donor",
-										"items",
-										"1",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/donor/items/1/"
 							},
 							"response": []
 						}
@@ -577,18 +362,7 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{BASE_URL}}/api/donor/banks/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"donor",
-										"banks",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/donor/banks/"
 							},
 							"response": []
 						}
@@ -613,18 +387,7 @@
 										"type": "default"
 									}
 								],
-								"url": {
-									"raw": "{{BASE_URL}}/api/payment/cart/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"payment",
-										"cart",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/payment/cart/"
 							},
 							"response": []
 						},
@@ -648,19 +411,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{BASE_URL}}/api/payment/cart/items/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"payment",
-										"cart",
-										"items",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/payment/cart/items/"
 							},
 							"response": []
 						},
@@ -675,20 +426,7 @@
 										"type": "default"
 									}
 								],
-								"url": {
-									"raw": "{{BASE_URL}}/api/payment/cart/items/18/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"payment",
-										"cart",
-										"items",
-										"18",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/payment/cart/items/18/"
 							},
 							"response": []
 						},
@@ -715,19 +453,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{BASE_URL}}/api/payment/cart/items/7",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"payment",
-										"cart",
-										"items",
-										"7"
-									]
-								}
+								"url": "{{BASE_URL}}/api/payment/cart/items/7"
 							},
 							"response": []
 						},
@@ -751,20 +477,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{BASE_URL}}/api/payment/cart/items/10/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"payment",
-										"cart",
-										"items",
-										"10",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/payment/cart/items/10/"
 							},
 							"response": []
 						},
@@ -788,19 +501,7 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{BASE_URL}}/api/payment/cart/clear/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"payment",
-										"cart",
-										"clear",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/payment/cart/clear/"
 							},
 							"response": []
 						}
@@ -820,18 +521,7 @@
 										"type": "default"
 									}
 								],
-								"url": {
-									"raw": "{{BASE_URL}}/api/payment/donations/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"payment",
-										"donations",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/payment/donations/"
 							},
 							"response": []
 						}
@@ -851,18 +541,7 @@
 										"type": "default"
 									}
 								],
-								"url": {
-									"raw": "{{BASE_URL}}/api/payment/transactions/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"payment",
-										"transactions",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/payment/transactions/"
 							},
 							"response": []
 						},
@@ -877,18 +556,7 @@
 										"type": "default"
 									}
 								],
-								"url": {
-									"raw": "{{BASE_URL}}/api/payment/transactions/13",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"payment",
-										"transactions",
-										"13"
-									]
-								}
+								"url": "{{BASE_URL}}/api/payment/transactions/13"
 							},
 							"response": []
 						}
@@ -910,25 +578,14 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"first_name\":\"Enes\",\n    \"last_name\":\"Baysan\",\n    \"email\":\"info@baysansoft.com\",\n    \"phone_number\":\"+905308626253\",\n    \"card_number\":\"4033 6025 6202 0327\",\n    \"card_holder_name\":\"Enes Baysan\",\n    \"card_expiry\":\"01/30\",\n    \"card_cvc\":\"861\",\n    \"message\":\"TEST!\",\n    \"donations\": [\n        {\"donation_item\":3, \"amount\":750},\n        {\"donation_item\":3, \"amount\":1500}\n    ]\n}",
+									"raw": "{\n    \"first_name\": \"Enes\",\n    \"last_name\": \"Baysan\",\n    \"email\": \"info@baysansoft.com\",\n    \"phone_number\": \"+905308626253\",\n    \"card_number\": \"4033 6025 6202 0327\",\n    \"card_holder_name\": \"Enes Baysan\",\n    \"card_expiry\": \"01/30\",\n    \"card_cvc\": \"861\",\n    \"message\": \"TEST!\",\n    \"donations\": [\n        {\n            \"donation_item\": 1,\n            \"amount\": 750\n        },\n        {\n            \"donation_item\": 1,\n            \"amount\": 750\n        }\n    ],\n    \"bill_address\": {\n        \"state_province\": \"Istanbul\",\n        \"country\": \"Turkiye\",\n        \"country_code\": \"TUR\",\n        \"add_line\": \"XYZ Mahallesi, Uskudar Istanbul, Turkiye\",\n        \"postal_code\": \"340000\",\n        \"state_code\": \"34\"\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
 										}
 									}
 								},
-								"url": {
-									"raw": "{{BASE_URL}}/api/payment/payment/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"payment",
-										"payment",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/payment/payment/"
 							},
 							"response": []
 						},
@@ -939,25 +596,14 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"first_name\":\"Enes\",\n    \"last_name\":\"Baysan\",\n    \"email\":\"info@baysansoft.com\",\n    \"phone_number\":\"+905308626253\",\n    \"card_number\":\"5188 9619 3919 2544\",\n    \"card_holder_name\":\"Enes Baysan\",\n    \"card_expiry\":\"06/25\",\n    \"card_cvc\":\"929\",\n    \"message\":\"TEST!\",\n    \"donations\": [\n        {\"donation_item\":1, \"amount\":750}\n    ]\n}",
+									"raw": "{\n    \"first_name\": \"Enes\",\n    \"last_name\": \"Baysan\",\n    \"email\": \"info@baysansoft.com\",\n    \"phone_number\": \"+905308626253\",\n    \"card_number\": \"5188 9619 3919 2544\",\n    \"card_holder_name\": \"Enes Baysan\",\n    \"card_expiry\": \"06/25\",\n    \"card_cvc\": \"929\",\n    \"message\": \"TEST!\",\n    \"donations\": [\n        {\n            \"donation_item\": 1,\n            \"amount\": 750\n        }\n    ],\n    \"bill_address\": {\n        \"state_province\": \"Istanbul\",\n        \"country\": \"Turkiye\",\n        \"country_code\": \"TUR\",\n        \"add_line\": \"XYZ Mahallesi, Uskudar Istanbul, Turkiye\",\n        \"postal_code\": \"340000\",\n        \"state_code\": \"34\"\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
 										}
 									}
 								},
-								"url": {
-									"raw": "{{BASE_URL}}/api/payment/payment/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"payment",
-										"payment",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/payment/payment/"
 							},
 							"response": []
 						},
@@ -968,25 +614,14 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"first_name\":\"Enes\",\n    \"last_name\":\"Baysan\",\n    \"email\":\"info@baysansoft.com\",\n    \"phone_number\":\"+905308626253\",\n    \"card_number\":\"5188 9619 3919 2544\",\n    \"card_holder_name\":\"Enes Baysan\",\n    \"card_expiry\":\"06/25\",\n    \"card_cvc\":\"929\",\n    \"message\":\"TEST!\",\n    \"group_name\": \"Test Group\",\n    \"donations\": [\n        {\"donation_item\":1, \"amount\":750}\n    ]\n}",
+									"raw": "{\n    \"first_name\": \"Enes\",\n    \"last_name\": \"Baysan\",\n    \"email\": \"info@baysansoft.com\",\n    \"phone_number\": \"+905308626253\",\n    \"card_number\": \"5188 9619 3919 2544\",\n    \"card_holder_name\": \"Enes Baysan\",\n    \"card_expiry\": \"06/25\",\n    \"card_cvc\": \"929\",\n    \"message\": \"TEST!\",\n    \"group_name\": \"Test Group\",\n    \"donations\": [\n        {\n            \"donation_item\": 1,\n            \"amount\": 750\n        }\n    ],\n    \"bill_address\": {\n        \"state_province\": \"Istanbul\",\n        \"country\": \"TR\",\n        \"add_line\": \"XYZ Mahallesi, Uskudar Istanbul, Turkiye\",\n        \"postal_code\": \"340000\",\n        \"state_code\": \"34\"\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
 										}
 									}
 								},
-								"url": {
-									"raw": "{{BASE_URL}}/api/payment/payment/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"payment",
-										"payment",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/payment/payment/"
 							},
 							"response": []
 						},
@@ -997,25 +632,14 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"first_name\":\"Enes\",\n    \"last_name\":\"Baysan\",\n    \"email\":\"info@baysansoft.com\",\n    \"phone_number\":\"+905308626253\",\n    \"card_number\":\"5188 9619 3919 2544\",\n    \"card_holder_name\":\"Enes Baysan\",\n    \"card_expiry\":\"06/25\",\n    \"card_cvc\":\"929\",\n    \"message\":\"TEST!\",\n    \"organization_name\": \"Test Organization\",\n    \"donations\": [\n        {\"donation_item\":1, \"amount\":750}\n    ]\n}",
+									"raw": "{\n    \"first_name\": \"Enes\",\n    \"last_name\": \"Baysan\",\n    \"email\": \"info@baysansoft.com\",\n    \"phone_number\": \"+905308626253\",\n    \"card_number\": \"5188 9619 3919 2544\",\n    \"card_holder_name\": \"Enes Baysan\",\n    \"card_expiry\": \"06/25\",\n    \"card_cvc\": \"929\",\n    \"message\": \"TEST!\",\n    \"organization_name\": \"Test Organization\",\n    \"donations\": [\n        {\n            \"donation_item\": 1,\n            \"amount\": 750\n        }\n    ],\n    \"bill_address\": {\n        \"state_province\": \"Istanbul\",\n        \"country\": \"TR\",\n        \"add_line\": \"XYZ Mahallesi, Uskudar Istanbul, Turkiye\",\n        \"postal_code\": \"340000\",\n        \"state_code\": \"34\"\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
 										}
 									}
 								},
-								"url": {
-									"raw": "{{BASE_URL}}/api/payment/payment/",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"payment",
-										"payment",
-										""
-									]
-								}
+								"url": "{{BASE_URL}}/api/payment/payment/"
 							},
 							"response": []
 						}

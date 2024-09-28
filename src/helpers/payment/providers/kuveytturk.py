@@ -87,16 +87,18 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
         ).decode()
         hashed_data = base64.b64encode(
             hashlib.sha1(
-                f'{settings.KUVEYTTURK_CONF["store_no"]}{merchant_order_id}{payment_request_data["amount_sent_to_bank"]}{settings.KUVEYTTURK_CONF["ok_url"]}{settings.KUVEYTTURK_CONF["fail_url"]}{settings.KUVEYTTURK_CONF["username"]}{hashed_password}'.encode(
+                f'{settings.KUVEYTTURK_CONF["store_no"]}{merchant_order_id}{payment_request_data.amount_sent_to_bank}{settings.KUVEYTTURK_CONF["ok_url"]}{settings.KUVEYTTURK_CONF["fail_url"]}{settings.KUVEYTTURK_CONF["username"]}{hashed_password}'.encode(
                     "ISO-8859-9"
                 )
             ).digest()
         ).decode()
 
-        mobile_phone_cc, mobile_phone_subscriber = self.parse_phone_number(payment_request_data["phone"])
+        mobile_phone_cc, mobile_phone_subscriber = self.parse_phone_number(
+            payment_request_data.phone
+        )
 
         ########### Payment Request #############
-        #TODO: Implement the payment request; BillAddrCity, BillAddrCountry, BillAddrLine1, BillAddrPostCode, BillAddrState
+        # TODO: Implement the payment request; BillAddrCity, BillAddrCountry, BillAddrLine1, BillAddrPostCode, BillAddrState
         data = f"""<KuveytTurkVPosMessage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                                     xmlns:xsd="http://www.w3.org/2001/XMLSchema">
                     <APIVersion>1.0.0</APIVersion>
@@ -107,31 +109,31 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
                     <CustomerId>{int(settings.KUVEYTTURK_CONF['customer_no'])}</CustomerId>
                     <DeviceData>
                         <DeviceChannel>02</DeviceChannel>
-                        <ClientIP>{str(payment_request_data['client_ip_address'])}</ClientIP>
+                        <ClientIP>{str(payment_request_data.client_ip_address)}</ClientIP>
                     </DeviceData>
                     <CardHolderData>
-                        <BillAddrCity>İstanbul</BillAddrCity>
-                        <BillAddrCountry>792</BillAddrCountry>
-                        <BillAddrLine1>XXX Mahallesi XXX Caddesi No 55 Daire 1</BillAddrLine1>
-                        <BillAddrPostCode>34000</BillAddrPostCode>
-                        <BillAddrState>40</BillAddrState>
-                        <Email>{str(payment_request_data['email'])}</Email>
+                        <BillAddrCity>{str(payment_request_data.state_province)}</BillAddrCity>
+                        <BillAddrCountry>{str(payment_request_data.country_code)}</BillAddrCountry>
+                        <BillAddrLine1>{str(payment_request_data.add_line)}</BillAddrLine1>
+                        <BillAddrPostCode>{str(payment_request_data.postal_code)}</BillAddrPostCode>
+                        <BillAddrState>{str(payment_request_data.state_code)}</BillAddrState>
+                        <Email>{str(payment_request_data.email)}</Email>
                         <MobilePhone>
                             <Cc>{str(mobile_phone_cc)}</Cc>
                             <Subscriber>{str(mobile_phone_subscriber)}</Subscriber>
                         </MobilePhone>
                     </CardHolderData>
                     <UserName>{str(settings.KUVEYTTURK_CONF['username'])}</UserName>
-                    <CardNumber>{str(payment_request_data['card_number'])}</CardNumber>
-                    <CardExpireDateYear>{str(payment_request_data['card_year'])}</CardExpireDateYear>
-                    <CardExpireDateMonth>{str(payment_request_data['card_month'])}</CardExpireDateMonth>
-                    <CardCVV2>{str(payment_request_data['card_cvc'])}</CardCVV2>
-                    <CardHolderName>{str(payment_request_data['card_holder_name'])}</CardHolderName>
-                    <CardType>{str(payment_request_data['card_type'])}</CardType>
+                    <CardNumber>{str(payment_request_data.card_number)}</CardNumber>
+                    <CardExpireDateYear>{str(payment_request_data.card_year)}</CardExpireDateYear>
+                    <CardExpireDateMonth>{str(payment_request_data.card_month)}</CardExpireDateMonth>
+                    <CardCVV2>{str(payment_request_data.card_cvc)}</CardCVV2>
+                    <CardHolderName>{str(payment_request_data.card_holder_name)}</CardHolderName>
+                    <CardType>{str(payment_request_data.card_type)}</CardType>
                     <TransactionType>Sale</TransactionType>
                     <InstallmentCount>{int('0')}</InstallmentCount>
-                    <Amount>{int(payment_request_data['amount_sent_to_bank'])}</Amount>
-                    <DisplayAmount>{int(payment_request_data['amount_sent_to_bank'])}</DisplayAmount>
+                    <Amount>{int(payment_request_data.amount_sent_to_bank)}</Amount>
+                    <DisplayAmount>{int(payment_request_data.amount_sent_to_bank)}</DisplayAmount>
                     <CurrencyCode>{str('0949')}</CurrencyCode>
                     <MerchantOrderId>{str(merchant_order_id)}</MerchantOrderId>
                     <TransactionSecurity>{int('3')}</TransactionSecurity>
@@ -146,8 +148,8 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
         logger.info(
             "Payment requested. Transaction merchant order id: %s with amount %s (%s)",
             merchant_order_id,
-            payment_request_data["amount"],
-            payment_request_data["amount_sent_to_bank"],
+            payment_request_data.amount,
+            payment_request_data.amount_sent_to_bank,
         )
 
         bank_response = HttpResponse(r)

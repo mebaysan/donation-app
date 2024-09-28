@@ -1,4 +1,5 @@
 """Test endpoints for payment app."""
+
 import pytest
 from django.contrib.auth import get_user_model
 from helpers.payment.providers.kuveytturk import KuveytTurkPaymentProvider
@@ -203,12 +204,7 @@ def test_payment_provider_factory_with_different_payment_providers(
 
 
 @pytest.mark.django_db(transaction=True)
-def test_payment(
-    mocker,
-    client,
-    user,
-    donation_item_dynamic,
-):
+def test_payment(mocker, client, user, donation_item_dynamic, user_bill_address):
     """
     Test payment with KuveytTurkPaymentProvider.
     """
@@ -256,6 +252,14 @@ def test_payment(
             "card_cvc": "861",
             "message": "Test Message",
             "donations": [{"donation_item": donation_item_dynamic.id, "amount": 100}],
+            "bill_address": {
+                "state_province": user_bill_address.state_province.name,
+                "country": user_bill_address.country.name,
+                "country_code": user_bill_address.country_code,
+                "add_line": user_bill_address.add_line,
+                "postal_code": user_bill_address.postal_code,
+                "state_code": user_bill_address.state_code,
+            },
         }
     )
     assert payment_request_serializer.is_valid(raise_exception=True)
@@ -276,9 +280,7 @@ def test_payment(
 
 @pytest.mark.django_db(transaction=True)
 def test_payment_for_unauthenticated_new_user(
-    mocker,
-    client,
-    donation_item_dynamic,
+    mocker, client, donation_item_dynamic, user_bill_address
 ):
     """
     Test payment with KuveytTurkPaymentProvider for unauthenticated user.
@@ -305,6 +307,14 @@ def test_payment_for_unauthenticated_new_user(
         "card_cvc": "861",
         "message": "Test Message",
         "donations": [{"donation_item": donation_item_dynamic.id, "amount": 100}],
+        "bill_address": {
+            "state_province": user_bill_address.state_province.name,
+            "country": user_bill_address.country.name,
+            "country_code": user_bill_address.country_code,
+            "add_line": user_bill_address.add_line,
+            "postal_code": user_bill_address.postal_code,
+            "state_code": user_bill_address.state_code,
+        },
     }
 
     response = client.post("/api/payment/payment/", payload, format="json")
@@ -323,3 +333,14 @@ def test_payment_for_unauthenticated_new_user(
         == donation_item_dynamic
     )
     assert new_user.donation_transactions.count() == 1
+    assert new_user.bill_addresses.count() == 1
+    assert new_user.bill_addresses.first().add_line == user_bill_address.add_line
+    assert (
+        new_user.bill_addresses.first().state_province
+        == user_bill_address.state_province
+    )
+    assert new_user.bill_addresses.first().country == user_bill_address.country
+    assert (
+        new_user.bill_addresses.first().country_code == user_bill_address.country_code
+    )
+    assert new_user.bill_addresses.first().state_code == user_bill_address.state_code

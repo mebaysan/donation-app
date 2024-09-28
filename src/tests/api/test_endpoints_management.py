@@ -370,6 +370,7 @@ def test_bill_address_update(client, user, user_bill_address):
     assert response.json().get("postal_code") == payload.get("postal_code")
     assert response.json().get("state_province") == payload.get("state_province")
 
+
 @pytest.fixture
 def test_bill_address_get(client, user, user_bill_address):
     """Tests the bill address get endpoint."""

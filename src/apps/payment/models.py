@@ -69,6 +69,12 @@ class DonationTransaction(models.Model):
     group_name = models.CharField(max_length=255, null=True, blank=True)
     organization_name = models.CharField(max_length=255, null=True, blank=True)
     client_ip_address = models.CharField(max_length=255, null=True, blank=True)
+    country = models.CharField(max_length=255, null=True, blank=True)
+    country_code = models.CharField(max_length=5, null=True, blank=True)
+    state_province = models.CharField(max_length=255, null=True, blank=True)
+    state_code = models.CharField(max_length=50, null=True, blank=True)
+    add_line = models.CharField(max_length=500, null=True, blank=True)
+    postal_code = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         verbose_name = "Donation Transaction"

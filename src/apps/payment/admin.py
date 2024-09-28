@@ -154,6 +154,13 @@ class DonationTransactionAdmin(admin.ModelAdmin):
         "phone_number",
         "message",
         "donation_platform",
+        "client_ip_address",
+        "country",
+        "country_code",
+        "state_province",
+        "state_code",
+        "add_line",
+        "postal_code",
     ]
     actions = ["export_to_csv", "export_all_to_csv"]
 

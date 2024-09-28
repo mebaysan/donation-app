@@ -87,11 +87,12 @@ class User(AbstractUser):
 
 class BillAddress(models.Model):
     address_name = models.CharField(max_length=255)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    state_province = models.ForeignKey(StateProvince, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bill_addresses")
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
-    state_code = models.CharField(max_length=255, blank=True)
-    add_line = models.CharField(max_length=255)
+    country_code = models.CharField(max_length=5, blank=True)
+    state_province = models.ForeignKey(StateProvince, on_delete=models.CASCADE)
+    state_code = models.CharField(max_length=50, blank=True)
+    add_line = models.CharField(max_length=500)
     postal_code = models.CharField(max_length=255)
 
     class Meta:
@@ -103,4 +104,5 @@ class BillAddress(models.Model):
 
     def save(self, *args, **kwargs):
         self.state_code = self.state_province.state_code
+        self.country_code = self.country.country_code_alpha3
         super(BillAddress, self).save(*args, **kwargs)

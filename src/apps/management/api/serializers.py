@@ -129,6 +129,35 @@ class BillAddressDetailsSerializer(serializers.ModelSerializer):
         model = BillAddress
         exclude = ["user"]
 
+    def validate_country_code(self, value):
+        if (
+            not Country.objects.filter(country_code_alpha3=value).first()
+            and not Country.objects.filter(country_code=value).first()
+        ):
+            raise serializers.ValidationError("Invalid country code.")
+        return value
+
+    def validate_state_province(self, value):
+        state_province_obj = StateProvince.objects.filter(id=value.id).first()
+        if not state_province_obj:
+            raise serializers.ValidationError("Invalid state province.")
+        if str(state_province_obj.country.id) != str(self.initial_data.get("country")):
+            raise serializers.ValidationError("Invalid state province for the country.")
+        return value
+
+    def validate_state_code(self, value):
+        state_province_obj = StateProvince.objects.filter(state_code=value).first()
+        if not state_province_obj:
+            raise serializers.ValidationError("Invalid state code.")
+        if (
+            StateProvince.objects.filter(id=self.initial_data.get("state_province"))
+            .first()
+            .state_code
+            != value
+        ):
+            raise serializers.ValidationError("State code and state province mismatch.")
+        return value
+
 
 class BillAddressListSerializer(BillAddressDetailsSerializer):
     country = CountrySerializer()
