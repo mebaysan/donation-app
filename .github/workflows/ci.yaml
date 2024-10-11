@@ -41,14 +41,10 @@ jobs:
         run: pytest src # Adjust this command to run your pytest tests
         env:
           DEBUG: 1 # Set any environment variables required by your tests
-      - name: Control cotnext
-        run: | 
-          echo "Context: ${{ github.workspace }}/src"
-          ls -la
-        shell: bash
+
   docker-main:
     needs: code-test
-    if: ${{ github.job.code-test.outcome == 'success' }} && ${{ startsWith(github.ref, 'refs/heads/main') }}
+    if: success() && ${{ startsWith(github.ref, 'refs/heads/main') }}
     uses: ./.github/workflows/reuse-docker-build-push.yml
     with:
       docker-context: /src
@@ -58,7 +54,7 @@ jobs:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   docker-develop:
     needs: code-test
-    if: ${{ github.job.code-test.outcome == 'success' }} && ${{ startsWith(github.ref, 'refs/heads/develop') }}
+    if: success() && ${{ startsWith(github.ref, 'refs/heads/develop') }}
     uses: ./.github/workflows/reuse-docker-build-push.yml
     with:
       docker-context: /src
@@ -68,11 +64,11 @@ jobs:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   docker-feature:
     needs: code-test
-    if: ${{ github.job.code-test.outcome == 'success' }} && ${{ startsWith(github.ref, 'refs/heads/feature/*') }}
+    if: success() && ${{ startsWith(github.ref, 'refs/heads/feature') }}
     uses: ./.github/workflows/reuse-docker-build-push.yml
     with:
       docker-context: /src
-      image-tag: ${{ github.ref_name}}
+      image-tag: ${{ github.ref }}
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
