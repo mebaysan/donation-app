@@ -1,4 +1,4 @@
-[![CI - Image Deploy To Docker Hub](https://github.com/mebaysan/donation-app/actions/workflows/ci.yaml/badge.svg)](https://github.com/mebaysan/donation-app/actions/workflows/ci.yaml)[![CI - Develop Branch Test](https://github.com/mebaysan/donation-app/actions/workflows/ci-develop.yaml/badge.svg)](https://github.com/mebaysan/donation-app/actions/workflows/ci-develop.yaml)
+[![CI](https://github.com/mebaysan/donation-app/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/mebaysan/donation-app/actions/workflows/ci.yaml) [![CI](https://github.com/mebaysan/donation-app/actions/workflows/ci.yaml/badge.svg?branch=develop)](https://github.com/mebaysan/donation-app/actions/workflows/ci.yaml)
 
 # Table of Contents
 
