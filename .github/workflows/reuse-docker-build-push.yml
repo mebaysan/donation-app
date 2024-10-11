@@ -23,6 +23,13 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4 
+    - name:
+      run: |
+        echo "Building Docker image"
+        echo "Docker context: ${{ inputs.docker-context }}"
+        echo "Image tag: ${{ inputs.image-tag }}"
+        ls -la
+      shell: bash
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
     - name: Set up Docker Buildx
