@@ -23,7 +23,7 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4 
-    - name:
+    - name: Control
       run: |
         echo "Building Docker image"
         echo "Docker context: ${{ inputs.docker-context }}"
