@@ -41,6 +41,11 @@ jobs:
         run: pytest src # Adjust this command to run your pytest tests
         env:
           DEBUG: 1 # Set any environment variables required by your tests
+      - name: Control cotnext
+        run: | 
+          echo "Context: ${{ github.workspace }}/src"
+          ls -la
+        shell: bash
   docker-main:
     needs: code-test
     if: ${{ github.job.code-test.outcome == 'success' }} && ${{ github.ref == 'refs/heads/main' }}
