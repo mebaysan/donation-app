@@ -6,9 +6,6 @@ on:
       - "main"
       - "develop"
       - "feature/*"
-  pull_request:
-    branches:
-      - "main"
 
 jobs:
   code-test:
@@ -52,6 +49,7 @@ jobs:
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
   docker-develop:
     needs: code-test
     if: ${{ startsWith(github.ref, 'refs/heads/develop') }}
@@ -62,13 +60,14 @@ jobs:
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      
   docker-feature:
     needs: code-test
     if: ${{ startsWith(github.ref, 'refs/heads/feature') }}
     uses: ./.github/workflows/reuse-docker-build-push.yml
     with:
       docker-context: /src
-      image-tag: ${{ github.ref }}
+      image-tag: feature-${{ github.sha }}
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
