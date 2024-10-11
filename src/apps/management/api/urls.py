@@ -28,4 +28,14 @@ urlpatterns = [
         views.CountryDetailsAPIView.as_view(),
         name="country_detail",
     ),
+    path(
+        "bill-address/",
+        views.BillAddressListCreateAPIView.as_view(),
+        name="bill_address_list",
+    ),
+    path(
+        "bill-address/<int:id>/",
+        views.BillAddressRetrieveUpdateDestroyAPIView.as_view(),
+        name="bill_address_details",
+    ),
 ]

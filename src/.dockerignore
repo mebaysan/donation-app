@@ -168,3 +168,4 @@ db.sqlite3
 .gitignore/
 .nginx/
 tests/
+.DS_Store

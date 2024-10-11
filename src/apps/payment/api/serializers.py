@@ -3,6 +3,7 @@ from rest_framework import serializers
 from apps.donor.models import DonationItem
 from apps.donor.api.serializers import DonationItemSerializer
 from apps.payment.models import Cart, CartItem, Donation, DonationTransaction
+from apps.management.models import BillAddress
 from helpers.serializers.validators import email_regex, phone_regex, card_expiry_regex
 
 
@@ -63,6 +64,15 @@ class CartSerializer(serializers.ModelSerializer):
         fields = ["updated_date", "amount", "cart_items"]
 
 
+class BillAddressSerializer(serializers.Serializer):
+    add_line = serializers.CharField()
+    country = serializers.CharField()
+    country_code = serializers.CharField()
+    state_province = serializers.CharField()
+    state_code = serializers.CharField()
+    postal_code = serializers.CharField()
+
+
 class PaymentRequestSerializer(serializers.Serializer):
     # we sum manually in the provider method to check "amount" field
     first_name = serializers.CharField()
@@ -77,6 +87,7 @@ class PaymentRequestSerializer(serializers.Serializer):
     donations = CartItemPaymentRequestSerializer(many=True)
     group_name = serializers.CharField(required=False)
     organization_name = serializers.CharField(required=False)
+    bill_address = BillAddressSerializer()
 
     def validate_card_number(self, value):
         """

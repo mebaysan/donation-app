@@ -7,6 +7,8 @@ from rest_framework.generics import (
     UpdateAPIView,
     CreateAPIView,
     ListAPIView,
+    ListCreateAPIView,
+    RetrieveUpdateDestroyAPIView,
 )
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -19,8 +21,10 @@ from apps.management.api.serializers import (
     ForgotPasswordSerializer,
     CountrySerializer,
     CountryDetailSerializer,
+    BillAddressListSerializer,
+    BillAddressDetailsSerializer,
 )
-from apps.management.models import Country
+from apps.management.models import Country, BillAddress
 from apps.management.authentication import JWTAuthentication
 from helpers.communication.email import send_password_reset_email
 import random
@@ -201,3 +205,36 @@ class CountryDetailsAPIView(RetrieveAPIView):
     serializer_class = CountryDetailSerializer
     permission_classes = [AllowAny]
     lookup_field = "id"
+
+
+class BillAddressListCreateAPIView(ListCreateAPIView):
+    queryset = BillAddress.objects.all()
+    serializer_class = BillAddressListSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return BillAddress.objects.filter(user=self.request.user)
+
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return BillAddressDetailsSerializer
+        return BillAddressListSerializer
+
+    def perform_create(self, serializer):
+        # Set the authenticated user as the 'user' of the BillAddress
+        serializer.save(user=self.request.user)
+
+
+class BillAddressRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = BillAddress.objects.all()
+    serializer_class = BillAddressDetailsSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = "id"
+
+    def get_queryset(self):
+        return BillAddress.objects.filter(user=self.request.user)
+
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return BillAddressListSerializer
+        return BillAddressDetailsSerializer

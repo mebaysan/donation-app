@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  database:
+    container_name: donation_database
+    image: postgres:15
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=secretpassword
+      - POSTGRES_USER=donation
+      - POSTGRES_DB=donation
+    volumes:
+      - database_volume:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  
+  redis:
+    container_name: donation_redis
+    image: redis:7.4.0
+    restart: always
+    ports:
+      - "6379:6379"
+
+volumes:
+  database_volume:
