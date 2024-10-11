@@ -43,7 +43,7 @@ jobs:
           DEBUG: 1 # Set any environment variables required by your tests
   docker-main:
     needs: code-test
-    if: ${{ github.job.code-test.outcome == 'success' }} && ${{ github.base_ref == 'refs/heads/main' }}
+    if: ${{ github.job.code-test.outcome == 'success' }} && ${{ github.ref == 'refs/heads/main' }}
     uses: ./.github/workflows/reuse-docker-build-push.yml
     with:
       docker-context: "${{ github.workspace }}/src" 
@@ -53,7 +53,7 @@ jobs:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   docker-develop:
     needs: code-test
-    if: ${{ github.job.code-test.outcome == 'success' }} && ${{ github.base_ref == 'refs/heads/develop' }}
+    if: ${{ github.job.code-test.outcome == 'success' }} && ${{ github.ref == 'refs/heads/develop' }}
     uses: ./.github/workflows/reuse-docker-build-push.yml
     with:
       docker-context: "${{ github.workspace }}/src" 
@@ -63,7 +63,7 @@ jobs:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   docker-feature:
     needs: code-test
-    if: ${{ github.job.code-test.outcome == 'success' }} && ${{ github.base_ref == 'refs/heads/feature/*' }}
+    if: ${{ github.job.code-test.outcome == 'success' }} && ${{ github.ref == 'refs/heads/feature/*' }}
     uses: ./.github/workflows/reuse-docker-build-push.yml
     with:
       docker-context: "${{ github.workspace }}/src" 
