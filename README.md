@@ -162,18 +162,6 @@ if (s.forceSsl) {
         location / {
             return 302 https://$http_host$request_uri;
         }
-
-        #THIS IS CONFIGURED FOR CAPROVER NGINX #BAYSAN
-        ###########
-        location /django-static/ {
-            alias /nginx-shared/YOUR-SHARED-PATH/static/;
-         }
-
-        location /django-media/ {
-            alias /nginx-shared/YOUR-SHARED-PATH/media/;
-        }
-        ###########
-
     }
 <%
 }
@@ -208,20 +196,7 @@ server {
         # IMPORTANT!! If you are here from an old thread to set a custom port, you do not need to modify this port manually here!!
         # Simply change the Container HTTP Port from the dashboard HTTP panel
         set $upstream http://<%-s.localDomain%>:<%-s.containerHttpPort%>;
-
-
-
-        #THIS IS CONFIGURED FOR CAPROVER NGINX #BAYSAN
-        ###########
-        location /django-static/ {
-            alias /nginx-shared/YOUR-SHARED-PATH/static/;
-         }
-
-        location /django-media/ {
-            alias /nginx-shared/YOUR-SHARED-PATH/media/;
-        }
-        ###########
-
+        set $donation_be_upstream http://srv-captain--YOUR-BACKEND-SERVICE:8000; # # YOUR UPSTREAM SERVICE IN CAPROVER (BACKEND)
 
         location / {
 
@@ -281,6 +256,30 @@ server {
                 root <%-s.customErrorPagesDirectory%>;
                 internal;
         }
-  
+
+   #BAYSAN
+    location /django-static/ {
+            alias /nginx-shared/YOUR-PATH-ON-HOST/static/; # YOUR SHARED FILES OF BACKEND PROJECT'S STATIC
+         }
+
+        location /django-media/ {
+            alias /nginx-shared/YOUR-PATH-ON-HOST/media/;
+        }
+
+   # Django App
+    location /cockpit {
+        proxy_pass $donation_be_upstream; # YOUR UPSTREAM SERVICE IN CAPROVER (BACKEND)
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_redirect off;
+    }
+
+    location /api {
+        proxy_pass $donation_be_upstream; # YOUR UPSTREAM SERVICE IN CAPROVER (BACKEND)
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_redirect off;
+    }
+
 }
 ```
