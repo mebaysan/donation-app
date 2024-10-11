@@ -51,7 +51,7 @@ jobs:
     if: ${{ github.job.code-test.outcome == 'success' }} && ${{ startsWith(github.ref, 'refs/heads/main') }}
     uses: ./.github/workflows/reuse-docker-build-push.yml
     with:
-      docker-context: ${{ github.workspace }}/src
+      docker-context: /src
       image-tag: latest
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -61,7 +61,7 @@ jobs:
     if: ${{ github.job.code-test.outcome == 'success' }} && ${{ startsWith(github.ref, 'refs/heads/develop') }}
     uses: ./.github/workflows/reuse-docker-build-push.yml
     with:
-      docker-context: ${{ github.workspace }}/src
+      docker-context: /src
       image-tag: develop
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -71,7 +71,7 @@ jobs:
     if: ${{ github.job.code-test.outcome == 'success' }} && ${{ startsWith(github.ref, 'refs/heads/feature/*') }}
     uses: ./.github/workflows/reuse-docker-build-push.yml
     with:
-      docker-context: ${{ github.workspace }}/src
+      docker-context: /src
       image-tag: ${{ github.ref_name}}
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
