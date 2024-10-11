@@ -17,7 +17,7 @@
 - [Environment Variables](#environment-variables)
 - [Docker](#docker)
 - [Dummy Payment Request](#dummy-payment-request)
-- [Caprover Nginx Configuration](#caprover-nginx-configuration)
+- [Caprover Nginx Configuration for Frontend App](#caprover-nginx-configuration-for-frontend-app)
 
 
 # Introducing the Donation App - Empowering Non-Profits
@@ -135,7 +135,9 @@ new_dummy_response = HttpResponse(
         )
 ```
 
-# Caprover Nginx Configuration
+# Caprover Nginx Configuration for Frontend App
+
+[Django Deployment on Caprover by Docker Image](https://medium.com/codex/django-deployment-on-caprover-by-docker-image-669e87ea81e7)
 
 ```nginx
 <%
