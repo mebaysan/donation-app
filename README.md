@@ -164,11 +164,11 @@ if (s.forceSsl) {
         #THIS IS CONFIGURED FOR CAPROVER NGINX #BAYSAN
         ###########
         location /django-static/ {
-            alias /nginx-shared/babialem-be/static/;
+            alias /nginx-shared/YOUR-SHARED-PATH/static/;
          }
 
         location /django-media/ {
-            alias /nginx-shared/babialem-be/media/;
+            alias /nginx-shared/YOUR-SHARED-PATH/media/;
         }
         ###########
 
@@ -212,11 +212,11 @@ server {
         #THIS IS CONFIGURED FOR CAPROVER NGINX #BAYSAN
         ###########
         location /django-static/ {
-            alias /nginx-shared/babialem-be/static/;
+            alias /nginx-shared/YOUR-SHARED-PATH/static/;
          }
 
         location /django-media/ {
-            alias /nginx-shared/babialem-be/media/;
+            alias /nginx-shared/YOUR-SHARED-PATH/media/;
         }
         ###########
 
