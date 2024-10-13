@@ -26,7 +26,7 @@ class DonationCategoryRetrieveAPIView(RetrieveAPIView):
 
 class DonationItemListAPIView(ListAPIView):
     serializer_class = DonationItemSerializer
-    queryset = DonationItem.objects.filter(is_published=True).all()
+    queryset = DonationItem.objects.filter(is_published=True).order_by("order").all()
     permission_classes = []
 
 class DonationItemRetrieveAPIView(RetrieveAPIView):

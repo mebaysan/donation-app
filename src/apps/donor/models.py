@@ -44,7 +44,7 @@ class DonationItem(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     category = models.ForeignKey(
-        DonationCategory, on_delete=models.SET_NULL, null=True, related_name="items"
+        DonationCategory, on_delete=models.SET_NULL, null=True, related_name="items",
     )
     image = models.ImageField(upload_to="donation_item/", null=True, blank=True)
     is_published = models.BooleanField(default=True)
@@ -55,6 +55,7 @@ class DonationItem(models.Model):
     quantity_price = models.DecimalField(
         decimal_places=2, max_digits=16, null=True, blank=True
     )
+    order = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.name
