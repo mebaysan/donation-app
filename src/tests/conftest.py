@@ -1,9 +1,10 @@
 """Defines fixtures available to all tests (Dependency Injection)."""
+
 import pytest
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from rest_framework.test import APIClient
-from apps.management.models import Country, StateProvince
+from apps.management.models import Country, StateProvince, BillAddress
 from apps.donor.models import DonationCategory, DonationItem, Bank, BankAccount
 
 User = get_user_model()
@@ -13,7 +14,7 @@ User = get_user_model()
 def django_db_setup(mocker, django_db_setup, django_db_blocker):
     """Load countries and states."""
     mocker.patch(
-        "apps.management.management.commands.load_countries_states.Command.get_data_from_api",
+        "apps.management.management.commands.load_countries_states.Command.get_country_state_data_from_file",
         return_value=[
             {
                 "name": "Turkey",
@@ -45,7 +46,7 @@ def country():
 
 
 @pytest.fixture
-def state():
+def state(country):
     """Return a new StateProvince instance."""
     return StateProvince.objects.filter(name="Istanbul", country=country).first()
 
@@ -152,3 +153,16 @@ def bank_account(bank):
 def user_cart(user):
     """Return a new Cart instance."""
     return user.cart
+
+
+@pytest.fixture
+def user_bill_address(user, country, state):
+    """Return a new BillAddress instance."""
+    return BillAddress.objects.create(
+        user=user,
+        address_name="Test Bill Address",
+        add_line="XYZ Street. Uskudar, Istanbul, Turkiye",
+        postal_code="34000",
+        country=country,
+        state_province=state,
+    )

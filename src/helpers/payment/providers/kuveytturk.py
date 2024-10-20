@@ -1,4 +1,5 @@
 """Payment Provider APIs' Provider Classes"""
+
 import base64
 import hashlib
 import urllib.parse
@@ -8,195 +9,14 @@ import requests
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.db import IntegrityError
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, redirect
-from rest_framework import status
-from rest_framework.response import Response
-
-from apps.payment.models import DonationTransaction, Donation
-from helpers.communication.email import send_password_reset_email
+from django.shortcuts import redirect
+from apps.payment.models import DonationTransaction
+from helpers.payment.providers.base import BasePaymentProvider
 
 logger = logging.getLogger(__name__)
 
 User = get_user_model()
-
-
-class BasePaymentProvider(object):
-    """
-    Base class for payment providers
-    """
-
-    def payment_request_parser(self, request_data):
-        """
-        Parses the payment request data and returns a dictionary
-
-        Args:
-            request_data (OrderedDict): Serialized data
-
-        Returns:
-            dict: Parsed data
-        """
-        ####### Bagisci Bilgileri #######
-        first_name = request_data.get("first_name")
-        last_name = request_data.get("last_name")
-        email = request_data.get("email")
-        phone = request_data.get("phone_number")
-
-        # ####### Kart Bilgileri #######
-        card_number = request_data.get("card_number").replace(" ", "")
-        card_holder_name = request_data.get("card_holder_name").upper()
-        card_expiry = request_data.get("card_expiry")
-        card_date = card_expiry.split("/")
-        card_month = card_date[0].strip()
-        card_year = card_date[1].strip()
-        card_cvc = request_data.get("card_cvc")
-
-        if card_number[0] == "4":
-            card_type = "Visa"
-        elif card_number[0] == "5" or card_number[0] == "6":
-            card_type = "MasterCard"
-        elif card_number[0] == "9":
-            card_type = "Troy"
-        else:
-            raise ValueError("Lütfen geçerli bir kart girin.")
-
-        ####### Mesaj #######
-        message = request_data.get("message")
-
-        ####### Donation Items #######
-        donations = request_data.get("donations")
-
-        ####### Amount #######
-        amount = 0
-        for donation in donations:
-            amount += donation.get("amount")
-        amount = float(amount)
-        amount_sent_to_bank = amount * 100
-        amount_sent_to_bank = str(amount_sent_to_bank)
-        amount_sent_to_bank = int(amount_sent_to_bank.split(".")[0])
-
-        ####### Donation Items #######
-        group_name = request_data.get("group_name", None)
-        organization_name = request_data.get("organization_name", None)
-
-        return {
-            "first_name": first_name,
-            "last_name": last_name,
-            "email": email,
-            "phone": phone,
-            "amount": amount,
-            "amount_sent_to_bank": amount_sent_to_bank,
-            "card_number": card_number,
-            "card_holder_name": card_holder_name,
-            "card_expiry": card_expiry,
-            "card_date": card_date,
-            "card_month": card_month,
-            "card_year": card_year,
-            "card_cvc": card_cvc,
-            "card_type": card_type,
-            "message": message,
-            "donations": donations,
-            "group_name": group_name,
-            "organization_name": organization_name,
-        }
-
-    def make_payment(self, request, request_data):
-        """
-        Makes the payment request to the payment provider
-
-        This can be a different method for each payment provider
-        """
-        raise NotImplementedError
-
-    def create_transaction(self, request, payment_request_data, merchant_order_id):
-        """
-        Creates a DonationTransaction instance
-
-        Payment transaction will be connected to this instance
-
-        Args:
-            request (Request): Request object
-            payment_request_data (dict): Parsed payment request data
-            merchant_order_id (str): Merchant order id
-
-        Returns:
-            DonationTransaction: Created instance
-        """
-
-        new_transaction = DonationTransaction(
-            first_name=payment_request_data["first_name"],
-            last_name=payment_request_data["last_name"],
-            email=payment_request_data["email"],
-            phone_number=payment_request_data["phone"],
-            amount=payment_request_data["amount"],
-            amount_sent_to_bank=payment_request_data["amount_sent_to_bank"],
-            merchant_order_id=merchant_order_id,
-            message=payment_request_data["message"],
-            group_name=payment_request_data["group_name"],
-            organization_name=payment_request_data["organization_name"],
-        )
-        if request.user.is_authenticated:
-            new_transaction.user = request.user
-
-        else:  # payment request has no user (not logged-in)
-            exists_user = User.objects.filter(
-                email=payment_request_data["email"],
-                phone_number=payment_request_data["phone"],
-            ).first()
-            if exists_user is not None:  # there is a User with credentials
-                new_transaction.user = exists_user
-            else:  # there is no User with the mail_templates or phone_number
-                try:
-                    new_user = User.objects.create(
-                        first_name=payment_request_data["first_name"],
-                        last_name=payment_request_data["first_name"],
-                        email=payment_request_data["email"],
-                        username=payment_request_data["email"],
-                        phone_number=payment_request_data["phone"],
-                    )
-                    new_user.set_password(str(uuid.uuid4()))
-                    new_user.save()
-                    new_transaction.user = new_user
-                    send_password_reset_email(new_user)
-                except IntegrityError as e:
-                    # mail_templates != phone_number for User
-                    context = {
-                        "details": "Lütfen geçerli email ve telefon numarası kullanın."
-                    }
-                    if "phone_number" in str(
-                        e
-                    ):  # email is different but phone_number is taken by a User
-                        context[
-                            "details"
-                        ] = "Telefon farklı bir bağışçı profilinde kullanılıyor. Lütfen hesabınıza tanımlı email ve telefon numarasını kullanın."
-                    if "username" in str(
-                        e
-                    ):  # phone_number is different but email (username) is taken by a User
-                        context[
-                            "details"
-                        ] = "Email farklı bir bağışçı profilinde kullanılıyor. Lütfen hesabınıza tanımlı email ve telefon numarasını kullanın."
-                    return Response(context, status.HTTP_400_BAD_REQUEST)
-
-        new_transaction.save()
-
-        # create donations for the transaction
-        self.create_donation(payment_request_data, new_transaction)
-
-        return new_transaction
-
-    def create_donation(self, payment_request_data, new_transaction):
-        """
-        Creates Donation instances for the transaction
-        """
-        for donation in payment_request_data["donations"]:
-            new_donation = Donation.objects.create(
-                donation_item=donation.get("donation_item"),
-                amount=donation.get("amount"),
-                donation_transaction=new_transaction,
-                user=new_transaction.user,
-            )
-            new_donation.save()
 
 
 class KuveytTurkPaymentProvider(BasePaymentProvider):
@@ -252,7 +72,7 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
     CONF = settings.KUVEYTTURK_CONF
 
     def make_payment(self, request, request_data):
-        payment_request_data = self.payment_request_parser(request_data)
+        payment_request_data = self.payment_request_parser(request, request_data)
         merchant_order_id = str(
             uuid.uuid4()
         )  # it can be anything, we use uuid for uniqueness
@@ -267,38 +87,58 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
         ).decode()
         hashed_data = base64.b64encode(
             hashlib.sha1(
-                f'{settings.KUVEYTTURK_CONF["store_no"]}{merchant_order_id}{payment_request_data["amount_sent_to_bank"]}{settings.KUVEYTTURK_CONF["ok_url"]}{settings.KUVEYTTURK_CONF["fail_url"]}{settings.KUVEYTTURK_CONF["username"]}{hashed_password}'.encode(
+                f'{settings.KUVEYTTURK_CONF["store_no"]}{merchant_order_id}{payment_request_data.amount_sent_to_bank}{settings.KUVEYTTURK_CONF["ok_url"]}{settings.KUVEYTTURK_CONF["fail_url"]}{settings.KUVEYTTURK_CONF["username"]}{hashed_password}'.encode(
                     "ISO-8859-9"
                 )
             ).digest()
         ).decode()
 
+        mobile_phone_cc, mobile_phone_subscriber = self.parse_phone_number(
+            payment_request_data.phone
+        )
+
         ########### Payment Request #############
-        data = f"""
-           <KuveytTurkVPosMessage xmlns:xsi="http://www.w3.org/2001/XMLSchemainstance"
-           xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-           <APIVersion>1.0.0</APIVersion>
-           <OkUrl>{str(settings.KUVEYTTURK_CONF["ok_url"])}</OkUrl>
-           <FailUrl>{str(settings.KUVEYTTURK_CONF["fail_url"])}</FailUrl>
-           <HashData>{hashed_data}</HashData>
-           <MerchantId>{int(settings.KUVEYTTURK_CONF['store_no'])}</MerchantId>
-           <CustomerId>{int(settings.KUVEYTTURK_CONF['customer_no'])}</CustomerId>
-           <UserName>{str(settings.KUVEYTTURK_CONF['username'])}</UserName>
-           <CardNumber>{str(payment_request_data['card_number'])}</CardNumber>
-           <CardExpireDateYear>{str(payment_request_data['card_year'])}</CardExpireDateYear>
-           <CardExpireDateMonth>{str(payment_request_data['card_month'])}</CardExpireDateMonth>
-           <CardCVV2>{str(payment_request_data['card_cvc'])}</CardCVV2>
-           <CardHolderName>{str(payment_request_data['card_holder_name'])}</CardHolderName>
-           <CardType>{str(payment_request_data['card_type'])}</CardType>
-           <TransactionType>Sale</TransactionType>
-           <InstallmentCount>{int('0')}</InstallmentCount>
-           <Amount>{int(payment_request_data['amount_sent_to_bank'])}</Amount>
-           <DisplayAmount>{int(payment_request_data['amount_sent_to_bank'])}</DisplayAmount>
-           <CurrencyCode>{str('0949')}</CurrencyCode>
-           <MerchantOrderId>{str(merchant_order_id)}</MerchantOrderId>
-           <TransactionSecurity>{int('3')}</TransactionSecurity>
-           </KuveytTurkVPosMessage>
-           """
+        # TODO: Implement the payment request; BillAddrCity, BillAddrCountry, BillAddrLine1, BillAddrPostCode, BillAddrState
+        data = f"""<KuveytTurkVPosMessage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <APIVersion>1.0.0</APIVersion>
+                    <OkUrl>{str(settings.KUVEYTTURK_CONF["ok_url"])}</OkUrl>
+                    <FailUrl>{str(settings.KUVEYTTURK_CONF["fail_url"])}</FailUrl>
+                    <HashData>{hashed_data}</HashData>
+                    <MerchantId>{int(settings.KUVEYTTURK_CONF['store_no'])}</MerchantId>
+                    <CustomerId>{int(settings.KUVEYTTURK_CONF['customer_no'])}</CustomerId>
+                    <DeviceData>
+                        <DeviceChannel>02</DeviceChannel>
+                        <ClientIP>{str(payment_request_data.client_ip_address)}</ClientIP>
+                    </DeviceData>
+                    <CardHolderData>
+                        <BillAddrCity>{str(payment_request_data.state_province)}</BillAddrCity>
+                        <BillAddrCountry>{str(payment_request_data.country_code)}</BillAddrCountry>
+                        <BillAddrLine1>{str(payment_request_data.add_line)}</BillAddrLine1>
+                        <BillAddrPostCode>{str(payment_request_data.postal_code)}</BillAddrPostCode>
+                        <BillAddrState>{str(payment_request_data.state_code)}</BillAddrState>
+                        <Email>{str(payment_request_data.email)}</Email>
+                        <MobilePhone>
+                            <Cc>{str(mobile_phone_cc)}</Cc>
+                            <Subscriber>{str(mobile_phone_subscriber)}</Subscriber>
+                        </MobilePhone>
+                    </CardHolderData>
+                    <UserName>{str(settings.KUVEYTTURK_CONF['username'])}</UserName>
+                    <CardNumber>{str(payment_request_data.card_number)}</CardNumber>
+                    <CardExpireDateYear>{str(payment_request_data.card_year)}</CardExpireDateYear>
+                    <CardExpireDateMonth>{str(payment_request_data.card_month)}</CardExpireDateMonth>
+                    <CardCVV2>{str(payment_request_data.card_cvc)}</CardCVV2>
+                    <CardHolderName>{str(payment_request_data.card_holder_name)}</CardHolderName>
+                    <CardType>{str(payment_request_data.card_type)}</CardType>
+                    <TransactionType>Sale</TransactionType>
+                    <InstallmentCount>{int('0')}</InstallmentCount>
+                    <Amount>{int(payment_request_data.amount_sent_to_bank)}</Amount>
+                    <DisplayAmount>{int(payment_request_data.amount_sent_to_bank)}</DisplayAmount>
+                    <CurrencyCode>{str('0949')}</CurrencyCode>
+                    <MerchantOrderId>{str(merchant_order_id)}</MerchantOrderId>
+                    <TransactionSecurity>{int('3')}</TransactionSecurity>
+                </KuveytTurkVPosMessage>
+                """
         headers = {"Content-Type": "application/xml", "Content-Length": str(len(data))}
         r = requests.post(
             settings.KUVEYTTURK_CONF["payment_request_url"],
@@ -308,8 +148,8 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
         logger.info(
             "Payment requested. Transaction merchant order id: %s with amount %s (%s)",
             merchant_order_id,
-            payment_request_data["amount"],
-            payment_request_data["amount_sent_to_bank"],
+            payment_request_data.amount,
+            payment_request_data.amount_sent_to_bank,
         )
 
         bank_response = HttpResponse(r)
@@ -380,9 +220,13 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
         response_code = str(r.text[response_code_start + 14 : response_code_end])
 
         ####### DonationTransaction get instance from payment ##############
-        transaction = DonationTransaction.objects.filter(merchant_order_id=str(merchant_order_id)).first()
+        transaction = DonationTransaction.objects.filter(
+            merchant_order_id=str(merchant_order_id)
+        ).first()
         if transaction is None:
-            logger.warning("There is no transaction with merchant order id: %s", merchant_order_id)
+            logger.warning(
+                "There is no transaction with merchant order id: %s", merchant_order_id
+            )
         else:
             transaction.status_code = response_code
             transaction.status_code_description = (
@@ -398,9 +242,6 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
             transaction.save()
 
             if transaction.is_complete:
-                # return Response(
-                #     {"details": "Başarıyla bağışınız tamamlandı."}, status.HTTP_200_OK
-                # )
                 query_string = urllib.parse.urlencode(
                     {
                         "details": "Bağışınız tamamlandı.",
@@ -415,15 +256,6 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
                     transaction.amount,
                 )
                 return redirect(redirect_url)
-    
-        # return Response(
-        #     {
-        #         "details": "Bağışınız tamamlanamadı.",
-        #         "bank_status_code": transaction.status_code,
-        #         "bank_status_code_description": transaction.status_code_description,
-        #     },
-        #     status.HTTP_402_PAYMENT_REQUIRED,
-        # )
         query_string = urllib.parse.urlencode(
             {
                 "details": "Bağışınız tamamlanamadı.",
@@ -465,22 +297,18 @@ class KuveytTurkPaymentProvider(BasePaymentProvider):
         )
 
         # get the donation transaction instance
-        transaction = DonationTransaction.objects.filter(merchant_order_id=str(merchant_order_id)).first()
+        transaction = DonationTransaction.objects.filter(
+            merchant_order_id=str(merchant_order_id)
+        ).first()
         if transaction is None:
-            logger.warning("There is no transaction with merchant order id: %s", merchant_order_id)
-        else:    
+            logger.warning(
+                "There is no transaction with merchant order id: %s", merchant_order_id
+            )
+        else:
             # update the transaction status and save
             transaction.status_code = response_code
             transaction.status_code_description = response_message
             transaction.save()
-        
-
-        # content = {
-        #     "details": "Bağışınız tamamlanamadı.",
-        #     "bank_status_code": transaction.status_code,
-        #     "bank_status_code_description": transaction.status_code_description,
-        # }
-        # return Response(content, status.HTTP_402_PAYMENT_REQUIRED)
 
         query_string = urllib.parse.urlencode(
             {

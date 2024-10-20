@@ -1,6 +1,6 @@
-from apps.payment.api.serializers import KuveytTurkPaymentRequestSerializer
-from helpers.payment.providers import KuveytTurkPaymentProvider
 from apps.payment.models import PaymentProvider
+from apps.payment.api.serializers import KuveytTurkPaymentRequestSerializer
+from helpers.payment.providers.kuveytturk import KuveytTurkPaymentProvider
 
 
 class PaymentProviderFactory:

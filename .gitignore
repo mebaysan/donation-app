@@ -168,3 +168,4 @@ scripts/postgres_dev/
 .idea/
 static/
 media/
+.DS_Store

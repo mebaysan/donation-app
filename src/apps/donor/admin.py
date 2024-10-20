@@ -4,7 +4,21 @@ from apps.donor.models import DonationItem, DonationCategory, Bank, BankAccount
 from apps.payment.models import Donation
 
 
-# Register your models here.
+class DonationItemAdmin(admin.ModelAdmin):
+    list_display = ("name", "category", "is_published", "donation_type", "order")
+    list_editable = ("category", "is_published", "order")
+
+    def has_delete_permission(self, request, obj=None):
+        if obj is not None:
+            if obj.donations.count() != 0:
+                return False
+            else:
+                return True
+
+
+class DonationItemInline(admin.TabularInline):
+    model = DonationItem
+    extra = 1
 
 
 class DonationCategoryAdmin(admin.ModelAdmin):
@@ -17,6 +31,7 @@ class DonationCategoryAdmin(admin.ModelAdmin):
         "is_published",
         "order",
     )
+    inlines = [DonationItemInline]
 
     def has_delete_permission(self, request, obj=None):
         if obj is not None:
@@ -25,21 +40,6 @@ class DonationCategoryAdmin(admin.ModelAdmin):
                 donation_item__in=donation_items
             ).count()
             if donations != 0:
-                return False
-            else:
-                return True
-
-
-class DonationItemAdmin(admin.ModelAdmin):
-    list_display = ("name", "category", "is_published", "donation_type")
-    list_editable = (
-        "category",
-        "is_published",
-    )
-
-    def has_delete_permission(self, request, obj=None):
-        if obj is not None:
-            if obj.donations.count() != 0:
                 return False
             else:
                 return True

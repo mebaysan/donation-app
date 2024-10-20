@@ -215,6 +215,10 @@ EMAIL_USE_SSL = True if os.environ.get("EMAIL_USE_SSL") == "True" else False
 
 CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
 
+# Constant data files
+DATA_FILE_COUNTRIES_STATES = BASE_DIR / "data/COUNTRY_STATE_DATA.json"
+DATA_FILE_ISO_CODES = BASE_DIR / "data/IP2LOCATION-ISO3166-2.json"
+
 # LOGGING
 if DEBUG is False:
     LOGGING = {

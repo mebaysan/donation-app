@@ -1,4 +1,4 @@
-[![CI - Image Deploy To Docker Hub](https://github.com/mebaysan/donation-app/actions/workflows/ci.yaml/badge.svg)](https://github.com/mebaysan/donation-app/actions/workflows/ci.yaml)[![CI - Develop Branch Test](https://github.com/mebaysan/donation-app/actions/workflows/ci-develop.yaml/badge.svg)](https://github.com/mebaysan/donation-app/actions/workflows/ci-develop.yaml)
+[![CI](https://github.com/mebaysan/donation-app/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/mebaysan/donation-app/actions/workflows/ci.yaml) [![CI](https://github.com/mebaysan/donation-app/actions/workflows/ci.yaml/badge.svg?branch=develop)](https://github.com/mebaysan/donation-app/actions/workflows/ci.yaml)
 
 # Table of Contents
 
@@ -16,6 +16,11 @@
   - [Test Project](#test-project)
 - [Environment Variables](#environment-variables)
 - [Docker](#docker)
+- [Dummy Payment Request](#dummy-payment-request)
+- [Caprover Nginx Configuration](#caprover-nginx-configuration)
+  - [Backent Applicaton Static Files Config](#backent-applicaton-static-files-config)
+  - [Frontend Application Config for Proxying](#frontend-application-config-for-proxying)
+
 
 # Introducing the Donation App - Empowering Non-Profits
 
@@ -120,4 +125,298 @@ You can access the Docker image from [Docker Hub](https://hub.docker.com/r/mebay
 ```bash
 docker image pull mebaysan/donation-app:latest # pull the latest image
 docker image pull mebaysan/donation-app:develop # pull the develop image
+```
+
+# Dummy Payment Request
+
+```python
+new_dummy_response = HttpResponse(
+            content=b'<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head runat="server">    <title></title></head><body onload="OnLoadEvent();">    <form name="downloadForm"        action="http://127.0.0.1:8000/api/payment/payment-fail/"        method="POST">         <input type="hidden"  name="AuthenticationResponse" value="%3c%3fxml+version%3d%221.0%22+encoding%3d%22utf-8%22%3f%3e%3cVPosTransactionResponseContract+xmlns%3axsd%3d%22http%3a%2f%2fwww.w3.org%2f2001%2fXMLSchema%22+xmlns%3axsi%3d%22http%3a%2f%2fwww.w3.org%2f2001%2fXMLSchema-instance%22%3e%3cIsEnrolled%3etrue%3c%2fIsEnrolled%3e%3cIsVirtual%3efalse%3c%2fIsVirtual%3e%3cResponseCode%3eCommonThreedControlsReturnedFail%3c%2fResponseCode%3e%3cResponseMessage%3e%c4%b0%c5%9flem+ger%c3%a7ekle%c5%9ftirilemedi.%3c%2fResponseMessage%3e%3cOrderId%3e0%3c%2fOrderId%3e%3cTransactionTime%3e0001-01-01T00%3a00%3a00%3c%2fTransactionTime%3e%3cMerchantOrderId%3edb926ff3-a12a-4a2c-88d5-7c15ce3c6494%3c%2fMerchantOrderId%3e%3cReferenceId%3e13144df6b8ad4bfb97c78236f1e610d9%3c%2fReferenceId%3e%3cMerchantId%3e57902%3c%2fMerchantId%3e%3cBusinessKey%3e0%3c%2fBusinessKey%3e%3c%2fVPosTransactionResponseContract%3e">        <!-- To support javascript unaware/disabled browsers -->        <noscript>    <center>Please click the submit button below.<br>    <input type="submit" name="submit" value="Submit"></center>  </noscript>    </form>    <script language="Javascript">         function OnLoadEvent() {document.downloadForm.submit();}   </script></body></html>',
+            headers={"Content-Type": "text/html; charset=utf-8"},
+            status=200,
+        )
+```
+
+# Caprover Nginx Configuration
+
+
+[Django Deployment on Caprover by Docker Image](https://medium.com/codex/django-deployment-on-caprover-by-docker-image-669e87ea81e7)
+
+## Backent Applicaton Static Files Config
+
+```nginx
+<%
+if (s.forceSsl) {
+%>
+    server {
+
+        listen       80;
+
+        server_name  <%-s.publicDomain%>;
+
+        # Used by Lets Encrypt
+        location /.well-known/acme-challenge/ {
+            root <%-s.staticWebRoot%>;
+        }
+
+        # Used by CapRover for health check
+        location /.well-known/captain-identifier {
+            root <%-s.staticWebRoot%>;
+        }
+
+        location / {
+            return 302 https://$http_host$request_uri;
+        }
+    }
+<%
+}
+%>
+
+
+server {
+
+    <%
+    if (!s.forceSsl) {
+    %>
+        listen       80;
+    <%
+    }
+    if (s.hasSsl) {
+    %>
+        listen              443 ssl http2;
+        ssl_certificate     <%-s.crtPath%>;
+        ssl_certificate_key <%-s.keyPath%>;
+    <%
+    }
+    %>
+
+        client_max_body_size 500m;
+
+        server_name  <%-s.publicDomain%>;
+
+        # 127.0.0.11 is DNS set up by Docker, see:
+        # https://docs.docker.com/engine/userguide/networking/configure-dns/
+        # https://github.com/moby/moby/issues/20026
+        resolver 127.0.0.11 valid=10s;
+        # IMPORTANT!! If you are here from an old thread to set a custom port, you do not need to modify this port manually here!!
+        # Simply change the Container HTTP Port from the dashboard HTTP panel
+        set $upstream http://<%-s.localDomain%>:<%-s.containerHttpPort%>;
+
+        location / {
+
+
+	<%
+	if (s.redirectToPath) {
+	%>
+	    return 302 <%-s.redirectToPath%>;
+	<%
+	} else {
+	%>
+
+		    <%
+		    if (s.httpBasicAuthPath) {
+		    %>
+			    auth_basic           "Restricted Access";
+			    auth_basic_user_file <%-s.httpBasicAuthPath%>; 
+		    <%
+		    }
+		    %>
+
+			    proxy_pass $upstream;
+			    proxy_set_header Host $host;
+			    proxy_set_header X-Real-IP $remote_addr;
+			    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+			    proxy_set_header X-Forwarded-Proto $scheme;
+
+		    <%
+		    if (s.websocketSupport) {
+		    %>
+			    proxy_set_header Upgrade $http_upgrade;
+			    proxy_set_header Connection "upgrade";
+			    proxy_http_version 1.1;
+		    <%
+		    }
+		    %>
+    
+    
+	<%
+	}
+	%>
+	
+        }
+
+        # Used by Lets Encrypt
+        location /.well-known/acme-challenge/ {
+            root <%-s.staticWebRoot%>;
+        }
+        
+        # Used by CapRover for health check
+        location /.well-known/captain-identifier {
+            root <%-s.staticWebRoot%>;
+        }
+
+        error_page 502 /captain_502_custom_error_page.html;
+        location = /captain_502_custom_error_page.html {
+                root <%-s.customErrorPagesDirectory%>;
+                internal;
+        }
+
+
+
+        #BAYSAN ADDED
+        location /django-static/ {
+            alias /nginx-shared/YOUR-PATH-ON-HOST/static/;
+         }
+
+        location /django-media/ {
+            alias /nginx-shared/YOUR-PATH-ON-HOST/media/;
+        }
+}
+```
+
+## Frontend Application Config for Proxying
+
+```nginx
+<%
+if (s.forceSsl) {
+%>
+    server {
+
+        listen       80;
+
+        server_name  <%-s.publicDomain%>;
+
+        # Used by Lets Encrypt
+        location /.well-known/acme-challenge/ {
+            root <%-s.staticWebRoot%>;
+        }
+
+        # Used by CapRover for health check
+        location /.well-known/captain-identifier {
+            root <%-s.staticWebRoot%>;
+        }
+
+        location / {
+            return 302 https://$http_host$request_uri;
+        }
+    }
+<%
+}
+%>
+
+
+server {
+
+    <%
+    if (!s.forceSsl) {
+    %>
+        listen       80;
+    <%
+    }
+    if (s.hasSsl) {
+    %>
+        listen              443 ssl http2;
+        ssl_certificate     <%-s.crtPath%>;
+        ssl_certificate_key <%-s.keyPath%>;
+    <%
+    }
+    %>
+
+        client_max_body_size 500m;
+
+        server_name  <%-s.publicDomain%>;
+
+        # 127.0.0.11 is DNS set up by Docker, see:
+        # https://docs.docker.com/engine/userguide/networking/configure-dns/
+        # https://github.com/moby/moby/issues/20026
+        resolver 127.0.0.11 valid=10s;
+        # IMPORTANT!! If you are here from an old thread to set a custom port, you do not need to modify this port manually here!!
+        # Simply change the Container HTTP Port from the dashboard HTTP panel
+        set $upstream http://<%-s.localDomain%>:<%-s.containerHttpPort%>;
+        set $donation_be_upstream http://srv-captain--YOUR-BACKEND-SERVICE:8000; # # YOUR UPSTREAM SERVICE IN CAPROVER (BACKEND)
+
+        location / {
+
+
+	<%
+	if (s.redirectToPath) {
+	%>
+	    return 302 <%-s.redirectToPath%>;
+	<%
+	} else {
+	%>
+
+		    <%
+		    if (s.httpBasicAuthPath) {
+		    %>
+			    auth_basic           "Restricted Access";
+			    auth_basic_user_file <%-s.httpBasicAuthPath%>; 
+		    <%
+		    }
+		    %>
+
+			    proxy_pass $upstream;
+			    proxy_set_header Host $host;
+			    proxy_set_header X-Real-IP $remote_addr;
+			    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+			    proxy_set_header X-Forwarded-Proto $scheme;
+
+		    <%
+		    if (s.websocketSupport) {
+		    %>
+			    proxy_set_header Upgrade $http_upgrade;
+			    proxy_set_header Connection "upgrade";
+			    proxy_http_version 1.1;
+		    <%
+		    }
+		    %>
+    
+    
+	<%
+	}
+	%>
+	
+        }
+
+        # Used by Lets Encrypt
+        location /.well-known/acme-challenge/ {
+            root <%-s.staticWebRoot%>;
+        }
+        
+        # Used by CapRover for health check
+        location /.well-known/captain-identifier {
+            root <%-s.staticWebRoot%>;
+        }
+
+        error_page 502 /captain_502_custom_error_page.html;
+        location = /captain_502_custom_error_page.html {
+                root <%-s.customErrorPagesDirectory%>;
+                internal;
+        }
+
+   #BAYSAN
+    location /django-static/ {
+            alias /nginx-shared/YOUR-PATH-ON-HOST/static/; # YOUR SHARED FILES OF BACKEND PROJECT'S STATIC
+         }
+
+        location /django-media/ {
+            alias /nginx-shared/YOUR-PATH-ON-HOST/media/;
+        }
+
+   # Django App
+    location /cockpit {
+        proxy_pass $donation_be_upstream; # YOUR UPSTREAM SERVICE IN CAPROVER (BACKEND)
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_redirect off;
+    }
+
+    location /api {
+        proxy_pass $donation_be_upstream; # YOUR UPSTREAM SERVICE IN CAPROVER (BACKEND)
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_redirect off;
+    }
+
+}
 ```
