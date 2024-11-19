@@ -13,3 +13,7 @@ updates:
     # Labels on pull requests for version updates only
     labels:
       - "pip dependencies"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    open-pull-requests-limit: 1
