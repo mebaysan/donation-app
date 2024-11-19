@@ -97,7 +97,7 @@ redis==5.0.8
 referencing==0.35.1
 requests==2.32.0
 rpds-py==0.21.0
-s3transfer==0.6.0
+s3transfer==0.10.3
 six==1.16.0
 soupsieve==2.5
 sqlparse==0.5.2
