@@ -32,7 +32,7 @@ django-filter==22.1
 djangorestframework==3.15.2
 docopt==0.6.2
 executing==2.0.1
-fastjsonschema==2.19.1
+fastjsonschema==2.20.0
 flake8==6.1.0
 gunicorn==22.0.0
 idna==3.7
