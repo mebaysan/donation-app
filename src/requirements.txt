@@ -8,7 +8,7 @@ backcall==0.2.0
 beautifulsoup4==4.12.3
 billiard==4.2.0
 bleach==6.1.0
-build==1.2.1
+build==1.2.2
 certifi==2024.7.4
 charset-normalizer==3.0.1
 click==8.1.3
